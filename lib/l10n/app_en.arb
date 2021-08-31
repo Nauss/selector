@@ -1,0 +1,30 @@
+{
+  "connection": "Connection",
+  "add": "Add",
+  "listen": "Listen",
+  "store": "Store",
+  "remove": "Remove",
+  "cancel": "Cancel",
+  "oneSide": "{SIDE}-side",
+  "@oneSide": {
+    "description": "The side of a vinyl",
+    "placeholders": {
+      "SIDE": {
+        "type": "String"
+      }
+    }
+  },
+  "listening": "Listening",
+  "mySelector": "My selector",
+  "darkMode": "Dark mode",
+  "dark": "Dark",
+  "light": "Light",
+  "uiSettings": "UI Settings",
+  "bluetoothSettings": "Bluetooth Settings",
+  "searchTitle": "Search my Selector",
+  "searchHint": "Search by artist or album...",
+  "searchDiscogs": "Search discogs...",
+  "selectRecordStore": "Select the record to store",
+  "emptySearchLabel": "Search artists, albums and more...",
+  "barcodeScanFailed": "Barcode scan failed"
+}

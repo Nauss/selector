@@ -1,0 +1,22 @@
+{
+  "connection": "Connexion",
+  "add": "Ajouter",
+  "listen": "Ecouter",
+  "store": "Ranger",
+  "remove": "Supprimer",
+  "cancel": "Annuler",
+  "oneSide": "Face {SIDE}",
+  "listening": "En écoute",
+  "mySelector": "Mon selector",
+  "darkMode": "Mode sombre",
+  "dark": "Sombre",
+  "light": "Lumineux",
+  "uiSettings": "Paramètres d'Interface",
+  "bluetoothSettings": "Paramètres Bluetooth",
+  "searchTitle": "Rechercher dans mon Selector",
+  "searchHint": "Rechercher par artiste ou album...",
+  "searchDiscogs": "Rechercher sur discogs...",
+  "selectRecordStore": "Choisir le vinyle à ranger",
+  "emptySearchLabel": "Rechercher des artistes, albums et plus...",
+  "barcodeScanFailed": "Le scan du code barre a échoué"
+}
