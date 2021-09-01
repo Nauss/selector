@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get_it/get_it.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:selector/data/record.dart';
 import 'package:selector/data/search.dart';
+import 'package:selector/data/selector.dart';
 import 'package:selector/screens/search_screen.dart';
 import 'package:selector/screens/settings_sreen.dart';
 import 'package:selector/widgets/record_grid.dart';
+import 'package:selector/widgets/search_history.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -15,24 +18,17 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   final FloatingSearchBarController searchBarController =
       FloatingSearchBarController();
-  late final Search search;
+  final selector = GetIt.I.get<Selector>();
   List<String> filteredSearchHistory = [];
   String? selectedTerm;
-  RecordList? records;
 
   @override
   void initState() {
-    Search.load().then((value) {
-      setState(() {
-        search = value;
-        filteredSearchHistory = search.getFilteredHistory(null);
-      });
-    });
-    Record.load().then((value) {
-      setState(() {
-        records = value;
-      });
-    });
+    selector.loadSelectorSearch();
+    selector.loadRecords();
+
+    filteredSearchHistory =
+        selector.selectorSearch?.getFilteredHistory(null) ?? [];
     super.initState();
   }
 
@@ -42,129 +38,104 @@ class _MainScreenState extends State<MainScreen> {
     super.dispose();
   }
 
+  void _handleSearch(Search? search, String term) {
+    setState(() {
+      search?.addHistory(term);
+      selectedTerm = term;
+      filteredSearchHistory =
+          search?.getFilteredHistory(searchBarController.query) ?? [];
+    });
+    searchBarController.close();
+  }
+
+  void _handleDelete(Search? search, String term) {
+    setState(() {
+      search?.deleteHistory(term);
+      filteredSearchHistory =
+          search?.getFilteredHistory(searchBarController.query) ?? [];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final locale = AppLocalizations.of(context)!;
-    final fsb = FloatingSearchBar.of(context);
     return SafeArea(
       child: Scaffold(
-        body: FloatingSearchBar(
-          automaticallyImplyBackButton: false,
-          body: FloatingSearchBarScrollNotifier(
-            child: Padding(
-              padding: EdgeInsets.only(
-                top: fsb != null
-                    ? fsb.style.height + fsb.style.margins.vertical
-                    : 50,
-              ),
-              child: RecordGrid(records: records),
-            ),
-          ),
-          controller: searchBarController,
-          transition: CircularFloatingSearchBarTransition(),
-          title: Text(
-            selectedTerm ?? locale.searchTitle,
-            style: themeData.inputDecorationTheme.hintStyle,
-          ),
-          hint: locale.searchHint,
-          hintStyle: themeData.inputDecorationTheme.hintStyle,
-          actions: [
-            FloatingSearchBarAction.searchToClear(),
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return SettingsScreen();
-                    },
-                  ),
-                );
-              },
-              icon: const Icon(
-                Icons.settings,
-              ),
-            )
-          ],
-          onQueryChanged: (query) {
-            setState(() {
-              filteredSearchHistory = search.getFilteredHistory(query);
-            });
-          },
-          onSubmitted: (query) {
-            setState(() {
-              search.addHistory(query);
-              selectedTerm = query;
-            });
-            searchBarController.close();
-          },
-          builder: (context, transition) {
-            return ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Card(
-                child: Builder(
-                  builder: (context) {
-                    if (filteredSearchHistory.isEmpty &&
-                        searchBarController.query.isEmpty) {
-                      return Container();
-                    } else if (filteredSearchHistory.isEmpty) {
-                      return ListTile(
-                        title: Text(searchBarController.query),
-                        leading: const Icon(Icons.search),
-                        onTap: () {
-                          setState(() {
-                            selectedTerm = searchBarController.query;
-                            search.addHistory(selectedTerm!);
-                          });
-                          searchBarController.close();
-                        },
-                      );
-                    } else {
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: filteredSearchHistory
-                            .map(
-                              (term) => ListTile(
-                                title: Text(
-                                  term,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                leading: const Icon(Icons.history),
-                                trailing: IconButton(
-                                  icon: const Icon(Icons.clear),
-                                  onPressed: () {
-                                    setState(() {
-                                      search.deleteHistory(term);
-                                      filteredSearchHistory =
-                                          search.getFilteredHistory(
-                                              searchBarController.query);
-                                    });
-                                  },
-                                ),
-                                onTap: () {
-                                  setState(() {
-                                    // putSearchTermFirst(term);
-                                    selectedTerm = term;
-                                  });
-                                  searchBarController.close();
-                                },
-                              ),
-                            )
-                            .toList(),
-                      );
-                    }
+        body: StreamBuilder<Search>(
+          stream: selector.selectorSearchStream,
+          builder: (context, snapshot) {
+            var search = snapshot.data;
+            return FloatingSearchBar(
+              automaticallyImplyBackButton: false,
+              body: FloatingSearchBarScrollNotifier(
+                child: StreamBuilder<RecordList>(
+                  stream: selector.recordsStream,
+                  builder: (context, snapshot) {
+                    RecordList? records = snapshot.data;
+                    records = snapshot.data;
+                    return RecordGrid(records: records);
                   },
                 ),
               ),
+              controller: searchBarController,
+              transition: CircularFloatingSearchBarTransition(),
+              title: Text(
+                selectedTerm ?? locale.searchTitle,
+                style: themeData.inputDecorationTheme.hintStyle,
+              ),
+              hint: locale.searchHint,
+              hintStyle: themeData.inputDecorationTheme.hintStyle,
+              leadingActions: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return SettingsScreen();
+                        },
+                      ),
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.settings,
+                  ),
+                ),
+              ],
+              actions: [
+                FloatingSearchBarAction.searchToClear(),
+              ],
+              onQueryChanged: (query) {
+                setState(() {
+                  filteredSearchHistory =
+                      search?.getFilteredHistory(query) ?? [];
+                });
+              },
+              onSubmitted: (query) => _handleSearch(search, query),
+              builder: (context, transition) {
+                return SearchHistory(
+                  history: filteredSearchHistory,
+                  onDelete: (term) => _handleDelete(search, term),
+                  onSearch: (term) => _handleSearch(search, term),
+                  query: searchBarController.query,
+                );
+              },
             );
           },
         ),
         floatingActionButton: FloatingActionButton(
           mini: true,
+          backgroundColor: themeData.primaryColor,
           onPressed: () {
-            showSearch(context: context, delegate: SearchScreen(context));
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return SearchScreen();
+                },
+              ),
+            );
           },
           child: const Icon(
             Icons.add,

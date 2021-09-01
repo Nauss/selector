@@ -1,14 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:get_it/get_it.dart';
+import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:selector/data/discogs.dart';
 import 'package:selector/data/record.dart';
-import 'package:selector/widgets/empty_search.dart';
+import 'package:selector/data/search.dart';
+import 'package:selector/data/selector.dart';
 import 'package:selector/widgets/record_grid.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:selector/widgets/search_history.dart';
 
-class SearchScreen extends SearchDelegate<String> {
-  SearchScreen(BuildContext context)
-      : super(searchFieldLabel: AppLocalizations.of(context)!.searchDiscogs);
+class SearchScreen extends StatefulWidget {
+  @override
+  _SearchScreenState createState() => _SearchScreenState();
+}
+
+class _SearchScreenState extends State<SearchScreen> {
+  final FloatingSearchBarController searchBarController =
+      FloatingSearchBarController();
+  final selector = GetIt.I.get<Selector>();
+  final discogs = GetIt.I.get<Discogs>();
+  List<String> filteredSearchHistory = [];
+  String? selectedTerm;
+
+  @override
+  void initState() {
+    selector.loadNetworkSearch();
+
+    filteredSearchHistory =
+        selector.networkSearch?.getFilteredHistory(null) ?? [];
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    searchBarController.dispose();
+    super.dispose();
+  }
 
   void handleScanPressed(
     BuildContext context,
@@ -29,74 +57,90 @@ class SearchScreen extends SearchDelegate<String> {
       ));
     }
     if (scanResult != '-1') {
-      query = scanResult;
+      selectedTerm = scanResult;
     }
   }
 
+  void _handleSearch(Search? search, String term) {
+    discogs.searchRecords(term);
+    search?.addHistory(term);
+    searchBarController.close();
+    setState(() {
+      selectedTerm = term;
+      filteredSearchHistory =
+          search?.getFilteredHistory(searchBarController.query) ?? [];
+    });
+  }
+
+  void _handleDelete(Search? search, String term) {
+    setState(() {
+      search?.deleteHistory(term);
+      filteredSearchHistory =
+          search?.getFilteredHistory(searchBarController.query) ?? [];
+    });
+  }
+
   @override
-  List<Widget> buildActions(BuildContext context) {
-    return [
-      IconButton(
-        icon: ImageIcon(
-          AssetImage(
-            'assets/barcode_scanner.png',
-          ),
-        ),
-        onPressed: () {
-          handleScanPressed(
-            context,
-          );
-        },
+  Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+    final locale = AppLocalizations.of(context)!;
+    return SafeArea(
+      child: Scaffold(
+        body: StreamBuilder<Search>(
+            stream: selector.networkSearchStream,
+            builder: (context, snapshot) {
+              var search = snapshot.data;
+              return FloatingSearchBar(
+                body: FloatingSearchBarScrollNotifier(
+                  child: StreamBuilder<RecordList>(
+                    stream: discogs.resultsStream,
+                    builder: (context, snapshot) {
+                      RecordList? records = snapshot.data;
+                      return RecordGrid(records: records);
+                    },
+                  ),
+                ),
+                controller: searchBarController,
+                transition: CircularFloatingSearchBarTransition(),
+                title: Text(
+                  selectedTerm ?? locale.searchDiscogs,
+                  style: themeData.inputDecorationTheme.hintStyle,
+                ),
+                hint: locale.searchHint,
+                hintStyle: themeData.inputDecorationTheme.hintStyle,
+                actions: [
+                  FloatingSearchBarAction.searchToClear(),
+                  IconButton(
+                    icon: ImageIcon(
+                      AssetImage(
+                        'assets/barcode_scanner.png',
+                      ),
+                    ),
+                    onPressed: () {
+                      handleScanPressed(
+                        context,
+                      );
+                    },
+                  ),
+                ],
+                onQueryChanged: (query) {
+                  setState(() {
+                    filteredSearchHistory =
+                        search?.getFilteredHistory(query) ?? [];
+                  });
+                },
+                onSubmitted: (query) => _handleSearch(search, query),
+                builder: (context, transition) {
+                  return SearchHistory(
+                    history: filteredSearchHistory,
+                    onDelete: (term) => _handleDelete(search, term),
+                    onSearch: (term) => _handleSearch(search, term),
+                    query: searchBarController.query,
+                  );
+                },
+              );
+            }),
       ),
-      if (query.isNotEmpty)
-        IconButton(
-          icon: const Icon(
-            Icons.clear,
-          ),
-          onPressed: () {
-            query = "";
-          },
-        ),
-    ];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(
-      icon: const Icon(Icons.arrow_back),
-      onPressed: () {
-        close(context, query);
-      },
-    );
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    // if (query.isNotEmpty) {
-    //   return FutureBuilder(
-    //     future: Discogs.getRecords(query),
-    //     builder: (context, snapshot) {
-    //       if (!snapshot.hasData) {
-    //         return EmptySearch();
-    //       }
-    //       return RecordGrid(records: snapshot.data as RecordList);
-    //     },
-    //   );
-    // }
-
-    return EmptySearch();
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    return FutureBuilder(
-      future: Discogs.getRecords(query),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return EmptySearch();
-        }
-        return RecordGrid(records: snapshot.data as RecordList);
-      },
     );
   }
 }

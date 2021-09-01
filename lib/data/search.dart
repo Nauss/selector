@@ -1,36 +1,22 @@
 import 'package:hive/hive.dart';
 import 'package:selector/data/enums.dart';
 import 'package:selector/data/hive_ids.dart';
-import 'package:selector/data/selector.dart';
 
 part 'search.g.dart';
 
 @HiveType(typeId: hiveSearchId)
 class Search extends HiveObject {
-  static const BoxKey = 'search';
   static const DisplayedHistoryLength = 5;
   static const StoredHistoryLength = 30;
 
   @HiveField(0)
-  List<String> history;
+  late List<String> history;
   @HiveField(1)
-  SortType sortType;
+  late SortType sortType;
 
-  Search({
-    this.history = const <String>[],
-    this.sortType = SortType.artist,
-  });
-
-  static Future<Search> load() async {
-    // Open the box
-    var box = await Hive.openBox(Selector.BoxName);
-    var instance = box.get(BoxKey) as Search?;
-    if (instance == null) {
-      instance = Search();
-      instance.history = <String>[];
-      box.put(BoxKey, instance);
-    }
-    return instance;
+  Search() {
+    history = [];
+    sortType = SortType.artist;
   }
 
   List<String> getFilteredHistory(String? filter) {
@@ -62,7 +48,7 @@ class Search extends HiveObject {
 
   void deleteHistory(String term) {
     history.removeWhere((t) => t == term);
-    // update the box (history)
+    save();
   }
 
   SortType get sort {
@@ -71,6 +57,6 @@ class Search extends HiveObject {
 
   set setSortType(SortType type) {
     sortType = type;
-    // update the box (type)
+    save();
   }
 }

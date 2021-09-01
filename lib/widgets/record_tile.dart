@@ -56,9 +56,11 @@ class RecordTile extends StatelessWidget {
                     Text(
                       recordInfo.artist,
                       style: TextStyle(fontWeight: FontWeight.bold),
+                      maxLines: 2,
                     ),
                     Text(
                       recordInfo.title,
+                      maxLines: 3,
                     ),
                   ],
                 ),

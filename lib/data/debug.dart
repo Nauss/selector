@@ -125,14 +125,37 @@ var rancid = Record(
     fullyLoaded: true,
   ),
 );
+var danakil = Record(
+  position: 35,
+  status: RecordStatus.inside,
+  info: RecordInfo(
+    id: 5,
+    artist: 'Danakil',
+    country: 'France',
+    format: 'Vinyl 33T - Album',
+    label: 'Ariola',
+    title: 'Danakil Meets OnDubGround',
+    year: 2021,
+    tracks: [
+      Track(
+        title: 'Ecosysdub',
+        duration: "2:10",
+        side: Side.A,
+      ),
+    ],
+    image:
+        'https://img.discogs.com/A9svAHZNQGlraxNpBmDOKidicTQ=/fit-in/600x600/filters:strip_icc():format(jpeg):mode_rgb():quality(90)/discogs-images/R-11153397-1511350803-8677.jpeg.jpg',
+    fullyLoaded: true,
+  ),
+);
 
-var fakeList = [israel, carlos, dubamix, israel2, rancid];
+var fakeList = [israel, carlos, dubamix, israel2, rancid, danakil];
 
 Future<void> createFakeHive() async {
-  var box = await Hive.openBox(Record.BoxName);
+  var box = Hive.box(Record.BoxName);
   if (box.isEmpty) {
     for (var record in fakeList) {
-      record.store();
+      await record.store();
     }
   }
 }

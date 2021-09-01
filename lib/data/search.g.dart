@@ -16,10 +16,9 @@ class SearchAdapter extends TypeAdapter<Search> {
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return Search(
-      history: (fields[0] as List).cast<String>(),
-      sortType: fields[1] as SortType,
-    );
+    return Search()
+      ..history = (fields[0] as List).cast<String>()
+      ..sortType = fields[1] as SortType;
   }
 
   @override

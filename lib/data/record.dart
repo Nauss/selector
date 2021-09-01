@@ -1,6 +1,4 @@
 import 'package:hive/hive.dart';
-import 'package:selector/data/constants.dart';
-import 'package:selector/data/debug.dart';
 import 'package:selector/data/hive_ids.dart';
 import 'package:selector/data/record_info.dart';
 import 'package:selector/data/enums.dart';

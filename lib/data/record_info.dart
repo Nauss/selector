@@ -39,6 +39,6 @@ class RecordInfo extends HiveObject {
     required this.format,
     required this.label,
     required this.tracks,
-    this.fullyLoaded = false,
+    this.fullyLoaded = true,
   });
 }

@@ -1,45 +1,72 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:selector/data/enums.dart';
 import 'package:selector/data/record.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:selector/data/selector.dart';
 
 class RecordButtons extends StatelessWidget {
+  final selector = GetIt.I.get<Selector>();
   final Record record;
 
-  const RecordButtons({Key? key, required this.record}) : super(key: key);
+  RecordButtons({Key? key, required this.record}) : super(key: key);
 
   Widget getButton(BuildContext context, String type) {
     final locale = AppLocalizations.of(context)!;
-    if (type == "store" || type == "add")
-      return ElevatedButton.icon(
-        onPressed: () {},
+    final ThemeData themeData = Theme.of(context);
+    Color getDeleteColor(Set<MaterialState> states) {
+      return themeData.errorColor;
+    }
+
+    if (type == "store")
+      return OutlinedButton.icon(
+        onPressed: () {
+          selector.store(record);
+          Navigator.pop(context);
+        },
         icon: const Icon(Icons.login),
         label: Text(
-          type == "store" ? locale.store : locale.add,
+          locale.store,
+        ),
+      );
+    else if (type == "add")
+      return OutlinedButton.icon(
+        onPressed: () {
+          selector.add(record);
+          Navigator.pop(context);
+        },
+        icon: const Icon(Icons.login),
+        label: Text(
+          locale.add,
         ),
       );
     else if (type == "listen")
-      return ElevatedButton.icon(
-        onPressed: () {},
+      return OutlinedButton.icon(
+        onPressed: () {
+          selector.listen(record);
+          Navigator.pop(context);
+        },
         icon: const Icon(Icons.logout),
         label: Text(
           locale.listen,
         ),
       );
     else if (type == "remove")
-      return ElevatedButton.icon(
-        onPressed: () {},
+      return OutlinedButton.icon(
+        onPressed: () {
+          selector.removeRecord(record);
+          Navigator.pop(context);
+        },
         icon: const Icon(Icons.delete_outline),
         label: Text(
           locale.remove,
         ),
+        style: ButtonStyle(
+          foregroundColor: MaterialStateProperty.resolveWith(getDeleteColor),
+        ),
       );
-    return ElevatedButton.icon(
-      onPressed: () {},
-      icon: const Icon(Icons.help_outline),
-      label: Text("??"),
-    );
+    return Container();
   }
 
   @override

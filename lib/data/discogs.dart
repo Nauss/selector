@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:http/http.dart' as http;
+import 'package:rxdart/rxdart.dart';
 import 'package:selector/data/enums.dart';
 import 'package:selector/data/record.dart';
 import 'package:selector/data/record_info.dart';
@@ -11,12 +12,22 @@ class Discogs {
   static const token = 'uodMqxJulsGXDhfjykBLzpXZcObclMGLWmTusxbY';
   static const headers = {"Accept": "application/json"};
 
-  static RecordList currentResults = [];
+  RecordList results = [];
+  late BehaviorSubject<RecordList> resultsSubject;
+  late BehaviorSubject<Record?> recordDetailSubject;
 
-  static Future<RecordList> getRecords(String query) async {
-    currentResults = [];
-    if (query.isEmpty) return currentResults;
-    var uri = Uri.https(
+  Discogs() {
+    resultsSubject = BehaviorSubject<RecordList>();
+    recordDetailSubject = BehaviorSubject<Record?>();
+  }
+
+  ValueStream<RecordList> get resultsStream => resultsSubject.stream;
+  ValueStream<Record?> get recordDetailStream => recordDetailSubject.stream;
+
+  void searchRecords(String query) {
+    results = [];
+    if (query.isEmpty) resultsSubject.add(results);
+    final uri = Uri.https(
       apiUrl,
       "/database/search",
       {
@@ -26,19 +37,24 @@ class Discogs {
         "format": "vinyl",
       },
     );
-    var res = await http.get(uri, headers: headers);
-    var jsonData = json.decode(res.body);
-    if (jsonData["results"] != null) {
-      jsonData["results"].forEach(
-        (result) => currentResults.add(
-          Record(info: Discogs._fromSearch(result)),
-        ),
-      );
-    }
-    return currentResults;
+    http.get(uri, headers: headers).then((res) {
+      var jsonData = json.decode(res.body);
+      if (jsonData["results"] != null) {
+        jsonData["results"].forEach(
+          (result) => results.add(
+            Record(info: _fromSearch(result)),
+          ),
+        );
+      }
+      resultsSubject.add(results);
+    });
   }
 
-  static Future<Record> updateRecord(Record record) async {
+  void loadDetails(Record record) {
+    if (record.info.fullyLoaded) {
+      recordDetailSubject.add(record);
+      return;
+    }
     final id = record.info.id;
     var uri = Uri.https(
       apiUrl,
@@ -47,22 +63,23 @@ class Discogs {
         "token": token,
       },
     );
-    var res = await http.get(uri, headers: headers);
-    var jsonData = json.decode(res.body);
-    if (jsonData == null) {
-      throw "getRecord with id '$id' failed";
-    }
-    record.info = Discogs._fromRelease(jsonData, record.info);
-    return record;
+    http.get(uri, headers: headers).then((res) {
+      var jsonData = json.decode(res.body);
+      if (jsonData == null) {
+        throw "getRecord with id '$id' failed";
+      }
+      record.info = _fromRelease(jsonData, record.info);
+      recordDetailSubject.add(record);
+    });
   }
 
-  static RecordInfo _fromSearch(dynamic json) {
+  RecordInfo _fromSearch(dynamic json) {
     final splitted = (json["title"] as String).split(" - ");
     final label = (json["label"] as List<dynamic>).join(", ");
     final format = (json["format"] as List<dynamic>).join(", ");
     RecordInfo recordInfo = RecordInfo(
       id: json["id"],
-      title: splitted[1],
+      title: splitted.length > 0 ? splitted[1] : '',
       artist: splitted[0],
       image: json["cover_image"],
       country: json["country"],
@@ -70,30 +87,31 @@ class Discogs {
       format: format,
       label: label,
       tracks: [],
+      fullyLoaded: false,
     );
     return recordInfo;
   }
 
-  static RecordInfo _fromRelease(dynamic json, RecordInfo fromSearch) {
-    var image = Discogs._convertImages(json["images"]);
+  RecordInfo _fromRelease(dynamic json, RecordInfo fromSearch) {
+    var image = _convertImages(json["images"]);
     if (image.isEmpty) image = fromSearch.image;
     RecordInfo recordInfo = RecordInfo(
       id: json["id"],
       title: json["title"],
-      artist: Discogs._convertArtists(json["artists"]),
+      artist: _convertArtists(json["artists"]),
       image: image,
       country: json["country"],
       year: json["year"],
-      format: Discogs._convertFormats(json["formats"]),
-      label: Discogs._convertLabels(json["labels"]),
-      tracks: Discogs._convertTracks(json["tracklist"]),
+      format: _convertFormats(json["formats"]),
+      label: _convertLabels(json["labels"]),
+      tracks: _convertTracks(json["tracklist"]),
       fullyLoaded: true,
     );
     return recordInfo;
   }
 
   // Concat the artists
-  static String _convertArtists(dynamic artists) {
+  String _convertArtists(dynamic artists) {
     String result = "";
     if (artists != null && artists.length > 0) {
       for (var artist in artists) {
@@ -108,7 +126,7 @@ class Discogs {
 
   // Get the first "vinyl" format
   // Should this be user selectable ?
-  static String _convertFormats(dynamic formats) {
+  String _convertFormats(dynamic formats) {
     String result = "";
     if (formats != null && formats.length > 0) {
       for (var format in formats) {
@@ -128,7 +146,7 @@ class Discogs {
   }
 
   // Get the primary image
-  static String _convertImages(dynamic images) {
+  String _convertImages(dynamic images) {
     String result = "";
     if (images != null && images.length > 0) {
       for (var image in images) {
@@ -142,7 +160,7 @@ class Discogs {
   }
 
   // Concat the labels
-  static String _convertLabels(dynamic labels) {
+  String _convertLabels(dynamic labels) {
     String result = "";
     if (labels != null && labels.length > 0) {
       for (var label in labels) {
@@ -156,7 +174,7 @@ class Discogs {
   }
 
   // Concat the labels
-  static TrackList _convertTracks(dynamic tracklist) {
+  TrackList _convertTracks(dynamic tracklist) {
     TrackList result = [];
     if (tracklist != null && tracklist.length > 0) {
       for (var track in tracklist) {
