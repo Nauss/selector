@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:hive/hive.dart';
 
 import 'record.dart';
@@ -158,4 +160,24 @@ Future<void> createFakeHive() async {
       await record.store();
     }
   }
+}
+
+Future<void> fakeBluetooth() async {
+  await Future.delayed(Duration(seconds: 5));
+}
+
+Future<void> fakeOpen() async {
+  await Future.delayed(Duration(seconds: 5));
+}
+
+Future<void> fakeClose() async {
+  await Future.delayed(Duration(seconds: 5));
+}
+
+Future<void> fakeUserInsert() async {
+  await Future.delayed(Duration(seconds: 2));
+}
+
+Future<void> fakeUserTake() async {
+  await Future.delayed(Duration(seconds: 2));
 }

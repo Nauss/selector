@@ -26,5 +26,26 @@
   "searchDiscogs": "Search discogs...",
   "selectRecordStore": "Select the record to store",
   "emptySearchLabel": "Search artists, albums and more...",
-  "barcodeScanFailed": "Barcode scan failed"
+  "barcodeScanFailed": "Barcode scan failed",
+  "selectorOpening": "Selector opening slot {SLOT}",
+  "@selectorOpening": {
+    "description": "When opening the Selector",
+    "placeholders": {
+      "SLOT": {
+        "type": "String"
+      }
+    }
+  },
+  "selectorClosing": "Selector closing slot {SLOT}",
+  "@selectorClosing": {
+    "description": "When closing the Selector",
+    "placeholders": {
+      "SLOT": {
+        "type": "String"
+      }
+    }
+  },
+  "selectorUpdating": "Updating your collection...",
+  "userInsert": "Put the record in the opened slot",
+  "userTake": "Take the record in the opened slot"
 }

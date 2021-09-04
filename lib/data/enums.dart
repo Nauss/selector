@@ -36,3 +36,18 @@ enum SortType {
   @HiveField(3)
   year,
 }
+
+enum BlueToothState {
+  disconnected,
+  connecting,
+  connected,
+  sendingData,
+  receivingData,
+}
+
+enum Scenario {
+  add,
+  store,
+  listen,
+  remove,
+}

@@ -1,16 +1,70 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:im_stepper/stepper.dart';
 import 'package:selector/data/enums.dart';
+import 'package:selector/data/processor.dart';
 import 'package:selector/data/record.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:selector/data/selector.dart';
 
 class RecordButtons extends StatelessWidget {
   final selector = GetIt.I.get<Selector>();
+  final processor = GetIt.I.get<Processor>();
   final Record record;
 
   RecordButtons({Key? key, required this.record}) : super(key: key);
+
+  void onTap(BuildContext context, Scenario scenario) {
+    final ThemeData themeData = Theme.of(context);
+    processor.start(scenario, record);
+    showModalBottomSheet(
+      context: context,
+      isDismissible: false,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(25.0), topRight: Radius.circular(25.0)),
+      ),
+      builder: (BuildContext context) {
+        return StreamBuilder<Object>(
+          stream: processor.stepStream,
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Container();
+            }
+            final step = snapshot.data as int;
+            if (step == -1) {
+              Future.delayed(Duration(milliseconds: 10),
+                  () => Navigator.popUntil(context, (route) => route.isFirst));
+              return Container();
+            }
+            final currentAction = processor.currentAction;
+            if (currentAction == null) {
+              return Container();
+            }
+            return Column(
+              children: [
+                IconStepper(
+                  icons: processor.currentActions!
+                      .map((action) => action.icon(context))
+                      .toList(),
+                  steppingEnabled: true,
+                  activeStep: step,
+                  enableStepTapping: false,
+                  enableNextPreviousButtons: false,
+                  activeStepColor: themeData.primaryColor,
+                  activeStepBorderColor: Colors.transparent,
+                  lineColor: themeData.accentColor,
+                ),
+                currentAction.image(context),
+                currentAction.text(context),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
 
   Widget getButton(BuildContext context, String type) {
     final locale = AppLocalizations.of(context)!;
@@ -21,10 +75,7 @@ class RecordButtons extends StatelessWidget {
 
     if (type == "store")
       return OutlinedButton.icon(
-        onPressed: () {
-          selector.store(record);
-          Navigator.pop(context);
-        },
+        onPressed: () => onTap(context, Scenario.store),
         icon: const Icon(Icons.login),
         label: Text(
           locale.store,
@@ -32,10 +83,7 @@ class RecordButtons extends StatelessWidget {
       );
     else if (type == "add")
       return OutlinedButton.icon(
-        onPressed: () {
-          selector.add(record);
-          Navigator.pop(context);
-        },
+        onPressed: () => onTap(context, Scenario.add),
         icon: const Icon(Icons.login),
         label: Text(
           locale.add,
@@ -43,10 +91,7 @@ class RecordButtons extends StatelessWidget {
       );
     else if (type == "listen")
       return OutlinedButton.icon(
-        onPressed: () {
-          selector.listen(record);
-          Navigator.pop(context);
-        },
+        onPressed: () => onTap(context, Scenario.listen),
         icon: const Icon(Icons.logout),
         label: Text(
           locale.listen,
@@ -54,10 +99,7 @@ class RecordButtons extends StatelessWidget {
       );
     else if (type == "remove")
       return OutlinedButton.icon(
-        onPressed: () {
-          selector.removeRecord(record);
-          Navigator.pop(context);
-        },
+        onPressed: () => onTap(context, Scenario.remove),
         icon: const Icon(Icons.delete_outline),
         label: Text(
           locale.remove,

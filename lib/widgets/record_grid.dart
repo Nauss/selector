@@ -71,11 +71,12 @@ class RecordGrid extends StatelessWidget {
     RecordList missing = sorted.item3;
 
     final extraMargin = listening.length + stored.length == 0 ? 8 : 0;
+    final padding = _getTopMargin(context) + extraMargin;
     return CustomScrollView(
       slivers: [
         SliverPadding(
           padding: EdgeInsets.only(
-            top: _getTopMargin(context) + extraMargin,
+            top: padding,
           ),
         ),
         if (listening.length != 0)
@@ -95,6 +96,11 @@ class RecordGrid extends StatelessWidget {
             crossAxisCount: 2,
             children: missing.map((e) => RecordTile(record: e)).toList(),
           ),
+        SliverPadding(
+          padding: EdgeInsets.only(
+            top: padding,
+          ),
+        ),
       ],
     );
   }

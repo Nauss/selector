@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:enum_to_string/enum_to_string.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:rxdart/rxdart.dart';
 import 'package:selector/data/enums.dart';
@@ -9,7 +10,7 @@ import 'package:selector/data/track.dart';
 
 class Discogs {
   static const apiUrl = 'api.discogs.com';
-  static const token = 'uodMqxJulsGXDhfjykBLzpXZcObclMGLWmTusxbY';
+  static final token = dotenv.env['DICOGS_TOKEN'];
   static const headers = {"Accept": "application/json"};
 
   RecordList results = [];

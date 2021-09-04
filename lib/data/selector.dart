@@ -36,7 +36,7 @@ class Selector {
     recordsSubject.add(records);
   }
 
-  void removeRecord(Record record) {
+  void remove(Record record) {
     // Get the box
     var box = Hive.box(Record.BoxName);
     box.delete(record.position);
@@ -91,5 +91,3 @@ class Selector {
     networkSearchSubject.add(networkSearch!);
   }
 }
-
-// showmodalbottom sheet

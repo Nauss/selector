@@ -30,6 +30,7 @@ class RecordTile extends StatelessWidget {
           children: [
             Container(
               decoration: BoxDecoration(
+                color: Colors.black,
                 image: DecorationImage(
                   image: getImage(recordInfo),
                 ),

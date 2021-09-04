@@ -18,5 +18,10 @@
   "searchDiscogs": "Rechercher sur discogs...",
   "selectRecordStore": "Choisir le vinyle à ranger",
   "emptySearchLabel": "Rechercher des artistes, albums et plus...",
-  "barcodeScanFailed": "Le scan du code barre a échoué"
+  "barcodeScanFailed": "Le scan du code barre a échoué",
+  "selectorOpening": "Le Selector ouvre l'emplacement {SLOT}",
+  "selectorClosing": "Le Selector ferme l'emplacement {SLOT}",
+  "selectorUpdating": "Mise à jour de votre collection...",
+  "userInsert": "Placer le vinyle dans l'emplacement ouvert",
+  "userTake": "Prendre le vinyle dans l'emplacement ouvert"
 }
