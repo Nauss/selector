@@ -1,4 +1,4 @@
-package com.example.selector
+package com.samkutail.selector
 
 import io.flutter.embedding.android.FlutterActivity
 

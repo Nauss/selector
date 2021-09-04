@@ -90,4 +90,6 @@ class Selector {
     }
     networkSearchSubject.add(networkSearch!);
   }
+
+  void filter(Search search) {}
 }
