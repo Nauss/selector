@@ -32,7 +32,7 @@ class Discogs {
       apiUrl,
       "/database/search",
       {
-        "q": "$query",
+        "q": query,
         "token": token,
         "type": "release",
         "format": "vinyl",
@@ -80,7 +80,7 @@ class Discogs {
     final format = (json["format"] as List<dynamic>).join(", ");
     RecordInfo recordInfo = RecordInfo(
       id: json["id"],
-      title: splitted.length > 0 ? splitted[1] : '',
+      title: splitted.isNotEmpty ? splitted[1] : '',
       artist: splitted[0],
       image: json["cover_image"],
       country: json["country"],

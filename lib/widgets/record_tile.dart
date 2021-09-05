@@ -41,7 +41,7 @@ class RecordTile extends StatelessWidget {
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  stops: [0.6, 0.95],
+                  stops: const [0.6, 0.95],
                   colors: [
                     Colors.transparent,
                     isDark ? Colors.black : Colors.white,
@@ -56,7 +56,7 @@ class RecordTile extends StatelessWidget {
                   children: [
                     Text(
                       recordInfo.artist,
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                       maxLines: 2,
                     ),
                     Text(

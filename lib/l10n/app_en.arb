@@ -24,6 +24,7 @@
   "searchTitle": "Search my Selector",
   "searchHint": "Search by artist or album...",
   "searchDiscogs": "Search discogs...",
+  "selectorEmptySearch": "",
   "selectRecordStore": "Select the record to store",
   "emptySearchLabel": "Search artists, albums and more...",
   "barcodeScanFailed": "Barcode scan failed",

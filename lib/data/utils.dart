@@ -8,7 +8,7 @@ import 'package:path/path.dart' as p;
 
 ImageProvider getImage(RecordInfo info) {
   if (!Uri.parse(info.image).isAbsolute) {
-    return AssetImage(
+    return const AssetImage(
       'assets/missing.png',
     );
   }
@@ -19,7 +19,7 @@ ImageProvider getImage(RecordInfo info) {
   try {
     return NetworkToFileImage(url: info.image, file: file);
   } catch (e) {
-    return AssetImage(
+    return const AssetImage(
       'assets/missing.png',
     );
   }

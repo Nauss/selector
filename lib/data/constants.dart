@@ -28,22 +28,27 @@ class Globals {
 }
 
 final Map<Scenario, List<Action>> scenarii = {
-  Scenario.add: [OpenAction(), UserInsertAction(), CloseAction(), AddAction()],
+  Scenario.add: [
+    OpenAction(),
+    const UserInsertAction(),
+    CloseAction(),
+    AddAction()
+  ],
   Scenario.store: [
     OpenAction(),
-    UserInsertAction(),
+    const UserInsertAction(),
     CloseAction(),
     StoreAction()
   ],
   Scenario.listen: [
     OpenAction(),
-    UserTakeAction(),
+    const UserTakeAction(),
     CloseAction(),
     ListenAction()
   ],
   Scenario.remove: [
     OpenAction(),
-    UserTakeAction(),
+    const UserTakeAction(),
     CloseAction(),
     RemoveAction()
   ],

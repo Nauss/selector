@@ -21,7 +21,7 @@ class CloseAction extends Action {
 
   @override
   Icon icon(BuildContext context) {
-    return Icon(Icons.close);
+    return const Icon(Icons.close);
   }
 
   @override

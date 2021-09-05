@@ -14,6 +14,8 @@ const bottomInset = 16.0;
 class ConnectionScreen extends StatelessWidget {
   final bluetooth = GetIt.I.get<Bluetooth>();
 
+  ConnectionScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
@@ -27,7 +29,7 @@ class ConnectionScreen extends StatelessWidget {
         context,
         MaterialPageRoute(
           builder: (context) {
-            return MainScreen();
+            return const MainScreen();
           },
         ),
       );
@@ -68,7 +70,7 @@ class ConnectionScreen extends StatelessWidget {
                     Icons.bluetooth_searching,
                     color: themeData.primaryColor,
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   JumpingText(locale.connection),
                 ],
               ),

@@ -27,7 +27,7 @@ class SettingsScreen extends StatelessWidget {
         ),
         SettingsSection(
           title: locale.bluetoothSettings,
-          tiles: [],
+          tiles: const [],
         ),
       ],
     );

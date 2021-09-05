@@ -21,7 +21,7 @@ class RecordButtons extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       isDismissible: false,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(25.0), topRight: Radius.circular(25.0)),
       ),
@@ -34,7 +34,7 @@ class RecordButtons extends StatelessWidget {
             }
             final step = snapshot.data as int;
             if (step == -1) {
-              Future.delayed(Duration(milliseconds: 10),
+              Future.delayed(const Duration(milliseconds: 10),
                   () => Navigator.popUntil(context, (route) => route.isFirst));
               return Container();
             }
@@ -73,7 +73,7 @@ class RecordButtons extends StatelessWidget {
       return themeData.errorColor;
     }
 
-    if (type == "store")
+    if (type == "store") {
       return OutlinedButton.icon(
         onPressed: () => onTap(context, Scenario.store),
         icon: const Icon(Icons.login),
@@ -81,7 +81,7 @@ class RecordButtons extends StatelessWidget {
           locale.store,
         ),
       );
-    else if (type == "add")
+    } else if (type == "add") {
       return OutlinedButton.icon(
         onPressed: () => onTap(context, Scenario.add),
         icon: const Icon(Icons.login),
@@ -89,7 +89,7 @@ class RecordButtons extends StatelessWidget {
           locale.add,
         ),
       );
-    else if (type == "listen")
+    } else if (type == "listen") {
       return OutlinedButton.icon(
         onPressed: () => onTap(context, Scenario.listen),
         icon: const Icon(Icons.logout),
@@ -97,7 +97,7 @@ class RecordButtons extends StatelessWidget {
           locale.listen,
         ),
       );
-    else if (type == "remove")
+    } else if (type == "remove") {
       return OutlinedButton.icon(
         onPressed: () => onTap(context, Scenario.remove),
         icon: const Icon(Icons.delete_outline),
@@ -108,6 +108,7 @@ class RecordButtons extends StatelessWidget {
           foregroundColor: MaterialStateProperty.resolveWith(getDeleteColor),
         ),
       );
+    }
     return Container();
   }
 

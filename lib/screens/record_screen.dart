@@ -9,7 +9,7 @@ import 'package:selector/widgets/tracks.dart';
 class RecordScreen extends StatelessWidget {
   final Discogs discogs = GetIt.I.get<Discogs>();
   final Record record;
-  RecordScreen({required this.record});
+  RecordScreen({Key? key, required this.record}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

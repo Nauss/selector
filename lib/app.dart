@@ -5,6 +5,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/services.dart';
 
 class SelectorApp extends StatelessWidget {
+  const SelectorApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final primaryColor = Colors.lightBlue;
@@ -19,7 +21,7 @@ class SelectorApp extends StatelessWidget {
       dark: ThemeData(
         brightness: Brightness.dark,
         primaryColor: primaryColor,
-        inputDecorationTheme: InputDecorationTheme(
+        inputDecorationTheme: const InputDecorationTheme(
           hintStyle: TextStyle(fontSize: 16),
         ),
       ),

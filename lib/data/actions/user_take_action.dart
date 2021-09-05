@@ -19,7 +19,7 @@ class UserTakeAction extends Action {
 
   @override
   Icon icon(BuildContext context) {
-    return Icon(Icons.arrow_circle_up);
+    return const Icon(Icons.arrow_circle_up);
   }
 
   @override

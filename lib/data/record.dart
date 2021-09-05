@@ -7,7 +7,7 @@ part 'record.g.dart';
 
 @HiveType(typeId: hiveRecordId)
 class Record extends HiveObject {
-  static const BoxName = 'records';
+  static const boxName = 'records';
 
   @HiveField(0)
   RecordStatus status;
@@ -24,7 +24,7 @@ class Record extends HiveObject {
 
   Future<void> store() async {
     // Get the box
-    var box = Hive.box(BoxName);
+    var box = Hive.box(boxName);
     await box.put(position, this);
   }
 }

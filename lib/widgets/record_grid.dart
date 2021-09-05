@@ -8,7 +8,7 @@ import 'package:tuple/tuple.dart';
 
 class RecordGrid extends StatelessWidget {
   final RecordList? records;
-  RecordGrid({Key? key, required this.records}) : super(key: key);
+  const RecordGrid({Key? key, required this.records}) : super(key: key);
 
   Widget getHeader(BuildContext context, IconData icon, String text) {
     final themeData = Theme.of(context);
@@ -23,7 +23,7 @@ class RecordGrid extends StatelessWidget {
               icon,
               color: themeData.primaryColor,
             ),
-            SizedBox(
+            const SizedBox(
               width: 8,
             ),
             Text(text)
@@ -79,19 +79,19 @@ class RecordGrid extends StatelessWidget {
             top: padding,
           ),
         ),
-        if (listening.length != 0)
+        if (listening.isNotEmpty)
           getHeader(context, Icons.login, locale.listening),
         SliverGrid.count(
           crossAxisCount: 2,
           children: listening.map((e) => RecordTile(record: e)).toList(),
         ),
-        if (stored.length != 0)
+        if (stored.isNotEmpty)
           getHeader(context, Icons.logout, locale.mySelector),
         SliverGrid.count(
           crossAxisCount: 2,
           children: stored.map((e) => RecordTile(record: e)).toList(),
         ),
-        if (missing.length != 0)
+        if (missing.isNotEmpty)
           SliverGrid.count(
             crossAxisCount: 2,
             children: missing.map((e) => RecordTile(record: e)).toList(),

@@ -154,7 +154,7 @@ var danakil = Record(
 var fakeList = [israel, carlos, dubamix, israel2, rancid, danakil];
 
 Future<void> createFakeHive() async {
-  var box = Hive.box(Record.BoxName);
+  var box = Hive.box(Record.boxName);
   if (box.isEmpty) {
     for (var record in fakeList) {
       await record.store();
@@ -163,21 +163,21 @@ Future<void> createFakeHive() async {
 }
 
 Future<void> fakeBluetooth() async {
-  await Future.delayed(Duration(seconds: 5));
+  await Future.delayed(const Duration(seconds: 5));
 }
 
 Future<void> fakeOpen() async {
-  await Future.delayed(Duration(seconds: 5));
+  await Future.delayed(const Duration(seconds: 5));
 }
 
 Future<void> fakeClose() async {
-  await Future.delayed(Duration(seconds: 5));
+  await Future.delayed(const Duration(seconds: 5));
 }
 
 Future<void> fakeUserInsert() async {
-  await Future.delayed(Duration(seconds: 2));
+  await Future.delayed(const Duration(seconds: 2));
 }
 
 Future<void> fakeUserTake() async {
-  await Future.delayed(Duration(seconds: 2));
+  await Future.delayed(const Duration(seconds: 2));
 }

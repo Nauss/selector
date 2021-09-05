@@ -34,8 +34,8 @@ Future<void> initHive() async {
   // await Hive.deleteBoxFromDisk('selector');
 
   // Open the boxes
-  await Hive.openBox(Selector.BoxName);
-  await Hive.openBox(Record.BoxName);
+  await Hive.openBox(Selector.boxName);
+  await Hive.openBox(Record.boxName);
 
   // Debug add data
   await createFakeHive();
@@ -55,5 +55,5 @@ void main() async {
   initGetIt();
   await initHive();
 
-  runApp(SelectorApp());
+  runApp(const SelectorApp());
 }

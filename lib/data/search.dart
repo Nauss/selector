@@ -6,8 +6,8 @@ part 'search.g.dart';
 
 @HiveType(typeId: hiveSearchId)
 class Search extends HiveObject {
-  static const DisplayedHistoryLength = 5;
-  static const StoredHistoryLength = 30;
+  static const displayedHistoryLength = 5;
+  static const storedHistoryLength = 30;
 
   @HiveField(0)
   late List<String> history;
@@ -30,17 +30,20 @@ class Search extends HiveObject {
     } else {
       list = history.reversed.toList();
     }
-    return list.take(DisplayedHistoryLength).toList();
+    return list.take(displayedHistoryLength).toList();
   }
 
   void addHistory(String term) {
+    if (term.isEmpty) {
+      return;
+    }
     if (history.contains(term)) {
       history.removeWhere((t) => t == term);
       history.add(term);
     } else {
       history.add(term);
-      if (history.length > StoredHistoryLength) {
-        history.removeRange(0, history.length - StoredHistoryLength);
+      if (history.length > storedHistoryLength) {
+        history.removeRange(0, history.length - storedHistoryLength);
       }
     }
     save();
@@ -49,10 +52,6 @@ class Search extends HiveObject {
   void deleteHistory(String term) {
     history.removeWhere((t) => t == term);
     save();
-  }
-
-  SortType get sort {
-    return sortType;
   }
 
   set setSortType(SortType type) {

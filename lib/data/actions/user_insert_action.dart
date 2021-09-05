@@ -19,7 +19,7 @@ class UserInsertAction extends Action {
 
   @override
   Icon icon(BuildContext context) {
-    return Icon(Icons.arrow_circle_down);
+    return const Icon(Icons.arrow_circle_down);
   }
 
   @override

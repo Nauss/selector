@@ -12,7 +12,7 @@ class AddAction extends Action {
   @override
   Future<void> execute(Record record) {
     selector.add(record);
-    return Future.delayed(Duration(seconds: 2));
+    return Future.delayed(const Duration(seconds: 2));
   }
 
   @override
@@ -22,7 +22,7 @@ class AddAction extends Action {
 
   @override
   Icon icon(BuildContext context) {
-    return Icon(Icons.account_balance_sharp);
+    return const Icon(Icons.account_balance_sharp);
   }
 
   @override

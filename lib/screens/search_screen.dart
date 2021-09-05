@@ -11,6 +11,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:selector/widgets/search_history.dart';
 
 class SearchScreen extends StatefulWidget {
+  const SearchScreen({Key? key}) : super(key: key);
+
   @override
   _SearchScreenState createState() => _SearchScreenState();
 }
@@ -101,6 +103,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                 ),
                 controller: searchBarController,
+                physics: const BouncingScrollPhysics(),
                 transition: CircularFloatingSearchBarTransition(),
                 title: Text(
                   selectedTerm ?? locale.searchDiscogs,
@@ -111,7 +114,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 actions: [
                   FloatingSearchBarAction.searchToClear(),
                   IconButton(
-                    icon: ImageIcon(
+                    icon: const ImageIcon(
                       AssetImage(
                         'assets/barcode_scanner.png',
                       ),

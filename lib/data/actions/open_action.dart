@@ -21,7 +21,7 @@ class OpenAction extends Action {
 
   @override
   Icon icon(BuildContext context) {
-    return Icon(Icons.open_in_new);
+    return const Icon(Icons.open_in_new);
   }
 
   @override

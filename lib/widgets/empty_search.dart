@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EmptySearch extends StatelessWidget {
+  final String? query;
+  const EmptySearch({Key? key, this.query}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
@@ -14,7 +17,7 @@ class EmptySearch extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(bottom: 8.0),
               child: Text(
-                locale.selectRecordStore,
+                query ?? locale.selectRecordStore,
                 style: themeData.textTheme.headline4,
                 textAlign: TextAlign.center,
               ),

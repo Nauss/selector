@@ -7,10 +7,13 @@ import 'package:selector/data/search.dart';
 import 'package:selector/data/selector.dart';
 import 'package:selector/screens/search_screen.dart';
 import 'package:selector/screens/settings_sreen.dart';
+import 'package:selector/widgets/empty_search.dart';
 import 'package:selector/widgets/record_grid.dart';
 import 'package:selector/widgets/search_history.dart';
 
 class MainScreen extends StatefulWidget {
+  const MainScreen({Key? key}) : super(key: key);
+
   @override
   _MainScreenState createState() => _MainScreenState();
 }
@@ -20,7 +23,7 @@ class _MainScreenState extends State<MainScreen> {
       FloatingSearchBarController();
   final selector = GetIt.I.get<Selector>();
   List<String> filteredSearchHistory = [];
-  String? selectedTerm;
+  String selectedTerm = "";
 
   @override
   void initState() {
@@ -45,7 +48,17 @@ class _MainScreenState extends State<MainScreen> {
       filteredSearchHistory =
           search?.getFilteredHistory(searchBarController.query) ?? [];
     });
+    selector.filter(term);
     searchBarController.close();
+  }
+
+  void _handleClear() {
+    if (searchBarController.isClosed) {
+      selector.filter("");
+      setState(() {
+        selectedTerm = "";
+      });
+    }
   }
 
   void _handleDelete(Search? search, String term) {
@@ -73,15 +86,21 @@ class _MainScreenState extends State<MainScreen> {
                   stream: selector.recordsStream,
                   builder: (context, snapshot) {
                     RecordList? records = snapshot.data;
-                    records = snapshot.data;
+                    if (records == null || records.isEmpty) {
+                      return EmptySearch(
+                        query: selectedTerm,
+                      );
+                    }
                     return RecordGrid(records: records);
                   },
                 ),
               ),
               controller: searchBarController,
+              physics: const BouncingScrollPhysics(),
+              clearQueryOnClose: false,
               transition: CircularFloatingSearchBarTransition(),
               title: Text(
-                selectedTerm ?? locale.searchTitle,
+                selectedTerm.isEmpty ? locale.searchTitle : selectedTerm,
                 style: themeData.inputDecorationTheme.hintStyle,
               ),
               hint: locale.searchHint,
@@ -93,7 +112,7 @@ class _MainScreenState extends State<MainScreen> {
                       context,
                       MaterialPageRoute(
                         builder: (context) {
-                          return SettingsScreen();
+                          return const SettingsScreen();
                         },
                       ),
                     );
@@ -104,7 +123,11 @@ class _MainScreenState extends State<MainScreen> {
                 ),
               ],
               actions: [
-                FloatingSearchBarAction.searchToClear(),
+                _SearchIconButton(
+                  isEmpty:
+                      searchBarController.query.isEmpty && selectedTerm.isEmpty,
+                  onClear: _handleClear,
+                ),
               ],
               onQueryChanged: (query) {
                 setState(() {
@@ -132,7 +155,7 @@ class _MainScreenState extends State<MainScreen> {
               context,
               MaterialPageRoute(
                 builder: (context) {
-                  return SearchScreen();
+                  return const SearchScreen();
                 },
               ),
             );
@@ -142,6 +165,47 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _SearchIconButton extends StatelessWidget {
+  final bool isEmpty;
+  final Function onClear;
+  const _SearchIconButton({
+    Key? key,
+    required this.isEmpty,
+    required this.onClear,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final FloatingSearchAppBarState bar = FloatingSearchAppBar.of(context)!;
+    return FloatingSearchBarAction(
+      showIfOpened: true,
+      showIfClosed: true,
+      builder: (context, animation) {
+        return ValueListenableBuilder<String>(
+          valueListenable: bar.queryNotifer,
+          builder: (context, query, _) {
+            return SearchToClear(
+              isEmpty: isEmpty,
+              // size: size,
+              // color: color ?? bar.style.iconColor,
+              // duration: duration * 0.5,
+              onTap: () {
+                if (!isEmpty) {
+                  bar.clear();
+                  onClear();
+                } else {
+                  bar.isOpen =
+                      !bar.isOpen || (!bar.hasFocus && bar.isAlwaysOpened);
+                }
+              },
+            );
+          },
+        );
+      },
     );
   }
 }
