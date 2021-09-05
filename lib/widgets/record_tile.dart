@@ -39,9 +39,9 @@ class RecordTile extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  begin: Alignment.topCenter,
+                  begin: Alignment.center,
                   end: Alignment.bottomCenter,
-                  stops: const [0.6, 0.95],
+                  stops: const [0.2, 1],
                   colors: [
                     Colors.transparent,
                     isDark ? Colors.black : Colors.white,

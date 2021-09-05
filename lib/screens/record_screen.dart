@@ -31,10 +31,8 @@ class RecordScreen extends StatelessWidget {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      constraints: const BoxConstraints(
-                        maxHeight: 250,
-                      ),
+                    Flexible(
+                      flex: 2,
                       child: Center(
                         child: Image(
                           image: getImage(updatedInfo),
@@ -72,7 +70,8 @@ class RecordScreen extends StatelessWidget {
                       ),
                     ),
                     RecordButtons(record: record),
-                    Expanded(
+                    Flexible(
+                      flex: 1,
                       child: Tracks(tracks: updatedInfo.tracks),
                     ),
                   ],
