@@ -31,9 +31,14 @@ class RecordScreen extends StatelessWidget {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Center(
-                      child: Image(
-                        image: getImage(updatedInfo),
+                    Container(
+                      constraints: const BoxConstraints(
+                        maxHeight: 250,
+                      ),
+                      child: Center(
+                        child: Image(
+                          image: getImage(updatedInfo),
+                        ),
                       ),
                     ),
                     Padding(

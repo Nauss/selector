@@ -6,6 +6,7 @@ import 'package:selector/data/discogs.dart';
 import 'package:selector/data/record.dart';
 import 'package:selector/data/search.dart';
 import 'package:selector/data/selector.dart';
+import 'package:selector/data/utils.dart';
 import 'package:selector/widgets/record_grid.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:selector/widgets/search_history.dart';
@@ -23,7 +24,7 @@ class _SearchScreenState extends State<SearchScreen> {
   final selector = GetIt.I.get<Selector>();
   final discogs = GetIt.I.get<Discogs>();
   List<String> filteredSearchHistory = [];
-  String? selectedTerm;
+  String selectedTerm = "";
 
   @override
   void initState() {
@@ -48,7 +49,7 @@ class _SearchScreenState extends State<SearchScreen> {
     String scanResult = "";
     try {
       scanResult = await FlutterBarcodeScanner.scanBarcode(
-        themeData.primaryColor.toString(),
+        themeData.primaryColor.toHex(),
         locale.cancel,
         true,
         ScanMode.BARCODE,
@@ -59,7 +60,10 @@ class _SearchScreenState extends State<SearchScreen> {
       ));
     }
     if (scanResult != '-1') {
-      selectedTerm = scanResult;
+      setState(() {
+        selectedTerm = scanResult;
+        discogs.searchRecords(selectedTerm);
+      });
     }
   }
 
@@ -97,8 +101,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   child: StreamBuilder<RecordList>(
                     stream: discogs.resultsStream,
                     builder: (context, snapshot) {
-                      RecordList? records = snapshot.data;
-                      return RecordGrid(records: records);
+                      return RecordGrid(records: snapshot.data);
                     },
                   ),
                 ),
@@ -106,7 +109,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 physics: const BouncingScrollPhysics(),
                 transition: CircularFloatingSearchBarTransition(),
                 title: Text(
-                  selectedTerm ?? locale.searchDiscogs,
+                  selectedTerm.isEmpty ? locale.searchDiscogs : selectedTerm,
                   style: themeData.inputDecorationTheme.hintStyle,
                 ),
                 hint: locale.searchHint,
