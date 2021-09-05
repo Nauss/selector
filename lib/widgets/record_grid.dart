@@ -8,7 +8,9 @@ import 'package:tuple/tuple.dart';
 
 class RecordGrid extends StatelessWidget {
   final RecordList? records;
-  const RecordGrid({Key? key, required this.records}) : super(key: key);
+  final bool isFiltered;
+  const RecordGrid({Key? key, required this.records, this.isFiltered = false})
+      : super(key: key);
 
   Widget getHeader(BuildContext context, IconData icon, String text) {
     final themeData = Theme.of(context);
@@ -39,16 +41,20 @@ class RecordGrid extends StatelessWidget {
     RecordList missing = [];
     if (records != null) {
       for (var record in records) {
-        switch (record.status) {
-          case RecordStatus.inside:
-            stored.add(record);
-            break;
-          case RecordStatus.outside:
-            listening.add(record);
-            break;
-          case RecordStatus.missing:
-            missing.add(record);
-            break;
+        if (isFiltered) {
+          missing.add(record);
+        } else {
+          switch (record.status) {
+            case RecordStatus.inside:
+              stored.add(record);
+              break;
+            case RecordStatus.outside:
+              listening.add(record);
+              break;
+            case RecordStatus.missing:
+              missing.add(record);
+              break;
+          }
         }
       }
     }

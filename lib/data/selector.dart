@@ -4,7 +4,7 @@ import 'package:selector/data/constants.dart';
 import 'package:selector/data/enums.dart';
 import 'package:selector/data/record.dart';
 import 'package:selector/data/search.dart';
-import 'package:fuzzy/fuzzy.dart';
+import 'package:string_similarity/string_similarity.dart';
 
 class Selector {
   static const String boxName = 'selector';
@@ -72,23 +72,43 @@ class Selector {
       recordsSubject.add(records);
       return;
     }
+    final lowerQuery = query.toLowerCase();
     // First filter
-    final fuse = Fuzzy(
-      records,
-      options: FuzzyOptions<Record>(
-        keys: [
-          WeightedKey(
-            name: 'artist',
-            getter: (Record record) => record.info.artist,
-            weight: 5,
-          )
-        ],
-      ),
-    );
-    final result = fuse.search(query).map((e) => e.item).toList();
+    final filtered = records.where((record) {
+      final lowerArtists = record.info.artist.toLowerCase().split(" ");
+      final lowerTitles = record.info.title.toLowerCase().split(" ");
+      // Check the start of each word
+      var index = lowerArtists.indexWhere(
+        (element) => element.contains(lowerQuery),
+      );
+      if (index != -1) {
+        return true;
+      }
+      index = lowerTitles.indexWhere(
+        (element) => element.contains(lowerQuery),
+      );
+      if (index != -1) {
+        return true;
+      }
+      // Check similarity
+      var bestMatch = lowerQuery.bestMatch(lowerArtists);
+      var match = bestMatch.ratings.indexWhere(
+        (element) => element.rating! > similarityThreshold,
+      );
+      if (match != -1) {
+        return true;
+      }
+      bestMatch = lowerQuery.bestMatch(lowerTitles);
+      match = bestMatch.ratings.indexWhere(
+        (element) => element.rating! > similarityThreshold,
+      );
+      if (match != -1) {
+        return true;
+      }
+      return false;
+    });
+    recordsSubject.add(filtered.toList());
 
-    // result.map((r) => r.info.artist).forEach(print);
-    recordsSubject.add(result);
     // Then order
   }
 

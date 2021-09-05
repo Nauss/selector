@@ -15,6 +15,7 @@ import 'package:selector/data/actions/user_take_action.dart';
 import 'enums.dart';
 
 const selectorCapacity = 120;
+const similarityThreshold = 0.5;
 
 class Globals {
   static Directory? images;

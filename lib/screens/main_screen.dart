@@ -91,7 +91,10 @@ class _MainScreenState extends State<MainScreen> {
                         query: selectedTerm,
                       );
                     }
-                    return RecordGrid(records: records);
+                    return RecordGrid(
+                      records: records,
+                      isFiltered: selectedTerm.isNotEmpty,
+                    );
                   },
                 ),
               ),
