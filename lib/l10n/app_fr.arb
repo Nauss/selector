@@ -16,6 +16,7 @@
   "searchTitle": "Rechercher dans mon Selector",
   "searchHint": "Rechercher par artiste ou album...",
   "searchDiscogs": "Rechercher sur discogs...",
+  "selectorEmptySearch": "",
   "selectRecordStore": "Choisir le vinyle à ranger",
   "emptySearchLabel": "Rechercher des artistes, albums et plus...",
   "barcodeScanFailed": "Le scan du code barre a échoué",

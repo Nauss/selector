@@ -54,7 +54,7 @@ class RecordButtons extends StatelessWidget {
                   enableNextPreviousButtons: false,
                   activeStepColor: themeData.primaryColor,
                   activeStepBorderColor: Colors.transparent,
-                  lineColor: themeData.accentColor,
+                  lineColor: themeData.colorScheme.secondary,
                 ),
                 currentAction.image(context),
                 currentAction.text(context),
