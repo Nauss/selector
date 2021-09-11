@@ -54,3 +54,8 @@ final Map<Scenario, List<Action>> scenarii = {
     RemoveAction()
   ],
 };
+
+// Hero tags
+class Tags {
+  static cover(int position) => "cover$position";
+}

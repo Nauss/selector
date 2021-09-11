@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:selector/data/constants.dart';
 import 'package:selector/data/discogs.dart';
 import 'package:selector/data/record.dart';
 import 'package:selector/data/utils.dart';
@@ -34,8 +35,11 @@ class RecordScreen extends StatelessWidget {
                     Flexible(
                       flex: 2,
                       child: Center(
-                        child: Image(
-                          image: getImage(updatedInfo),
+                        child: Hero(
+                          tag: Tags.cover(updatedInfo.id),
+                          child: Image(
+                            image: getImage(updatedInfo),
+                          ),
                         ),
                       ),
                     ),

@@ -1,5 +1,6 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:selector/data/constants.dart';
 import 'package:selector/data/record.dart';
 import 'package:selector/data/record_info.dart';
 import 'package:selector/data/utils.dart';
@@ -28,11 +29,14 @@ class RecordTile extends StatelessWidget {
         },
         child: Stack(
           children: [
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.black,
-                image: DecorationImage(
-                  image: getImage(recordInfo),
+            Hero(
+              tag: Tags.cover(recordInfo.id),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  image: DecorationImage(
+                    image: getImage(recordInfo),
+                  ),
                 ),
               ),
             ),
