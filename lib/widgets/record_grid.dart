@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_sticky_header/flutter_sticky_header.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
+import 'package:selector/data/constants.dart';
 import 'package:selector/data/record.dart';
 import 'package:selector/data/enums.dart';
 import 'package:selector/widgets/record_tile.dart';
@@ -12,26 +15,30 @@ class RecordGrid extends StatelessWidget {
   const RecordGrid({Key? key, required this.records, this.isFiltered = false})
       : super(key: key);
 
-  Widget getHeader(BuildContext context, IconData icon, String text) {
+  Widget getHeader(BuildContext context, SvgPicture icon, String text) {
     final themeData = Theme.of(context);
-    return SliverGrid.count(
-      crossAxisCount: 1,
-      childAspectRatio: 10,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              color: themeData.primaryColor,
-            ),
-            const SizedBox(
-              width: 8,
-            ),
-            Text(text)
-          ],
-        ),
-      ],
+    return Container(
+      // height: 60.0,
+      color: themeData.scaffoldBackgroundColor,
+      padding: const EdgeInsets.all(4.0),
+      // alignment: Alignment.centerLeft,
+      child: Row(
+        // mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const SizedBox(
+            width: 8,
+          ),
+          icon,
+          const SizedBox(
+            width: 8,
+          ),
+          Text(
+            text,
+            style: const TextStyle(fontSize: 17),
+          )
+        ],
+      ),
     );
   }
 
@@ -70,6 +77,7 @@ class RecordGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
+    final themeData = Theme.of(context);
 
     final sorted = sort(records);
     RecordList listening = sorted.item1;
@@ -77,7 +85,8 @@ class RecordGrid extends StatelessWidget {
     RecordList missing = sorted.item3;
 
     final extraMargin = listening.length + stored.length == 0 ? 8 : 0;
-    final padding = _getTopMargin(context) + extraMargin;
+    final padding = _getTopMargin(context) + extraMargin + 4;
+    final orientation = MediaQuery.of(context).orientation;
     return CustomScrollView(
       slivers: [
         SliverPadding(
@@ -86,20 +95,39 @@ class RecordGrid extends StatelessWidget {
           ),
         ),
         if (listening.isNotEmpty)
-          getHeader(context, Icons.login, locale.listening),
-        SliverGrid.count(
-          crossAxisCount: 2,
-          children: listening.map((e) => RecordTile(record: e)).toList(),
-        ),
+          SliverStickyHeader(
+            header: listening.isNotEmpty
+                ? getHeader(
+                    context,
+                    SVGs.listening(
+                      color: themeData.primaryColor,
+                    ),
+                    locale.listening,
+                  )
+                : null,
+            sliver: SliverGrid.count(
+              crossAxisCount: orientation == Orientation.portrait ? 2 : 3,
+              children: listening.map((e) => RecordTile(record: e)).toList(),
+            ),
+          ),
         if (stored.isNotEmpty)
-          getHeader(context, Icons.logout, locale.mySelector),
-        SliverGrid.count(
-          crossAxisCount: 2,
-          children: stored.map((e) => RecordTile(record: e)).toList(),
-        ),
+          SliverStickyHeader(
+            header: stored.isNotEmpty
+                ? getHeader(
+                    context,
+                    SVGs.mySelector(
+                      color: themeData.primaryColor,
+                    ),
+                    locale.mySelector)
+                : null,
+            sliver: SliverGrid.count(
+              crossAxisCount: orientation == Orientation.portrait ? 2 : 3,
+              children: stored.map((e) => RecordTile(record: e)).toList(),
+            ),
+          ),
         if (missing.isNotEmpty)
           SliverGrid.count(
-            crossAxisCount: 2,
+            crossAxisCount: orientation == Orientation.portrait ? 2 : 3,
             children: missing.map((e) => RecordTile(record: e)).toList(),
           ),
         SliverPadding(

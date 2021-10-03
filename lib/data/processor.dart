@@ -1,12 +1,12 @@
 import 'package:rxdart/rxdart.dart';
-import 'package:selector/data/actions/action.dart';
+import 'package:selector/data/actions/selector_action.dart';
 import 'package:selector/data/constants.dart';
 import 'package:selector/data/enums.dart';
 import 'package:selector/data/record.dart';
 
 class Processor {
   Record? _record; // The record being processed
-  List<Action>? currentActions;
+  List<SelectorAction>? currentActions;
   int step = -1;
   late BehaviorSubject<int> stepSubject;
 
@@ -16,7 +16,7 @@ class Processor {
 
   ValueStream<int> get stepStream => stepSubject.stream;
 
-  Action? get currentAction =>
+  SelectorAction? get currentAction =>
       step != -1 && currentActions != null ? currentActions![step] : null;
 
   void start(Scenario scenario, Record record) {
@@ -27,7 +27,7 @@ class Processor {
     execute(currentActions![step]);
   }
 
-  void execute(Action action) {
+  void execute(SelectorAction action) {
     action.execute(_record!).then((_) => done());
   }
 

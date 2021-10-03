@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart' hide Action;
-import 'package:selector/data/actions/action.dart';
+import 'package:selector/data/actions/selector_action.dart';
 import 'package:selector/data/debug.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:selector/data/record.dart';
 
-class CloseAction extends Action {
+class CloseAction extends SelectorAction {
   late String slot;
   CloseAction();
 

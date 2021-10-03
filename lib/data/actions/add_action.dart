@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart' hide Action;
 import 'package:get_it/get_it.dart';
-import 'package:selector/data/actions/action.dart';
+import 'package:selector/data/actions/selector_action.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:selector/data/discogs.dart';
 import 'package:selector/data/record.dart';
 import 'package:selector/data/selector.dart';
 
-class AddAction extends Action {
+class AddAction extends SelectorAction {
   final selector = GetIt.I.get<Selector>();
   final discogs = GetIt.I.get<Discogs>();
   AddAction();

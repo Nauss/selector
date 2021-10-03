@@ -81,22 +81,20 @@ class _MainScreenState extends State<MainScreen> {
             var search = snapshot.data;
             return FloatingSearchBar(
               automaticallyImplyBackButton: false,
-              body: FloatingSearchBarScrollNotifier(
-                child: StreamBuilder<RecordList>(
-                  stream: selector.recordsStream,
-                  builder: (context, snapshot) {
-                    RecordList? records = snapshot.data;
-                    if (records == null || records.isEmpty) {
-                      return EmptySearch(
-                        query: selectedTerm,
-                      );
-                    }
-                    return RecordGrid(
-                      records: records,
-                      isFiltered: selectedTerm.isNotEmpty,
+              body: StreamBuilder<RecordList>(
+                stream: selector.recordsStream,
+                builder: (context, snapshot) {
+                  RecordList? records = snapshot.data;
+                  if (records == null || records.isEmpty) {
+                    return EmptySearch(
+                      query: selectedTerm,
                     );
-                  },
-                ),
+                  }
+                  return RecordGrid(
+                    records: records,
+                    isFiltered: selectedTerm.isNotEmpty,
+                  );
+                },
               ),
               controller: searchBarController,
               physics: const BouncingScrollPhysics(),

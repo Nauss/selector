@@ -74,38 +74,55 @@ class RecordButtons extends StatelessWidget {
     }
 
     if (type == "store") {
-      return OutlinedButton.icon(
-        onPressed: () => onTap(context, Scenario.store),
-        icon: const Icon(Icons.login),
-        label: Text(
-          locale.store,
+      return Expanded(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: ElevatedButton(
+            onPressed: () => onTap(context, Scenario.store),
+            child: Text(
+              locale.store,
+            ),
+          ),
         ),
       );
     } else if (type == "add") {
-      return OutlinedButton.icon(
-        onPressed: () => onTap(context, Scenario.add),
-        icon: const Icon(Icons.login),
-        label: Text(
-          locale.add,
+      return Expanded(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: ElevatedButton(
+            onPressed: () => onTap(context, Scenario.add),
+            child: Text(
+              locale.add,
+            ),
+          ),
         ),
       );
     } else if (type == "listen") {
-      return OutlinedButton.icon(
-        onPressed: () => onTap(context, Scenario.listen),
-        icon: const Icon(Icons.logout),
-        label: Text(
-          locale.listen,
+      return Expanded(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: ElevatedButton(
+            onPressed: () => onTap(context, Scenario.listen),
+            child: Text(
+              locale.listen,
+            ),
+          ),
         ),
       );
     } else if (type == "remove") {
-      return OutlinedButton.icon(
-        onPressed: () => onTap(context, Scenario.remove),
-        icon: const Icon(Icons.delete_outline),
-        label: Text(
-          locale.remove,
-        ),
-        style: ButtonStyle(
-          foregroundColor: MaterialStateProperty.resolveWith(getDeleteColor),
+      return Expanded(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: ElevatedButton(
+            onPressed: () => onTap(context, Scenario.remove),
+            child: Text(
+              locale.remove,
+            ),
+            style: ButtonStyle(
+              backgroundColor:
+                  MaterialStateProperty.resolveWith(getDeleteColor),
+            ),
+          ),
         ),
       );
     }

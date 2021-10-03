@@ -1,9 +1,7 @@
 name: selector
 description: A new Flutter project.
 
-# The following line prevents the package from being accidentally published to
-# pub.dev using `pub publish`. This is preferred for private packages.
-publish_to: "none" # Remove this line if you wish to publish to pub.dev
+publish_to: "none"
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -48,6 +46,9 @@ dependencies:
   flutter_dotenv: ^5.0.2
   permission_handler: ^8.1.4+2
   string_similarity: ^2.0.0
+  mockito: ^5.0.15
+  flutter_sticky_header: ^0.6.0
+  flutter_svg: ^0.22.0
   
 
 dev_dependencies:
@@ -77,4 +78,10 @@ flutter:
     - assets/platine.gif
     - assets/missing.png
     - assets/barcode_scanner.png
+    - assets/icône en écoute.svg
+    - assets/svgs/icône mon selector.svg
+    - assets/svgs/icône en écoute.svg
+    - assets/svgs/icone Ranger vinyle.svg
+    - assets/svgs/icone Sortir vinyle.svg
+    - assets/svgs/icone Supprimer vinyle.svg
     - .env

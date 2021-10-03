@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:selector/data/constants.dart';
 import 'package:selector/data/discogs.dart';
+import 'package:selector/data/enums.dart';
 import 'package:selector/data/record.dart';
 import 'package:selector/data/utils.dart';
 import 'package:selector/widgets/record_buttons.dart';
@@ -35,11 +36,32 @@ class RecordScreen extends StatelessWidget {
                     Flexible(
                       flex: 2,
                       child: Center(
-                        child: Hero(
-                          tag: Tags.cover(updatedInfo.id),
-                          child: Image(
-                            image: getImage(updatedInfo),
-                          ),
+                        child: Stack(
+                          children: [
+                            Hero(
+                              tag: Tags.cover(updatedInfo.id),
+                              child: Image(
+                                image: getImage(updatedInfo),
+                              ),
+                            ),
+                            if (record.status != RecordStatus.missing)
+                              Positioned(
+                                right: 4,
+                                bottom: 4,
+                                child: CircleAvatar(
+                                  radius: 19,
+                                  backgroundColor:
+                                      themeData.dialogBackgroundColor,
+                                  child: record.status == RecordStatus.outside
+                                      ? SVGs.listening(
+                                          color: themeData.primaryColor,
+                                        )
+                                      : SVGs.mySelector(
+                                          color: themeData.primaryColor,
+                                        ),
+                                ),
+                              )
+                          ],
                         ),
                       ),
                     ),

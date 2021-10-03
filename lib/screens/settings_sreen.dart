@@ -10,26 +10,31 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
     final isDark = AdaptiveTheme.of(context).mode == AdaptiveThemeMode.dark;
-    return SettingsList(
-      sections: [
-        SettingsSection(
-          title: locale.uiSettings,
-          tiles: [
-            SettingsTile.switchTile(
-              title: locale.darkMode,
-              subtitle: isDark ? locale.dark : locale.light,
-              switchValue: isDark,
-              onToggle: (bool value) {
-                AdaptiveTheme.of(context).toggleThemeMode();
-              },
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: SettingsList(
+          sections: [
+            SettingsSection(
+              title: locale.uiSettings,
+              tiles: [
+                SettingsTile.switchTile(
+                  title: locale.darkMode,
+                  subtitle: isDark ? locale.dark : locale.light,
+                  switchValue: isDark,
+                  onToggle: (bool value) {
+                    AdaptiveTheme.of(context).toggleThemeMode();
+                  },
+                ),
+              ],
+            ),
+            SettingsSection(
+              title: locale.bluetoothSettings,
+              tiles: const [],
             ),
           ],
         ),
-        SettingsSection(
-          title: locale.bluetoothSettings,
-          tiles: const [],
-        ),
-      ],
+      ),
     );
   }
 }

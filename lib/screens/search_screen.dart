@@ -97,13 +97,11 @@ class _SearchScreenState extends State<SearchScreen> {
             builder: (context, snapshot) {
               var search = snapshot.data;
               return FloatingSearchBar(
-                body: FloatingSearchBarScrollNotifier(
-                  child: StreamBuilder<RecordList>(
-                    stream: discogs.resultsStream,
-                    builder: (context, snapshot) {
-                      return RecordGrid(records: snapshot.data);
-                    },
-                  ),
+                body: StreamBuilder<RecordList>(
+                  stream: discogs.resultsStream,
+                  builder: (context, snapshot) {
+                    return RecordGrid(records: snapshot.data);
+                  },
                 ),
                 controller: searchBarController,
                 physics: const BouncingScrollPhysics(),
