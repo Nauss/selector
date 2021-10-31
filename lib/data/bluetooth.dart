@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:selector/data/constants.dart';
@@ -62,7 +61,7 @@ class Bluetooth {
     if (state == BlueToothState.connecting) return;
     if (result.device.name.startsWith('Selector')) {
       state = BlueToothState.connecting;
-      var connected = await _connectToDevice(result.device, 1);
+      var connected = await _connectToDevice(result.device, 5);
       int attempt = 0;
       while (!connected && attempt < 3) {
         connected = await _connectToDevice(result.device, 5);
