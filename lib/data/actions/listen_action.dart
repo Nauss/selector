@@ -2,17 +2,20 @@ import 'package:flutter/material.dart' hide Action;
 import 'package:get_it/get_it.dart';
 import 'package:selector/data/actions/selector_action.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:selector/data/bluetooth.dart';
 import 'package:selector/data/record.dart';
 import 'package:selector/data/selector.dart';
 
 class ListenAction extends SelectorAction {
   final selector = GetIt.I.get<Selector>();
+  final bluetooth = GetIt.I.get<Bluetooth>();
   ListenAction();
 
   @override
-  Future<void> execute(Record record) {
+  Future<bool> execute(Record record) async {
     selector.listen(record);
-    return Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
+    return true;
   }
 
   @override

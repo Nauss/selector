@@ -1,22 +1,33 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:im_stepper/stepper.dart';
+import 'package:selector/data/bluetooth.dart';
 import 'package:selector/data/enums.dart';
 import 'package:selector/data/processor.dart';
 import 'package:selector/data/record.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:selector/data/selector.dart';
+import 'package:selector/screens/connection_screen.dart';
 
 class RecordButtons extends StatelessWidget {
   final selector = GetIt.I.get<Selector>();
   final processor = GetIt.I.get<Processor>();
+  final bluetooth = GetIt.I.get<Bluetooth>();
   final Record record;
 
   RecordButtons({Key? key, required this.record}) : super(key: key);
 
   void onTap(BuildContext context, Scenario scenario) {
-    final ThemeData themeData = Theme.of(context);
+    if (bluetooth.state != BlueToothState.connected) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) {
+            return const ConnectionScreen();
+          },
+        ),
+      );
+      return;
+    }
     processor.start(scenario, record);
     showModalBottomSheet(
       context: context,
@@ -42,23 +53,13 @@ class RecordButtons extends StatelessWidget {
             if (currentAction == null) {
               return Container();
             }
-            return Column(
-              children: [
-                IconStepper(
-                  icons: processor.currentActions!
-                      .map((action) => action.icon(context))
-                      .toList(),
-                  steppingEnabled: true,
-                  activeStep: step,
-                  enableStepTapping: false,
-                  enableNextPreviousButtons: false,
-                  activeStepColor: themeData.primaryColor,
-                  activeStepBorderColor: Colors.transparent,
-                  lineColor: themeData.colorScheme.secondary,
-                ),
-                currentAction.image(context),
-                currentAction.text(context),
-              ],
+            return Center(
+              child: Column(
+                children: [
+                  currentAction.image(context),
+                  currentAction.text(context),
+                ],
+              ),
             );
           },
         );

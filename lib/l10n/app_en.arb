@@ -48,5 +48,8 @@
   },
   "selectorUpdating": "Updating your collection...",
   "userInsert": "Put the record in the opened slot",
-  "userTake": "Take the record in the opened slot"
+  "userTake": "Take the record in the opened slot",
+  "bluetoothRequired": "Bluetooth is required to communicate with the Selector.",
+  "bluetoothNextActivate": "Hit \"Next\" and activate Bluetooth in the settings.",
+  "next": "Next"
 }

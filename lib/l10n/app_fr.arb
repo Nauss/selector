@@ -24,5 +24,8 @@
   "selectorClosing": "Le Selector ferme l'emplacement {SLOT}",
   "selectorUpdating": "Mise à jour de votre collection...",
   "userInsert": "Placer le vinyle dans l'emplacement ouvert",
-  "userTake": "Prendre le vinyle dans l'emplacement ouvert"
+  "userTake": "Prendre le vinyle dans l'emplacement ouvert",
+  "bluetoothRequired": "Le Bluetooth est obligatoire pour communiquer avec le Selector.",
+  "bluetoothNextActivate": "Faites \"Suivant\" et activez le Bluetooth dans les paramètres.",
+  "next": "Suivant"
 }

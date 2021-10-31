@@ -39,7 +39,7 @@ class RecordScreen extends StatelessWidget {
                         child: Stack(
                           children: [
                             Hero(
-                              tag: Tags.cover(updatedInfo.id),
+                              tag: Tags.cover(record.uniqueId),
                               child: Image(
                                 image: getImage(updatedInfo),
                               ),

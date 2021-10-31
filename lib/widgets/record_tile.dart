@@ -30,7 +30,7 @@ class RecordTile extends StatelessWidget {
         child: Stack(
           children: [
             Hero(
-              tag: Tags.cover(recordInfo.id),
+              tag: Tags.cover(record.uniqueId),
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.black,

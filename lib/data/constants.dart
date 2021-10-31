@@ -31,27 +31,22 @@ class Globals {
 }
 
 final Map<Scenario, List<SelectorAction>> scenarii = {
-  Scenario.add: [
-    OpenAction(),
-    const UserInsertAction(),
-    CloseAction(),
-    AddAction()
-  ],
+  Scenario.add: [OpenAction(), UserInsertAction(), CloseAction(), AddAction()],
   Scenario.store: [
     OpenAction(),
-    const UserInsertAction(),
+    UserInsertAction(),
     CloseAction(),
     StoreAction()
   ],
   Scenario.listen: [
     OpenAction(),
-    const UserTakeAction(),
+    UserTakeAction(),
     CloseAction(),
     ListenAction()
   ],
   Scenario.remove: [
     OpenAction(),
-    const UserTakeAction(),
+    UserTakeAction(),
     CloseAction(),
     RemoveAction()
   ],
@@ -59,7 +54,7 @@ final Map<Scenario, List<SelectorAction>> scenarii = {
 
 // Hero tags
 class Tags {
-  static cover(int position) => "cover$position";
+  static cover(String id) => "cover$id";
 }
 
 // SVGs
@@ -130,4 +125,13 @@ class SVGs {
         width: width,
         height: height,
       );
+}
+
+// Arduino
+class Arduino {
+  static const done = 'ETAPE_FIN\r\n';
+  static open(int position) => 'S$position';
+  static close(int position) => 'R$position';
+  static userInsert() => 'A';
+  static userTake() => 'P';
 }

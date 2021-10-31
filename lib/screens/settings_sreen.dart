@@ -1,11 +1,20 @@
 import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:selector/data/bluetooth.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 
+  @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  final bluetooth = GetIt.I.get<Bluetooth>();
+  final bluetoothMessageController = TextEditingController(text: 'INIT');
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
@@ -29,8 +38,21 @@ class SettingsScreen extends StatelessWidget {
               ],
             ),
             SettingsSection(
+              subtitle: TextField(
+                controller: bluetoothMessageController,
+                textCapitalization: TextCapitalization.characters,
+              ),
               title: locale.bluetoothSettings,
-              tiles: const [],
+              tiles: [
+                SettingsTile(
+                  title: 'Tail only 🙈',
+                  trailing: OutlinedButton(
+                      onPressed: () {
+                        bluetooth.sendMessage(bluetoothMessageController.text);
+                      },
+                      child: const Text('Envoyer')),
+                )
+              ],
             ),
           ],
         ),

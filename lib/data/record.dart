@@ -27,6 +27,8 @@ class Record extends HiveObject {
     var box = Hive.box(boxName);
     await box.put(position, this);
   }
+
+  String get uniqueId => '${info.id}-$position';
 }
 
 typedef RecordList = List<Record>;

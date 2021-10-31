@@ -32,7 +32,7 @@ class SelectorApp extends StatelessWidget {
         title: 'Selector',
         theme: theme,
         darkTheme: darkTheme,
-        home: ConnectionScreen(),
+        home: const ConnectionScreen(),
       ),
     );
   }
