@@ -38,6 +38,7 @@ enum SortType {
 }
 
 enum BlueToothState {
+  noLocation,
   noBluetooth,
   bluetoothIsOff,
   disconnected,

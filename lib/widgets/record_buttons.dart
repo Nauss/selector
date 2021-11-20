@@ -17,8 +17,8 @@ class RecordButtons extends StatelessWidget {
 
   RecordButtons({Key? key, required this.record}) : super(key: key);
 
-  void onTap(BuildContext context, Scenario scenario) {
-    if (bluetooth.state != BlueToothState.connected) {
+  void onTap(BuildContext context, Scenario scenario) async {
+    if (!await bluetooth.checkConnection()) {
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) {
@@ -28,6 +28,7 @@ class RecordButtons extends StatelessWidget {
       );
       return;
     }
+    selector.ensureRecordPosition(record);
     processor.start(scenario, record);
     showModalBottomSheet(
       context: context,
@@ -56,8 +57,12 @@ class RecordButtons extends StatelessWidget {
             return Center(
               child: Column(
                 children: [
-                  currentAction.image(context),
-                  currentAction.text(context),
+                  currentAction.icon(context),
+                  Expanded(child: Center(child: currentAction.image(context))),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: currentAction.text(context),
+                  ),
                 ],
               ),
             );

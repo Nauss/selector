@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:rxdart/rxdart.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:selector/data/constants.dart';
 import 'package:selector/data/enums.dart';
 
@@ -10,7 +11,7 @@ const customServiceUUID = '0000FFE0-0000-1000-8000-00805F9B34FB';
 const customCharacteristicUUID = '0000FFE1-0000-1000-8000-00805F9B34FB';
 
 class Bluetooth {
-  BlueToothState state = BlueToothState.disconnected;
+  BlueToothState _state = BlueToothState.disconnected;
   late BehaviorSubject<BlueToothState> connectionSubject;
 
   final FlutterBlue _flutterBlue = FlutterBlue.instance;
@@ -19,7 +20,7 @@ class Bluetooth {
   BluetoothCharacteristic? _uart;
 
   Bluetooth() {
-    connectionSubject = BehaviorSubject<BlueToothState>.seeded(state);
+    connectionSubject = BehaviorSubject<BlueToothState>.seeded(_state);
 
     // Listen to scan results
     // _flutterBlue.scanResults.listen(_scanResults);
@@ -28,27 +29,25 @@ class Bluetooth {
   // Connection functions
   ValueStream<BlueToothState> get connectionStream => connectionSubject.stream;
   Future<void> connect() async {
-    // Check the phone's bluetooth
-    var isAvailable = await _flutterBlue.isAvailable;
-    if (!isAvailable) {
-      connectionSubject.add(BlueToothState.noBluetooth);
+    if (!(await checkPermissions())) {
       return;
     }
-    var isOn = await _flutterBlue.isOn;
-    if (!isOn) {
-      connectionSubject.add(BlueToothState.bluetoothIsOff);
-      return;
-    }
-
     // Check for existing connection
     final connected = await _flutterBlue.connectedDevices;
     if (connected.isNotEmpty) {
-      // Already connected, nothing more todo
-      state = BlueToothState.connecting;
-      _deviceConnected(connected[0]);
-      state = BlueToothState.connected;
-      connectionSubject.add(state);
-      return;
+      // Already connected, look for the correct device
+      final selectorIndex = connected.indexWhere(
+        (element) => element.name.startsWith('Selector'),
+      );
+      if (selectorIndex != -1) {
+        // Selector found, connect to it
+        BluetoothDevice selectorDevice = connected[selectorIndex];
+        _state = BlueToothState.connecting;
+        await _deviceConnected(selectorDevice);
+        _state = BlueToothState.connected;
+        connectionSubject.add(_state);
+        return;
+      }
     }
 
     _flutterBlue
@@ -58,9 +57,9 @@ class Bluetooth {
   }
 
   Future<void> _scanResults(ScanResult result) async {
-    if (state == BlueToothState.connecting) return;
+    if (_state == BlueToothState.connecting) return;
     if (result.device.name.startsWith('Selector')) {
-      state = BlueToothState.connecting;
+      _state = BlueToothState.connecting;
       var connected = await _connectToDevice(result.device, 5);
       int attempt = 0;
       while (!connected && attempt < 3) {
@@ -73,8 +72,8 @@ class Bluetooth {
 
       await _deviceConnected(result.device);
 
-      state = BlueToothState.connected;
-      connectionSubject.add(state);
+      _state = BlueToothState.connected;
+      connectionSubject.add(_state);
 
       // Stop scanning
       await _flutterBlue.stopScan();
@@ -123,18 +122,39 @@ class Bluetooth {
   void _stateListener(BluetoothDeviceState event) {
     if (event == BluetoothDeviceState.disconnected) {
       reset();
-      state = BlueToothState.disconnected;
-      connectionSubject.add(state);
+      _state = BlueToothState.disconnected;
+      connectionSubject.add(_state);
     }
   }
 
-  bool _checkConnection() {
-    return state == BlueToothState.connected;
+  Future<bool> checkConnection() async {
+    final permissionsOk = await checkPermissions();
+    return permissionsOk && _state == BlueToothState.connected;
+  }
+
+  Future<bool> checkPermissions() async {
+    // Check the phone's location
+    if (!await Permission.locationWhenInUse.serviceStatus.isEnabled) {
+      connectionSubject.add(BlueToothState.noLocation);
+      return false;
+    }
+    // Check the phone's bluetooth
+    var isAvailable = await _flutterBlue.isAvailable;
+    if (!isAvailable) {
+      connectionSubject.add(BlueToothState.noBluetooth);
+      return false;
+    }
+    var isOn = await _flutterBlue.isOn;
+    if (!isOn) {
+      connectionSubject.add(BlueToothState.bluetoothIsOff);
+      return false;
+    }
+    return true;
   }
 
   // Actions
   Future<bool> open(int position) async {
-    if (!_checkConnection()) {
+    if (!await checkConnection()) {
       return false;
     }
 
@@ -145,7 +165,7 @@ class Bluetooth {
   }
 
   Future<bool> close(int position) async {
-    if (!_checkConnection()) {
+    if (!await checkConnection()) {
       return false;
     }
 
@@ -155,39 +175,39 @@ class Bluetooth {
     return true;
   }
 
-  Future<bool> userInsert() async {
-    if (!_checkConnection()) {
+  Future<bool> userTake() async {
+    if (!await checkConnection()) {
       return false;
     }
 
-    final message = Arduino.userInsert();
-
-    await sendMessage(message);
+    await sendMessage("");
     return true;
   }
 
-  Future<bool> userTake() async {
-    if (!_checkConnection()) {
+  Future<bool> closeEmpty(int position) async {
+    if (!await checkConnection()) {
       return false;
     }
 
-    final message = Arduino.userTake();
+    final message = Arduino.closeEmpty(position);
 
     await sendMessage(message);
     return true;
   }
 
   Future<void> sendMessage(String message) async {
-    await _uart!.write(utf8.encode(message));
-    await _uart!.read();
-    if (!_uart!.isNotifying) {
-      await _uart!.setNotifyValue(true);
+    if (message.isNotEmpty) {
+      await _uart!.write(utf8.encode(message));
       await _uart!.read();
+      if (!_uart!.isNotifying) {
+        await _uart!.setNotifyValue(true);
+        await _uart!.read();
+      }
     }
 
     await _uart!.value.firstWhere((value) {
       final received = utf8.decode(value, allowMalformed: true);
-      return received == Arduino.done;
+      return received == Arduino.take || received == Arduino.done;
     });
   }
 

@@ -5,6 +5,7 @@
   "store": "Ranger",
   "remove": "Supprimer",
   "cancel": "Annuler",
+  "clear": "Vider",
   "oneSide": "Face {SIDE}",
   "listening": "En écoute",
   "mySelector": "Mon selector",
@@ -22,10 +23,16 @@
   "barcodeScanFailed": "Le scan du code barre a échoué",
   "selectorOpening": "Le Selector ouvre l'emplacement {SLOT}",
   "selectorClosing": "Le Selector ferme l'emplacement {SLOT}",
+  "selectorInsertAndClose": "Mettre le vinyle et le Selector fermera l'emplacement {SLOT}",
   "selectorUpdating": "Mise à jour de votre collection...",
   "userInsert": "Placer le vinyle dans l'emplacement ouvert",
   "userTake": "Prendre le vinyle dans l'emplacement ouvert",
   "bluetoothRequired": "Le Bluetooth est obligatoire pour communiquer avec le Selector.",
   "bluetoothNextActivate": "Faites \"Suivant\" et activez le Bluetooth dans les paramètres.",
-  "next": "Suivant"
+  "next": "Suivant",
+  "locationSettings": "Localisation",
+  "locationRequired": "La localisation est obligatoire pour communiquer avec le Selector.",
+  "locationNextActivate": "Faites \"Suivant\" et activez le localisation dans les paramètres.",
+  "clearDatabase": "Vider la base de données",
+  "clearDatabaseWarning": "Êtes-vous sûr de vouloir vider la base de données ?"
 }

@@ -38,7 +38,7 @@ Future<void> initHive() async {
   await Hive.openBox(Record.boxName);
 
   // Debug add data
-  await createFakeHive();
+  // await createFakeHive();
 }
 
 void initGetIt() {

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart' hide Action;
+import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:selector/data/actions/selector_action.dart';
 import 'package:selector/data/bluetooth.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:selector/data/constants.dart';
 import 'package:selector/data/record.dart';
 
 class CloseAction extends SelectorAction {
@@ -17,8 +19,8 @@ class CloseAction extends SelectorAction {
   }
 
   @override
-  Image image(BuildContext context) {
-    return Image.asset("assets/platine.gif");
+  SvgPicture image(BuildContext context) {
+    return SVGs.mySelector(width: 150, height: 150);
   }
 
   @override
@@ -29,6 +31,6 @@ class CloseAction extends SelectorAction {
   @override
   Text text(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
-    return Text(locale.selectorClosing(slot));
+    return Text(locale.selectorInsertAndClose(slot));
   }
 }

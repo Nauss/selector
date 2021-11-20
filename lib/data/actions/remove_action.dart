@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart' hide Action;
+import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:selector/data/actions/selector_action.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:selector/data/constants.dart';
 import 'package:selector/data/record.dart';
 import 'package:selector/data/selector.dart';
 
@@ -16,8 +18,8 @@ class RemoveAction extends SelectorAction {
   }
 
   @override
-  Image image(BuildContext context) {
-    return Image.asset("assets/platine.gif");
+  SvgPicture image(BuildContext context) {
+    return SVGs.mySelector(width: 150, height: 150);
   }
 
   @override

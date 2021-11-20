@@ -5,6 +5,7 @@
   "store": "Store",
   "remove": "Remove",
   "cancel": "Cancel",
+  "clear": "Clear",
   "oneSide": "{SIDE}-side",
   "@oneSide": {
     "description": "The side of a vinyl",
@@ -46,10 +47,24 @@
       }
     }
   },
+  "selectorInsertAndClose": "Insert the record and the Selector will close slot {SLOT}",
+  "@selectorInsertAndClose": {
+    "description": "When closing the Selector but with a record to insert",
+    "placeholders": {
+      "SLOT": {
+        "type": "String"
+      }
+    }
+  },
   "selectorUpdating": "Updating your collection...",
   "userInsert": "Put the record in the opened slot",
   "userTake": "Take the record in the opened slot",
   "bluetoothRequired": "Bluetooth is required to communicate with the Selector.",
   "bluetoothNextActivate": "Hit \"Next\" and activate Bluetooth in the settings.",
-  "next": "Next"
+  "next": "Next",
+  "locationSettings": "Location",
+  "locationRequired": "Location is required to communicate with the Selector.",
+  "locationNextActivate": "Hit \"Next\" and activate Location in the settings.",
+  "clearDatabase": "Clear database",
+  "clearDatabaseWarning": "Are you sure you want to clear the database ?"
 }

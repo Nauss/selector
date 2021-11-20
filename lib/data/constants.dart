@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import 'package:selector/data/actions/close_empty_action.dart';
 import 'package:selector/data/actions/selector_action.dart';
 import 'package:selector/data/actions/add_action.dart';
 import 'package:selector/data/actions/close_action.dart';
@@ -11,7 +12,6 @@ import 'package:selector/data/actions/listen_action.dart';
 import 'package:selector/data/actions/open_action.dart';
 import 'package:selector/data/actions/remove_action.dart';
 import 'package:selector/data/actions/store_action.dart';
-import 'package:selector/data/actions/user_insert_action.dart';
 import 'package:selector/data/actions/user_take_action.dart';
 
 import 'enums.dart';
@@ -31,23 +31,18 @@ class Globals {
 }
 
 final Map<Scenario, List<SelectorAction>> scenarii = {
-  Scenario.add: [OpenAction(), UserInsertAction(), CloseAction(), AddAction()],
-  Scenario.store: [
-    OpenAction(),
-    UserInsertAction(),
-    CloseAction(),
-    StoreAction()
-  ],
+  Scenario.add: [OpenAction(), CloseAction(), AddAction()],
+  Scenario.store: [OpenAction(), CloseAction(), StoreAction()],
   Scenario.listen: [
     OpenAction(),
     UserTakeAction(),
-    CloseAction(),
+    CloseEmptyAction(),
     ListenAction()
   ],
   Scenario.remove: [
     OpenAction(),
     UserTakeAction(),
-    CloseAction(),
+    CloseEmptyAction(),
     RemoveAction()
   ],
 };
@@ -130,8 +125,8 @@ class SVGs {
 // Arduino
 class Arduino {
   static const done = 'ETAPE_FIN\r\n';
+  static const take = 'PRENDRE_VINYL\r\n';
   static open(int position) => 'S$position';
   static close(int position) => 'R$position';
-  static userInsert() => 'A';
-  static userTake() => 'P';
+  static closeEmpty(int position) => 'A$position';
 }

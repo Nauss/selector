@@ -1,14 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_blue/flutter_blue.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:selector/data/bluetooth.dart';
+import 'package:selector/data/constants.dart';
 import 'package:selector/data/enums.dart';
-import 'package:selector/widgets/missing_bluetooth_dialog.dart';
+import 'package:selector/widgets/feature_missing_dialog.dart';
 
 import 'main_screen.dart';
 
@@ -60,9 +60,7 @@ class _ConnectionScreenState extends State<ConnectionScreen>
               ),
             ),
             Expanded(
-              child: Image.asset(
-                'assets/platine.gif',
-              ),
+              child: SVGs.mySelector(width: 200, height: 200),
             ),
             Padding(
               padding: const EdgeInsets.only(
@@ -94,10 +92,8 @@ class _ConnectionScreenState extends State<ConnectionScreen>
     }
     if (state == AppLifecycleState.resumed && _isInBackground) {
       _isInBackground = false;
-      if (await FlutterBlue.instance.isOn) {
+      if (await bluetooth.checkPermissions()) {
         bluetooth.connect();
-      } else {
-        bluetooth.connectionSubject.add(BlueToothState.bluetoothIsOff);
       }
     }
   }
@@ -112,11 +108,13 @@ class _ConnectionScreenState extends State<ConnectionScreen>
           },
         ),
       );
-    } else if (state == BlueToothState.bluetoothIsOff) {
+    } else if (state == BlueToothState.noBluetooth ||
+        state == BlueToothState.bluetoothIsOff ||
+        state == BlueToothState.noLocation) {
       showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (context) => const MissingBluetootheDialog(),
+        builder: (context) => FeatureMissingDialog(state: state),
       );
     }
   }

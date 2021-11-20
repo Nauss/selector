@@ -136,4 +136,10 @@ class Selector {
     }
     networkSearchSubject.add(networkSearch!);
   }
+
+  void ensureRecordPosition(Record record) {
+    if (record.position == -1) {
+      record.position = records.last.position + 1;
+    }
+  }
 }

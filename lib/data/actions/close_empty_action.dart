@@ -1,32 +1,36 @@
 import 'package:flutter/material.dart' hide Action;
+import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:selector/data/actions/selector_action.dart';
 import 'package:selector/data/bluetooth.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:selector/data/constants.dart';
 import 'package:selector/data/record.dart';
 
-class UserInsertAction extends SelectorAction {
+class CloseEmptyAction extends SelectorAction {
   final bluetooth = GetIt.I.get<Bluetooth>();
-  UserInsertAction();
+  late String slot;
+  CloseEmptyAction();
 
   @override
   Future<bool> execute(Record record) {
-    return bluetooth.userInsert();
+    slot = record.position.toString();
+    return bluetooth.closeEmpty(record.position);
   }
 
   @override
-  Image image(BuildContext context) {
-    return Image.asset("assets/platine.gif");
+  SvgPicture image(BuildContext context) {
+    return SVGs.mySelector(width: 150, height: 150);
   }
 
   @override
   Icon icon(BuildContext context) {
-    return const Icon(Icons.arrow_circle_down);
+    return const Icon(Icons.close);
   }
 
   @override
   Text text(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
-    return Text(locale.userInsert);
+    return Text(locale.selectorClosing(slot));
   }
 }
