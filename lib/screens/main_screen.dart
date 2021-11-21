@@ -8,6 +8,7 @@ import 'package:selector/data/selector.dart';
 import 'package:selector/screens/search_screen.dart';
 import 'package:selector/screens/settings_sreen.dart';
 import 'package:selector/widgets/empty_search.dart';
+import 'package:selector/widgets/empty_selector.dart';
 import 'package:selector/widgets/record_grid.dart';
 import 'package:selector/widgets/search_history.dart';
 
@@ -86,9 +87,7 @@ class _MainScreenState extends State<MainScreen> {
                 builder: (context, snapshot) {
                   RecordList? records = snapshot.data;
                   if (records == null || records.isEmpty) {
-                    return EmptySearch(
-                      query: selectedTerm,
-                    );
+                    return const EmptySelector();
                   }
                   return RecordGrid(
                     records: records,

@@ -59,7 +59,7 @@ class Selector {
 
   void add(Record record) {
     record.status = RecordStatus.inside;
-    record.position = records.last.position + 1;
+    ensureRecordPosition(record);
     // Get the box
     var box = Hive.box(Record.boxName);
     box.put(record.position, record);
@@ -139,7 +139,11 @@ class Selector {
 
   void ensureRecordPosition(Record record) {
     if (record.position == -1) {
-      record.position = records.last.position + 1;
+      if (records.isEmpty) {
+        record.position = 1;
+      } else {
+        record.position = records.last.position + 1;
+      }
     }
   }
 }

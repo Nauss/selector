@@ -5,7 +5,6 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:selector/app.dart';
 import 'package:selector/data/bluetooth.dart';
 import 'package:selector/data/constants.dart';
-import 'package:selector/data/debug.dart';
 import 'package:selector/data/discogs.dart';
 import 'package:selector/data/processor.dart';
 import 'package:selector/data/selector.dart';

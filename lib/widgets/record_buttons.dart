@@ -28,7 +28,6 @@ class RecordButtons extends StatelessWidget {
       );
       return;
     }
-    selector.ensureRecordPosition(record);
     processor.start(scenario, record);
     showModalBottomSheet(
       context: context,
