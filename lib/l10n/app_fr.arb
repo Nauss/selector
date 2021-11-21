@@ -33,6 +33,7 @@
   "locationSettings": "Localisation",
   "locationRequired": "La localisation est obligatoire pour communiquer avec le Selector.",
   "locationNextActivate": "Faites \"Suivant\" et activez le localisation dans les paramètres.",
+  "dataBase": "Base de données",
   "clearDatabase": "Vider la base de données",
   "clearDatabaseWarning": "Êtes-vous sûr de vouloir vider la base de données ?",
   "emptySelector": "Votre Selector est vide",

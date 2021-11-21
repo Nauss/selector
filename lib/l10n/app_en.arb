@@ -65,6 +65,7 @@
   "locationSettings": "Location",
   "locationRequired": "Location is required to communicate with the Selector.",
   "locationNextActivate": "Hit \"Next\" and activate Location in the settings.",
+  "dataBase": "Database",
   "clearDatabase": "Clear database",
   "clearDatabaseWarning": "Are you sure you want to clear the database ?",
   "emptySelector": "Your Selector is empty",

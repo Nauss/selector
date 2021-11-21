@@ -6,14 +6,17 @@ import 'package:selector/data/bluetooth.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:selector/data/constants.dart';
 import 'package:selector/data/record.dart';
+import 'package:selector/data/selector.dart';
 
 class OpenAction extends SelectorAction {
   final bluetooth = GetIt.I.get<Bluetooth>();
+  final selector = GetIt.I.get<Selector>();
   late String slot;
   OpenAction();
 
   @override
   Future<bool> execute(Record record) async {
+    selector.ensureRecordPosition(record);
     slot = record.position.toString();
     return bluetooth.open(record.position);
   }

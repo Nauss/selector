@@ -59,7 +59,6 @@ class Selector {
 
   void add(Record record) {
     record.status = RecordStatus.inside;
-    ensureRecordPosition(record);
     // Get the box
     var box = Hive.box(Record.boxName);
     box.put(record.position, record);

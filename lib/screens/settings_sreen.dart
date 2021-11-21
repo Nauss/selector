@@ -60,10 +60,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ],
             ),
             SettingsSection(
-              title: "Database",
+              title: locale.dataBase,
               tiles: [
                 SettingsTile(
-                  title: 'Clear database',
+                  title: locale.clearDatabase,
                   trailing: OutlinedButton(
                     style: ButtonStyle(
                       foregroundColor: MaterialStateProperty.all<Color>(
@@ -101,7 +101,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ],
                       ),
                     ),
-                    child: const Text('Clear'),
+                    child: Text(locale.clear),
                   ),
                 ),
               ],
