@@ -124,8 +124,8 @@ class SVGs {
 
 // Arduino
 class Arduino {
-  static const done = 'ETAPE_FIN\r\n';
-  static const take = 'PRENDRE_VINYL\r\n';
+  static const done = 'ETAPE_FIN';
+  static const take = 'PRENDRE_VINYL';
   static open(int position) => 'S$position';
   static close(int position) => 'R$position';
   static closeEmpty(int position) => 'A$position';

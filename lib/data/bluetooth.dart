@@ -207,7 +207,8 @@ class Bluetooth {
 
     await _uart!.value.firstWhere((value) {
       final received = utf8.decode(value, allowMalformed: true);
-      return received == Arduino.take || received == Arduino.done;
+      return received.startsWith(Arduino.take) ||
+          received.startsWith(Arduino.done);
     });
   }
 
