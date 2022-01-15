@@ -5,7 +5,7 @@ import 'package:hive/hive.dart';
 import 'package:selector/data/bluetooth.dart';
 import 'package:selector/data/record.dart';
 import 'package:selector/data/selector.dart';
-import 'package:settings_ui/settings_ui.dart';
+import 'package:flutter_settings_ui/flutter_settings_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingsScreen extends StatefulWidget {
