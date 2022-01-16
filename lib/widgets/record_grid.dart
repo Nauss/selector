@@ -8,6 +8,7 @@ import 'package:selector/data/constants.dart';
 import 'package:selector/data/record.dart';
 import 'package:selector/data/enums.dart';
 import 'package:selector/screens/connection_screen.dart';
+import 'package:selector/widgets/gradient_text.dart';
 import 'package:selector/widgets/record_tile.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:tuple/tuple.dart';

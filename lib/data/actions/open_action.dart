@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:selector/data/enums.dart';
 import 'package:selector/data/record.dart';
 import 'package:selector/data/selector.dart';
+import 'package:selector/widgets/gradient_text.dart';
 
 class OpenAction extends SelectorAction {
   final bluetooth = GetIt.I.get<Bluetooth>();
@@ -32,8 +33,8 @@ class OpenAction extends SelectorAction {
   }
 
   @override
-  Text text(BuildContext context) {
+  Widget text(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
-    return Text(locale.selectorOpening(slot));
+    return GradientText(locale.selectorOpening(slot));
   }
 }

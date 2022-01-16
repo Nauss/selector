@@ -17,6 +17,9 @@ class SelectorApp extends StatelessWidget {
       light: ThemeData(
         brightness: Brightness.light,
         primaryColor: primaryColor,
+        inputDecorationTheme: const InputDecorationTheme(
+          hintStyle: TextStyle(fontSize: 16),
+        ),
       ),
       dark: ThemeData(
         brightness: Brightness.dark,
