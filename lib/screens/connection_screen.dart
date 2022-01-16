@@ -101,16 +101,18 @@ class _ConnectionScreenState extends State<ConnectionScreen>
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     if (state == AppLifecycleState.paused) {
       _isInBackground = true;
+      await bluetooth.offline();
     }
     if (state == AppLifecycleState.resumed && _isInBackground) {
       _isInBackground = false;
-      if (await bluetooth.checkPermissions()) {
-        bluetooth.connect();
-      }
+      await bluetooth.connect();
     }
   }
 
   void _bluetoothConnectionListener(BlueToothState state) {
+    if (_isInBackground) {
+      return;
+    }
     if (state == BlueToothState.connected || state == BlueToothState.offline) {
       Navigator.pushReplacement(
         context,
@@ -120,7 +122,9 @@ class _ConnectionScreenState extends State<ConnectionScreen>
           },
         ),
       );
-    } else if (state == BlueToothState.noBluetooth ||
+    }
+    // Only show the feature missing dialog if the platform is darwin
+    else if (state == BlueToothState.noBluetooth ||
         state == BlueToothState.bluetoothIsOff ||
         state == BlueToothState.noLocation) {
       showDialog(

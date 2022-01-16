@@ -27,9 +27,18 @@ class Bluetooth {
   // Connection functions
   ValueStream<BlueToothState> get connectionStream => connectionSubject.stream;
   Future<void> connect() async {
+    _state = BlueToothState.disconnected;
+    connectionSubject.add(_state);
+
     if (!(await checkPermissions())) {
       return;
     }
+
+    if (_scanSubscription != null) {
+      _scanSubscription!.cancel();
+    }
+    await _flutterBlue.stopScan();
+
     // Check for existing connection
     final connected = await _flutterBlue.connectedDevices;
     if (connected.isNotEmpty) {
@@ -41,22 +50,14 @@ class Bluetooth {
         // Selector found, connect to it
         BluetoothDevice selectorDevice = connected[selectorIndex];
         _state = BlueToothState.connecting;
+        connectionSubject.add(_state);
         await _deviceConnected(selectorDevice);
         _state = BlueToothState.connected;
         connectionSubject.add(_state);
         return;
       }
     }
-
-    if (_scanSubscription != null) {
-      _scanSubscription!.cancel();
-    }
     _scanSubscription = _flutterBlue.scan().listen(_scanResults);
-  }
-
-  void reconnect() {
-    _state = BlueToothState.disconnected;
-    connectionSubject.add(_state);
   }
 
   Future<void> offline() async {
@@ -94,11 +95,13 @@ class Bluetooth {
   Future<bool> _connectToDevice(BluetoothDevice device, int timeout) async {
     Future<bool> returnValue = Future.value(true);
     try {
-      await device.connect().timeout(Duration(seconds: timeout), onTimeout: () {
+      await device.connect().timeout(Duration(seconds: timeout),
+          onTimeout: () async {
         returnValue = Future.value(false);
-        device.disconnect();
+        await device.disconnect();
       });
     } catch (e) {
+      await device.disconnect();
       returnValue = Future.value(false);
     }
 
@@ -157,8 +160,13 @@ class Bluetooth {
     }
     var isOn = await _flutterBlue.isOn;
     if (!isOn) {
-      connectionSubject.add(BlueToothState.bluetoothIsOff);
-      return false;
+      // Try once more after some time (to allow auto-enable)
+      await Future.delayed(const Duration(seconds: 2));
+      isOn = await _flutterBlue.isOn;
+      if (!isOn) {
+        connectionSubject.add(BlueToothState.bluetoothIsOff);
+        return false;
+      }
     }
     return true;
   }

@@ -38,5 +38,5 @@
   "clearDatabaseWarning": "Êtes-vous sûr de vouloir vider la base de données ?",
   "emptySelector": "Votre Selector est vide",
   "addRecords": "Ajouter des vinyles",
-  "offline": "Déconnecté"
+  "reconnect": "Reconnecter"
 }
