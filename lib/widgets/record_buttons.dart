@@ -70,7 +70,7 @@ class RecordButtons extends StatelessWidget {
     );
   }
 
-  Widget getButton(BuildContext context, String type) {
+  Widget getButton(BuildContext context, String type, bool isOffline) {
     final locale = AppLocalizations.of(context)!;
     final ThemeData themeData = Theme.of(context);
     Color getDeleteColor(Set<MaterialState> states) {
@@ -82,7 +82,7 @@ class RecordButtons extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: ElevatedButton(
-            onPressed: () => onTap(context, Scenario.store),
+            onPressed: isOffline ? null : () => onTap(context, Scenario.store),
             child: Text(
               locale.store,
             ),
@@ -94,7 +94,7 @@ class RecordButtons extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: ElevatedButton(
-            onPressed: () => onTap(context, Scenario.add),
+            onPressed: isOffline ? null : () => onTap(context, Scenario.add),
             child: Text(
               locale.add,
             ),
@@ -106,7 +106,7 @@ class RecordButtons extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: ElevatedButton(
-            onPressed: () => onTap(context, Scenario.listen),
+            onPressed: isOffline ? null : () => onTap(context, Scenario.listen),
             child: Text(
               locale.listen,
             ),
@@ -118,7 +118,9 @@ class RecordButtons extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: ElevatedButton(
-            onPressed: () => onTap(context, Scenario.remove),
+            onPressed: (isOffline && record.status != RecordStatus.outside)
+                ? null
+                : () => onTap(context, Scenario.remove),
             child: Text(
               locale.remove,
             ),
@@ -135,21 +137,30 @@ class RecordButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var buttons = <Widget>[];
-    if (record.status == RecordStatus.outside) {
-      buttons.add(getButton(context, "store"));
-    }
-    if (record.status == RecordStatus.inside) {
-      buttons.add(getButton(context, "listen"));
-    }
-    if (record.status == RecordStatus.missing) {
-      buttons.add(getButton(context, "add"));
-    } else {
-      buttons.add(getButton(context, "remove"));
-    }
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: buttons,
-    );
+    return StreamBuilder(
+        stream: bluetooth.connectionStream,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Container();
+          }
+          final isOffline =
+              (snapshot.data as BlueToothState) == BlueToothState.offline;
+          var buttons = <Widget>[];
+          if (record.status == RecordStatus.outside) {
+            buttons.add(getButton(context, "store", isOffline));
+          }
+          if (record.status == RecordStatus.inside) {
+            buttons.add(getButton(context, "listen", isOffline));
+          }
+          if (record.status == RecordStatus.missing) {
+            buttons.add(getButton(context, "add", isOffline));
+          } else {
+            buttons.add(getButton(context, "remove", isOffline));
+          }
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: buttons,
+          );
+        });
   }
 }

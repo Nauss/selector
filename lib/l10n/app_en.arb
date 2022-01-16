@@ -69,5 +69,6 @@
   "clearDatabase": "Clear database",
   "clearDatabaseWarning": "Are you sure you want to clear the database ?",
   "emptySelector": "Your Selector is empty",
-  "addRecords": "Add some records"
+  "addRecords": "Add some records",
+  "offline": "Offline"
 }

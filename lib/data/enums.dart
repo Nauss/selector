@@ -46,6 +46,7 @@ enum BlueToothState {
   connected,
   sendingData,
   receivingData,
+  offline
 }
 
 enum Scenario {
