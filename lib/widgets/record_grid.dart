@@ -8,7 +8,6 @@ import 'package:selector/data/constants.dart';
 import 'package:selector/data/record.dart';
 import 'package:selector/data/enums.dart';
 import 'package:selector/screens/connection_screen.dart';
-import 'package:selector/widgets/gradient_text.dart';
 import 'package:selector/widgets/record_tile.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:tuple/tuple.dart';
@@ -117,8 +116,6 @@ class RecordGrid extends StatelessWidget {
                     children: [
                       ElevatedButton.icon(
                         onPressed: () {
-                          // Restart bluetooth
-                          bluetooth.reconnect();
                           // Back to the connection screen
                           Navigator.pushReplacement(
                             context,
@@ -139,11 +136,11 @@ class RecordGrid extends StatelessWidget {
                           visualDensity: VisualDensity.compact,
                         ),
                         icon: const Icon(
-                          Icons.bluetooth,
+                          Icons.bluetooth_disabled,
                           size: 20,
                         ),
                         label: Text(
-                          locale.offline,
+                          locale.reconnect,
                           style: const TextStyle(color: Colors.orange),
                         ),
                       )
