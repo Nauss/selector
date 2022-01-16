@@ -1,11 +1,10 @@
-import 'package:flutter/material.dart' hide Action;
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:selector/data/actions/selector_action.dart';
 import 'package:selector/data/bluetooth.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:selector/data/constants.dart';
 import 'package:selector/data/record.dart';
+import 'package:selector/widgets/gradient_text.dart';
 
 class CloseEmptyAction extends SelectorAction {
   final bluetooth = GetIt.I.get<Bluetooth>();
@@ -19,18 +18,13 @@ class CloseEmptyAction extends SelectorAction {
   }
 
   @override
-  SvgPicture image(BuildContext context) {
-    return SVGs.mySelector(width: 150, height: 150);
+  Widget image(BuildContext context) {
+    return Image.asset("assets/gifs/fermeture intercalaire vide.gif");
   }
 
   @override
-  Icon icon(BuildContext context) {
-    return const Icon(Icons.close);
-  }
-
-  @override
-  Text text(BuildContext context) {
+  Widget text(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
-    return Text(locale.selectorClosing(slot));
+    return GradientText(locale.selectorClosing(slot));
   }
 }

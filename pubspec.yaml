@@ -13,7 +13,7 @@ publish_to: "none"
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+4
+version: 1.0.0+5
 
 environment:
   sdk: ">=2.13.0 <3.0.0"
@@ -27,27 +27,27 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
-  google_fonts: ^2.1.0
-  adaptive_theme: ^2.2.0
-  hive: ^2.0.4
+  cupertino_icons: ^1.0.4
+  google_fonts: ^2.2.0
+  adaptive_theme: ^2.3.0
+  hive: ^2.0.5
   hive_flutter: ^1.1.0
   enum_to_string: ^2.0.1
-  settings_ui: ^1.0.0
-  material_floating_search_bar: ^0.3.4
-  path_provider: ^2.0.2
-  network_to_file_image: ^3.0.0
+  flutter_settings_ui: ^2.0.1
+  material_floating_search_bar: ^0.3.6
+  path_provider: ^2.0.8
+  network_to_file_image: ^3.1.0
   flutter_barcode_scanner: ^2.0.0
   rxdart: ^0.26.0
   get_it: ^7.2.0
   tuple: ^2.0.0
   progress_indicators: ^1.0.0
-  flutter_dotenv: ^5.0.2
-  permission_handler: ^8.1.4+2
+  environment_config: ^3.0.0
+  permission_handler: ^8.3.0
   string_similarity: ^2.0.0
-  mockito: ^5.0.15
+  mockito: ^5.0.17
   flutter_sticky_header: ^0.6.0
-  flutter_svg: ^0.22.0
+  flutter_svg: ^1.0.1
   flutter_blue: ^0.8.0
   app_settings: ^4.1.1
 
@@ -83,4 +83,13 @@ flutter:
     - assets/svgs/icone Ranger vinyle.svg
     - assets/svgs/icone Sortir vinyle.svg
     - assets/svgs/icone Supprimer vinyle.svg
-    - .env
+    - assets/gifs/fermeture intercalaire avec vinyle.gif
+    - assets/gifs/fermeture intercalaire vide.gif
+    - assets/gifs/insertion vinyle.gif
+    - assets/gifs/ouverture intercalaire avec vinyle.gif
+    - assets/gifs/ouverture intercalaire vide.gif
+    - assets/gifs/prendre vinyle.gif
+
+environment_config:
+  fields:
+    discogsToken:

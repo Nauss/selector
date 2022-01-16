@@ -70,12 +70,24 @@ class _ConnectionScreenState extends State<ConnectionScreen>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  const Expanded(child: SizedBox.shrink()),
                   Icon(
                     Icons.bluetooth_searching,
                     color: themeData.primaryColor,
                   ),
                   const SizedBox(width: 8),
                   JumpingText(locale.connection),
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: IconButton(
+                        onPressed: () {
+                          bluetooth.offline();
+                        },
+                        icon: const Icon(Icons.skip_next),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             )
@@ -99,7 +111,7 @@ class _ConnectionScreenState extends State<ConnectionScreen>
   }
 
   void _bluetoothConnectionListener(BlueToothState state) {
-    if (state == BlueToothState.connected) {
+    if (state == BlueToothState.connected || state == BlueToothState.offline) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(

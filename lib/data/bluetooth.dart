@@ -16,14 +16,12 @@ class Bluetooth {
 
   final FlutterBlue _flutterBlue = FlutterBlue.instance;
   StreamSubscription<BluetoothDeviceState>? _stateSubscription;
+  StreamSubscription<ScanResult>? _scanSubscription;
   BluetoothDevice? _device;
   BluetoothCharacteristic? _uart;
 
   Bluetooth() {
     connectionSubject = BehaviorSubject<BlueToothState>.seeded(_state);
-
-    // Listen to scan results
-    // _flutterBlue.scanResults.listen(_scanResults);
   }
 
   // Connection functions
@@ -50,11 +48,24 @@ class Bluetooth {
       }
     }
 
-    _flutterBlue
-        .scan(timeout: const Duration(seconds: 10))
-        .listen(_scanResults);
-    // await _flutterBlue.startScan(timeout: const Duration(seconds: 10));
+    if (_scanSubscription != null) {
+      _scanSubscription!.cancel();
+    }
+    _scanSubscription = _flutterBlue.scan().listen(_scanResults);
   }
+
+  void reconnect() {
+    _state = BlueToothState.disconnected;
+    connectionSubject.add(_state);
+  }
+
+  Future<void> offline() async {
+    await _flutterBlue.stopScan();
+    _state = BlueToothState.offline;
+    connectionSubject.add(_state);
+  }
+
+  get isOffline => _state == BlueToothState.offline;
 
   Future<void> _scanResults(ScanResult result) async {
     if (_state == BlueToothState.connecting) return;
@@ -96,7 +107,7 @@ class Bluetooth {
 
   Future<void> _deviceConnected(BluetoothDevice device) async {
     _device = device;
-    await getCharacteristic();
+    await _getCharacteristic();
     if (_stateSubscription == null) {
       _stateSubscription = _device!.state.listen(_stateListener);
     } else {
@@ -104,7 +115,7 @@ class Bluetooth {
     }
   }
 
-  Future<void> getCharacteristic() async {
+  Future<void> _getCharacteristic() async {
     List<BluetoothService> services = await _device!.discoverServices();
     for (var service in services) {
       if (service.uuid == Guid(customServiceUUID)) {
@@ -122,7 +133,7 @@ class Bluetooth {
   void _stateListener(BluetoothDeviceState event) {
     if (event == BluetoothDeviceState.disconnected) {
       reset();
-      _state = BlueToothState.disconnected;
+      _state = BlueToothState.offline;
       connectionSubject.add(_state);
     }
   }

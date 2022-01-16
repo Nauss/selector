@@ -4,6 +4,12 @@ This is the mobile application used to control your Selector.
 
 You can find information on the device here: _@todo_
 
+# Generate secrets
+
+```bash
+flutter pub run environment_config:generate --DICOGS_TOKEN=YOUR_DICOGS_TOKEN_HERE
+```
+
 # Generate the localizations
 
 ```bash
