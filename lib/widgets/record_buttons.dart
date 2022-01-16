@@ -30,41 +30,48 @@ class RecordButtons extends StatelessWidget {
     processor.start(scenario, record);
     showModalBottomSheet(
       context: context,
+      enableDrag: false,
       isDismissible: false,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(25.0), topRight: Radius.circular(25.0)),
       ),
       builder: (BuildContext context) {
-        return StreamBuilder<Object>(
-          stream: processor.stepStream,
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return Container();
-            }
-            final step = snapshot.data as int;
-            if (step == -1) {
-              Future.delayed(const Duration(milliseconds: 10),
-                  () => Navigator.popUntil(context, (route) => route.isFirst));
-              return Container();
-            }
-            final currentAction = processor.currentAction;
-            if (currentAction == null) {
-              return Container();
-            }
-            return Center(
-              child: Column(
-                children: [
-                  currentAction.icon(context),
-                  Expanded(child: Center(child: currentAction.image(context))),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: currentAction.text(context),
-                  ),
-                ],
-              ),
-            );
-          },
+        return WillPopScope(
+          onWillPop: () async => false,
+          child: StreamBuilder<Object>(
+            stream: processor.stepStream,
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return Container();
+              }
+              final step = snapshot.data as int;
+              if (step == -1) {
+                Future.delayed(
+                    const Duration(milliseconds: 10),
+                    () =>
+                        Navigator.popUntil(context, (route) => route.isFirst));
+                return Container();
+              }
+              final currentAction = processor.currentAction;
+              if (currentAction == null) {
+                return Container();
+              }
+              return Center(
+                child: Column(
+                  children: [
+                    currentAction.icon(context),
+                    Expanded(
+                        child: Center(child: currentAction.image(context))),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: currentAction.text(context),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
         );
       },
     );
