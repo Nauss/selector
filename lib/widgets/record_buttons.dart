@@ -49,8 +49,10 @@ class RecordButtons extends StatelessWidget {
               if (step == -1) {
                 Future.delayed(
                     const Duration(milliseconds: 10),
-                    () =>
-                        Navigator.popUntil(context, (route) => route.isFirst));
+                    () => Navigator.popUntil(
+                          context,
+                          (route) => route.isFirst,
+                        ));
                 return Container();
               }
               final currentAction = processor.currentAction;
@@ -60,7 +62,6 @@ class RecordButtons extends StatelessWidget {
               return Center(
                 child: Column(
                   children: [
-                    currentAction.icon(context),
                     Expanded(
                         child: Center(child: currentAction.image(context))),
                     Padding(

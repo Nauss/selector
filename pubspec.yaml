@@ -83,6 +83,12 @@ flutter:
     - assets/svgs/icone Ranger vinyle.svg
     - assets/svgs/icone Sortir vinyle.svg
     - assets/svgs/icone Supprimer vinyle.svg
+    - assets/gifs/fermeture intercalaire avec vinyle.gif
+    - assets/gifs/fermeture intercalaire vide.gif
+    - assets/gifs/insertion vinyle.gif
+    - assets/gifs/ouverture intercalaire avec vinyle.gif
+    - assets/gifs/ouverture intercalaire vide.gif
+    - assets/gifs/prendre vinyle.gif
 
 environment_config:
   fields:
