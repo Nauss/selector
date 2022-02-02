@@ -17,12 +17,12 @@ class UserTakeAction extends SelectorAction {
 
   @override
   Widget image(BuildContext context) {
-    return Image.asset("assets/gifs/prendre vinyle.gif");
+    return Image.asset("assets/gifs/ouverture et retrait vinyle.gif");
   }
 
   @override
   Widget text(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
-    return GradientText(locale.userTake);
+    return GradientText(locale.selectorOpeningVinyl);
   }
 }

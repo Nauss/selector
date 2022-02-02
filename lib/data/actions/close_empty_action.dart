@@ -25,6 +25,6 @@ class CloseEmptyAction extends SelectorAction {
   @override
   Widget text(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
-    return GradientText(locale.selectorClosing(slot));
+    return GradientText(locale.selectorClosingEmpty);
   }
 }
