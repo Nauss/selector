@@ -19,12 +19,12 @@ class CloseAction extends SelectorAction {
 
   @override
   Widget image(BuildContext context) {
-    return Image.asset("assets/gifs/fermeture intercalaire avec vinyle.gif");
+    return Image.asset("assets/gifs/insertion vinyle et fermeture.gif");
   }
 
   @override
   Widget text(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
-    return GradientText(locale.selectorInsertAndClose(slot));
+    return GradientText(locale.selectorClosing);
   }
 }

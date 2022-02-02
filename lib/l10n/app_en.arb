@@ -29,33 +29,10 @@
   "selectRecordStore": "Select the record to store",
   "emptySearchLabel": "Search artists, albums and more...",
   "barcodeScanFailed": "Barcode scan failed",
-  "selectorOpening": "Selector opening slot {SLOT}",
-  "@selectorOpening": {
-    "description": "When opening the Selector",
-    "placeholders": {
-      "SLOT": {
-        "type": "String"
-      }
-    }
-  },
-  "selectorClosing": "Selector closing slot {SLOT}",
-  "@selectorClosing": {
-    "description": "When closing the Selector",
-    "placeholders": {
-      "SLOT": {
-        "type": "String"
-      }
-    }
-  },
-  "selectorInsertAndClose": "Insert the record and the Selector will close slot {SLOT}",
-  "@selectorInsertAndClose": {
-    "description": "When closing the Selector but with a record to insert",
-    "placeholders": {
-      "SLOT": {
-        "type": "String"
-      }
-    }
-  },
+  "selectorOpeningVinyl": "Preparation of the vinyl record",
+  "selectorOpeningEmpty": "Preparation of the Selector",
+  "selectorClosingEmpty": "Closing the Selector",
+  "selectorClosing": "Storing the vinyl record",
   "selectorUpdating": "Updating your collection...",
   "userInsert": "Put the record in the opened slot",
   "userTake": "Take the record in the opened slot",

@@ -26,7 +26,7 @@ class OpenAction extends SelectorAction {
   @override
   Widget image(BuildContext context) {
     if (status == RecordStatus.inside) {
-      return Image.asset("assets/gifs/ouverture intercalaire avec vinyle.gif");
+      return Image.asset("assets/gifs/ouverture et retrait vinyle.gif");
     } else {
       return Image.asset("assets/gifs/ouverture intercalaire vide.gif");
     }
@@ -35,6 +35,10 @@ class OpenAction extends SelectorAction {
   @override
   Widget text(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
-    return GradientText(locale.selectorOpening(slot));
+    if (status == RecordStatus.inside) {
+      return GradientText(locale.selectorOpeningVinyl);
+    } else {
+      return GradientText(locale.selectorOpeningEmpty);
+    }
   }
 }
