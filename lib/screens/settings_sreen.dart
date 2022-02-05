@@ -1,4 +1,3 @@
-import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
@@ -23,25 +22,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final locale = AppLocalizations.of(context)!;
-    final isDark = AdaptiveTheme.of(context).mode == AdaptiveThemeMode.dark;
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: SettingsList(
           sections: [
-            SettingsSection(
-              title: locale.uiSettings,
-              tiles: [
-                SettingsTile.switchTile(
-                  title: locale.darkMode,
-                  subtitle: isDark ? locale.dark : locale.light,
-                  switchValue: isDark,
-                  onToggle: (bool value) {
-                    AdaptiveTheme.of(context).toggleThemeMode();
-                  },
-                ),
-              ],
-            ),
             SettingsSection(
               subtitle: TextField(
                 controller: bluetoothMessageController,
