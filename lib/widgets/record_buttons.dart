@@ -34,8 +34,14 @@ class RecordButtons extends StatelessWidget {
       isDismissible: false,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(25.0), topRight: Radius.circular(25.0)),
+          topLeft: Radius.circular(25.0),
+          topRight: Radius.circular(25.0),
+        ),
       ),
+      constraints: BoxConstraints(
+        maxHeight: MediaQuery.of(context).size.height * 0.5,
+      ),
+      barrierColor: const Color.fromARGB(100, 0, 0, 0),
       builder: (BuildContext context) {
         return WillPopScope(
           onWillPop: () async => false,
