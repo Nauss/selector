@@ -126,9 +126,11 @@ class RecordButtons extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: ElevatedButton(
-            onPressed: (isOffline && record.status != RecordStatus.outside)
+            onPressed: isOffline
                 ? null
-                : () => onTap(context, Scenario.remove),
+                : record.status == RecordStatus.outside
+                    ? () => onTap(context, Scenario.removeAlreadyOut)
+                    : () => onTap(context, Scenario.remove),
             child: Text(
               locale.remove,
             ),

@@ -45,6 +45,7 @@ final Map<Scenario, List<SelectorAction>> scenarii = {
     CloseEmptyAction(),
     RemoveAction()
   ],
+  Scenario.removeAlreadyOut: [RemoveAction()],
 };
 
 // Hero tags
