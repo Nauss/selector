@@ -39,7 +39,7 @@ class RecordButtons extends StatelessWidget {
         ),
       ),
       constraints: BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * 0.5,
+        maxHeight: MediaQuery.of(context).size.height * 0.33,
       ),
       barrierColor: const Color.fromARGB(100, 0, 0, 0),
       builder: (BuildContext context) {
