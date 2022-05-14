@@ -67,7 +67,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             },
                           ),
                           ElevatedButton(
-                            child: Text(locale.clear),
                             style: ButtonStyle(
                               backgroundColor: MaterialStateProperty.all<Color>(
                                   themeData.errorColor),
@@ -82,6 +81,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 ),
                               );
                             },
+                            child: Text(locale.clear),
                           ),
                         ],
                       ),

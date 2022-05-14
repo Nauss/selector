@@ -15,10 +15,10 @@ class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
 
   @override
-  _MainScreenState createState() => _MainScreenState();
+  MainScreenState createState() => MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class MainScreenState extends State<MainScreen> {
   final FloatingSearchBarController searchBarController =
       FloatingSearchBarController();
   final selector = GetIt.I.get<Selector>();

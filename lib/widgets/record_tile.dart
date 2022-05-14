@@ -28,6 +28,7 @@ class RecordTile extends StatelessWidget {
           );
         },
         child: Stack(
+          fit: StackFit.expand,
           children: [
             Hero(
               tag: Tags.cover(record.uniqueId),
@@ -72,7 +73,6 @@ class RecordTile extends StatelessWidget {
               ),
             ),
           ],
-          fit: StackFit.expand,
         ),
       ),
     );

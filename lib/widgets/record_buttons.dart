@@ -137,12 +137,12 @@ class RecordButtons extends StatelessWidget {
                 : record.status == RecordStatus.outside
                     ? () => onTap(context, Scenario.removeAlreadyOut)
                     : () => onTap(context, Scenario.remove),
-            child: Text(
-              locale.remove,
-            ),
             style: ButtonStyle(
               backgroundColor:
                   MaterialStateProperty.resolveWith(getDeleteColor),
+            ),
+            child: Text(
+              locale.remove,
             ),
           ),
         ),

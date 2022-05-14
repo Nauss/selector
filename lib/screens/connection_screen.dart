@@ -31,7 +31,7 @@ class _ConnectionScreenState extends State<ConnectionScreen>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     bluetooth.connect();
   }
 
@@ -137,7 +137,7 @@ class _ConnectionScreenState extends State<ConnectionScreen>
 
   @override
   void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     _stream?.cancel();
     super.dispose();
   }
