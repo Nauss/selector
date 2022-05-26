@@ -53,8 +53,6 @@ class Bluetooth {
         _state = BlueToothState.connecting;
         connectionSubject.add(_state);
         await _deviceConnected(selectorDevice);
-        _state = BlueToothState.connected;
-        connectionSubject.add(_state);
         return;
       }
     }
@@ -85,9 +83,6 @@ class Bluetooth {
 
       await _deviceConnected(result.device);
 
-      _state = BlueToothState.connected;
-      connectionSubject.add(_state);
-
       // Stop scanning
       await _flutterBlue.stopScan();
     }
@@ -117,6 +112,11 @@ class Bluetooth {
     } else {
       _stateSubscription!.resume();
     }
+
+    _state = BlueToothState.connected;
+    connectionSubject.add(_state);
+
+    Future.delayed(const Duration(milliseconds: 500), getStatus);
   }
 
   Future<void> _getCharacteristic() async {
@@ -215,8 +215,20 @@ class Bluetooth {
     return true;
   }
 
+  Future<bool> getStatus() async {
+    debugPrint('getStatus');
+    if (!await checkConnection()) {
+      debugPrint('No connection');
+      return false;
+    }
+
+    await sendMessage(Arduino.status);
+    return true;
+  }
+
   Future<void> sendMessage(String message) async {
     if (message.isNotEmpty) {
+      debugPrint('Sending message: $message');
       await _uart!.write(utf8.encode(message));
       await _uart!.read();
       if (!_uart!.isNotifying) {
@@ -227,8 +239,14 @@ class Bluetooth {
 
     await _uart!.value.firstWhere((value) {
       final received = utf8.decode(value, allowMalformed: true);
+      debugPrint('Received $received');
+      if (received.startsWith(Arduino.status)) {
+        final status = received.replaceAll(Arduino.status, '');
+        debugPrint('$received status: $status');
+      }
       return received.startsWith(Arduino.take) ||
-          received.startsWith(Arduino.done);
+          received.startsWith(Arduino.done) ||
+          received.startsWith(Arduino.status);
     });
   }
 
