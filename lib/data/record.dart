@@ -28,6 +28,11 @@ class Record extends HiveObject {
     await box.put(position, this);
   }
 
+  // For now we check whether the record has tracks on C or D sides
+  // to know if its a double
+  bool get isDouble =>
+      info.tracks.any((track) => track.side != Side.A && track.side != Side.B);
+
   String get uniqueId => '${info.id}-$position';
 }
 

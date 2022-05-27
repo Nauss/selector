@@ -47,6 +47,8 @@ class Selector {
 
   void listen(Record record) {
     record.status = RecordStatus.outside;
+    // Reset the position since we want to put it back to the closest possible position
+    record.position = -1;
     record.save();
     recordsSubject.add(records);
   }
@@ -141,7 +143,33 @@ class Selector {
       if (records.isEmpty) {
         record.position = 1;
       } else {
-        record.position = records.last.position + 1;
+        // Find the first available position
+        List<int> freeSpots = [for (var i = 1; i <= selectorCapacity; i++) i];
+        for (final element in records) {
+          freeSpots.remove(element.position);
+          if (element.isDouble) {
+            // Add one to the position if it's a double
+            // Since the next position is already taken
+            freeSpots.remove(element.position + 1);
+          }
+        }
+        if (freeSpots.isEmpty) {
+          // @Todo better handling of full Selector
+          throw Exception("No free spots");
+        }
+        var position = freeSpots[0];
+        if (record.isDouble) {
+          var nextPosition = 1;
+          while (freeSpots[nextPosition] - position != 1 || position.isEven) {
+            position = freeSpots[nextPosition];
+            nextPosition++;
+          }
+        }
+        if (position > selectorCapacity) {
+          // @Todo better handling of full Selector
+          throw Exception("No free spots");
+        }
+        record.position = position;
       }
     }
   }
