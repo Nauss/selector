@@ -86,6 +86,13 @@ class MainScreenState extends State<MainScreen> {
                 builder: (context, snapshot) {
                   RecordList? records = snapshot.data;
                   if (records == null || records.isEmpty) {
+                    if (selectedTerm.isNotEmpty) {
+                      return Center(
+                          child: Text(
+                        locale.filterEmptyResult,
+                        style: Theme.of(context).textTheme.headline6,
+                      ));
+                    }
                     return const EmptySelector();
                   }
                   return RecordGrid(
