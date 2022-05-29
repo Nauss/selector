@@ -39,5 +39,9 @@
   "clearDatabaseWarning": "Êtes-vous sûr de vouloir vider la base de données ?",
   "emptySelector": "Votre Selector est vide",
   "addRecords": "Ajouter des vinyles",
-  "reconnect": "Reconnecter"
+  "reconnect": "Reconnecter",
+  "recordAdded": "Vinyle ajouté",
+  "addMore": "Ajouter un autre vinyle ?",
+  "finish": "Terminer",
+  "filterEmptyResult": "Pas de resultat"
 }

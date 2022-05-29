@@ -47,5 +47,9 @@
   "clearDatabaseWarning": "Are you sure you want to clear the database ?",
   "emptySelector": "Your Selector is empty",
   "addRecords": "Add some records",
-  "reconnect": "Reconnect"
+  "reconnect": "Reconnect",
+  "recordAdded": "Record added",
+  "addMore": "Add another record ?",
+  "finish": "Finish",
+  "filterEmptyResult": "No result"
 }
