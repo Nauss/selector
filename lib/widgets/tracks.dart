@@ -10,9 +10,16 @@ class Tracks extends StatelessWidget {
 
   Widget trackItem(Track track, int index) {
     final side = EnumToString.convertToString(track.side);
+    var duration = track.duration;
+    if (duration.isEmpty) {
+      duration = "--:--";
+    }
     return ListTile(
-      leading: Text("$side${index + 1} - ${track.title}"),
-      trailing: Text(track.duration),
+      title: Text(
+        "$side${index + 1} - ${track.title}",
+        overflow: TextOverflow.ellipsis,
+      ),
+      trailing: Text(duration),
       dense: true,
     );
   }
@@ -63,6 +70,8 @@ class Tracks extends StatelessWidget {
     }
     if (list.length <= 1) return Container();
     return ListView.builder(
+      shrinkWrap: true,
+      physics: const ClampingScrollPhysics(),
       itemCount: list.length,
       itemBuilder: (BuildContext context, int index) {
         return list[index];
