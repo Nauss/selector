@@ -1,30 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:selector/data/actions/selector_action.dart';
-import 'package:selector/data/bluetooth.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:selector/data/bluetooth.dart';
 import 'package:selector/data/record.dart';
 import 'package:selector/widgets/gradient_text.dart';
 
-class CloseAction extends SelectorAction {
+class RentreVinyle extends SelectorAction {
   final bluetooth = GetIt.I.get<Bluetooth>();
-  late String slot;
-  CloseAction();
+  RentreVinyle();
 
   @override
-  Future<bool> execute(Record record) {
-    slot = record.position.toString();
-    return bluetooth.close(record.position);
+  Future<void> execute(Record record) {
+    return bluetooth.rentreVinyle();
   }
 
   @override
-  Widget image(BuildContext context) {
+  Widget content(BuildContext context) {
     return Image.asset("assets/gifs/insertion vinyle et fermeture.gif");
   }
 
   @override
   Widget text(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
-    return GradientText(locale.selectorClosing);
+    return GradientText(locale.userInsert);
   }
 }

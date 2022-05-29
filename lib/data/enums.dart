@@ -49,4 +49,4 @@ enum BlueToothState {
   offline
 }
 
-enum Scenario { add, store, listen, remove, removeAlreadyOut }
+enum Scenario { add, addMore, store, listen, remove, removeAlreadyOut, close }

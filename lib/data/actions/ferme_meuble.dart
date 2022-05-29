@@ -8,27 +8,24 @@ import 'package:selector/data/record.dart';
 import 'package:selector/data/selector.dart';
 import 'package:selector/widgets/gradient_text.dart';
 
-class OpenAction extends SelectorAction {
+class FermeMeuble extends SelectorAction {
   final bluetooth = GetIt.I.get<Bluetooth>();
   final selector = GetIt.I.get<Selector>();
-  late String slot;
   late RecordStatus status;
-  OpenAction();
+  FermeMeuble();
 
   @override
   Future<bool> execute(Record record) async {
-    selector.ensureRecordPosition(record);
-    slot = record.position.toString();
     status = record.status;
-    return bluetooth.open(record.position);
+    return bluetooth.fermeMeuble(record.position);
   }
 
   @override
-  Widget image(BuildContext context) {
+  Widget content(BuildContext context) {
     if (status == RecordStatus.inside) {
-      return Image.asset("assets/gifs/ouverture et retrait vinyle.gif");
+      return Image.asset("assets/gifs/insertion vinyle et fermeture.gif");
     } else {
-      return Image.asset("assets/gifs/ouverture intercalaire vide.gif");
+      return Image.asset("assets/gifs/fermeture intercalaire vide.gif");
     }
   }
 
@@ -36,9 +33,9 @@ class OpenAction extends SelectorAction {
   Widget text(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
     if (status == RecordStatus.inside) {
-      return GradientText(locale.selectorOpeningVinyl);
+      return GradientText(locale.selectorClosing);
     } else {
-      return GradientText(locale.selectorOpeningEmpty);
+      return GradientText(locale.selectorClosingEmpty);
     }
   }
 }

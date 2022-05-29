@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
-import 'package:selector/data/actions/close_empty_action.dart';
+import 'package:selector/data/actions/ajout_vinyle.dart';
+import 'package:selector/data/actions/ferme_meuble.dart';
+import 'package:selector/data/actions/rentre_vinyle.dart';
 import 'package:selector/data/actions/selector_action.dart';
 import 'package:selector/data/actions/add_action.dart';
-import 'package:selector/data/actions/close_action.dart';
 import 'package:selector/data/actions/listen_action.dart';
-import 'package:selector/data/actions/open_action.dart';
 import 'package:selector/data/actions/remove_action.dart';
+import 'package:selector/data/actions/sortie_vinyle.dart';
 import 'package:selector/data/actions/store_action.dart';
-import 'package:selector/data/actions/user_take_action.dart';
 
 import 'enums.dart';
 
@@ -31,21 +31,18 @@ class Globals {
 }
 
 final Map<Scenario, List<SelectorAction>> scenarii = {
-  Scenario.add: [OpenAction(), CloseAction(), AddAction()],
-  Scenario.store: [OpenAction(), CloseAction(), StoreAction()],
-  Scenario.listen: [
-    OpenAction(),
-    UserTakeAction(),
-    CloseEmptyAction(),
-    ListenAction()
+  Scenario.listen: [SortieVinyle(), FermeMeuble(), ListenAction()],
+  Scenario.remove: [SortieVinyle(), FermeMeuble(), RemoveAction()],
+  Scenario.store: [
+    SortieVinyle(),
+    RentreVinyle(),
+    FermeMeuble(),
+    StoreAction()
   ],
-  Scenario.remove: [
-    OpenAction(),
-    UserTakeAction(),
-    CloseEmptyAction(),
-    RemoveAction()
-  ],
+  Scenario.add: [SortieVinyle(), RentreVinyle(), AddAction()],
+  Scenario.addMore: [AjoutVinyle(), RentreVinyle(), AddAction()],
   Scenario.removeAlreadyOut: [RemoveAction()],
+  Scenario.close: [FermeMeuble()],
 };
 
 // Hero tags
@@ -126,8 +123,10 @@ class SVGs {
 // Arduino
 class Arduino {
   static const done = 'ETAPE_FIN';
-  static const take = 'PRENDRE_VINYL';
-  static open(int position) => 'S$position';
-  static close(int position) => 'R$position';
-  static closeEmpty(int position) => 'A$position';
+  static init() => 'INIT';
+  static info() => 'INFO';
+  static sortieVinyle(int position) => 'SV$position';
+  static rentreVinyl() => 'RV';
+  static ajoutVinyle(int position) => 'AV$position';
+  static fermeMeuble(int position) => 'FM$position';
 }

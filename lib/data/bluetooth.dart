@@ -173,43 +173,44 @@ class Bluetooth {
   }
 
   // Actions
-  Future<bool> open(int position) async {
+  Future<bool> sortieVinyle(int position) async {
     if (!await checkConnection()) {
       return false;
     }
 
-    final message = Arduino.open(position);
+    final message = Arduino.sortieVinyle(position);
 
     await sendMessage(message);
     return true;
   }
 
-  Future<bool> close(int position) async {
+  Future<bool> fermeMeuble(int position) async {
     if (!await checkConnection()) {
       return false;
     }
 
-    final message = Arduino.close(position);
+    final message = Arduino.fermeMeuble(position);
 
     await sendMessage(message);
     return true;
   }
 
-  Future<bool> userTake() async {
+  Future<bool> rentreVinyle() async {
     if (!await checkConnection()) {
       return false;
     }
+    final message = Arduino.rentreVinyl();
 
-    await sendMessage("");
+    await sendMessage(message);
     return true;
   }
 
-  Future<bool> closeEmpty(int position) async {
+  Future<bool> ajoutVinyle(int position) async {
     if (!await checkConnection()) {
       return false;
     }
 
-    final message = Arduino.closeEmpty(position);
+    final message = Arduino.ajoutVinyle(position);
 
     await sendMessage(message);
     return true;
@@ -222,7 +223,7 @@ class Bluetooth {
       return false;
     }
 
-    await sendMessage(Arduino.status);
+    await sendMessage(Arduino.info());
     return true;
   }
 
@@ -239,14 +240,12 @@ class Bluetooth {
 
     await _uart!.value.firstWhere((value) {
       final received = utf8.decode(value, allowMalformed: true);
-      debugPrint('Received $received');
-      if (received.startsWith(Arduino.status)) {
-        final status = received.replaceAll(Arduino.status, '');
-        debugPrint('$received status: $status');
-      }
-      return received.startsWith(Arduino.take) ||
-          received.startsWith(Arduino.done) ||
-          received.startsWith(Arduino.status);
+      // debugPrint('Received $received');
+      // if (received.startsWith(Arduino.status)) {
+      //   final status = received.replaceAll(Arduino.status, '');
+      //   debugPrint('$received status: $status');
+      // }
+      return received.startsWith(Arduino.done);
     });
   }
 
