@@ -60,7 +60,7 @@ class RecordTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      recordInfo.artist,
+                      '${recordInfo.artist} @${record.position}',
                       style: const TextStyle(fontWeight: FontWeight.bold),
                       maxLines: 2,
                     ),
