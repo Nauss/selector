@@ -179,6 +179,10 @@ class Discogs {
     TrackList result = [];
     if (tracklist != null && tracklist.length > 0) {
       for (var track in tracklist) {
+        if (track["type_"] != "track") {
+          // remove headings and maybe others
+          continue;
+        }
         result.add(Track(
           title: track["title"],
           duration: track["duration"],
