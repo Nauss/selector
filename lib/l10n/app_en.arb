@@ -4,6 +4,7 @@
   "listen": "Listen",
   "store": "Store",
   "remove": "Remove",
+  "removePermanently": "Remove completly",
   "cancel": "Cancel",
   "clear": "Clear",
   "oneSide": "{SIDE}-side",
@@ -17,6 +18,7 @@
   },
   "listening": "Listening",
   "mySelector": "My selector",
+  "removed": "Removed",
   "darkMode": "Dark mode",
   "dark": "Dark",
   "light": "Light",
@@ -51,5 +53,6 @@
   "recordAdded": "Record added",
   "addMore": "Add another record ?",
   "finish": "Finish",
-  "filterEmptyResult": "No result"
+  "filterEmptyResult": "No result",
+  "loadingTracks": "Loading tracks"
 }

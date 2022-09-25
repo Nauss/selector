@@ -18,7 +18,7 @@ class Record extends HiveObject {
 
   Record({
     required this.info,
-    this.status = RecordStatus.missing,
+    this.status = RecordStatus.none,
     this.position = -1,
   });
 

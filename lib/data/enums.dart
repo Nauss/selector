@@ -6,11 +6,13 @@ part 'enums.g.dart';
 @HiveType(typeId: hiveRecordStatusId)
 enum RecordStatus {
   @HiveField(0)
-  missing,
+  none,
   @HiveField(1)
   inside,
   @HiveField(2)
   outside,
+  @HiveField(3)
+  removed,
 }
 
 @HiveType(typeId: hiveSideId)
@@ -49,4 +51,13 @@ enum BlueToothState {
   offline
 }
 
-enum Scenario { add, addMore, store, listen, remove, removeAlreadyOut, close }
+enum Scenario {
+  add,
+  addMore,
+  store,
+  listen,
+  remove,
+  removeAlreadyOut,
+  removePermanently,
+  close
+}

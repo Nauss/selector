@@ -4,11 +4,13 @@
   "listen": "Ecouter",
   "store": "Ranger",
   "remove": "Supprimer",
+  "removePermanently": "Supprimer complètement",
   "cancel": "Annuler",
   "clear": "Vider",
   "oneSide": "Face {SIDE}",
   "listening": "En écoute",
   "mySelector": "Mon selector",
+  "removed": "Supprimé",
   "darkMode": "Mode sombre",
   "dark": "Sombre",
   "light": "Lumineux",
@@ -43,5 +45,6 @@
   "recordAdded": "Vinyle ajouté",
   "addMore": "Ajouter un autre vinyle ?",
   "finish": "Terminer",
-  "filterEmptyResult": "Pas de resultat"
+  "filterEmptyResult": "Pas de resultat",
+  "loadingTracks": "Chargement des pistes"
 }

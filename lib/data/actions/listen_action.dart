@@ -20,7 +20,7 @@ class ListenAction extends SelectorAction {
 
   @override
   Widget content(BuildContext context) {
-    return Image.asset("assets/gifs/prendre vinyle.gif");
+    return Image.asset("assets/gifs/ouverture et retrait vinyle.gif");
   }
 
   @override

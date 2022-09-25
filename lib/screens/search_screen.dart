@@ -3,6 +3,7 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get_it/get_it.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:selector/data/discogs.dart';
+import 'package:selector/data/enums.dart';
 import 'package:selector/data/record.dart';
 import 'package:selector/data/search.dart';
 import 'package:selector/data/selector.dart';
@@ -100,7 +101,10 @@ class SearchScreenState extends State<SearchScreen> {
                 body: StreamBuilder<RecordList>(
                   stream: discogs.resultsStream,
                   builder: (context, snapshot) {
-                    return RecordGrid(records: snapshot.data);
+                    return RecordGrid(
+                      records: snapshot.data,
+                      statusFilter: const [RecordStatus.none],
+                    );
                   },
                 ),
                 controller: searchBarController,

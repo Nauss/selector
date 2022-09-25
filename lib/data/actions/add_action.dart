@@ -12,9 +12,7 @@ import 'package:selector/data/record.dart';
 import 'package:selector/data/selector.dart';
 import 'package:selector/screens/connection_screen.dart';
 import 'package:selector/screens/search_screen.dart';
-import 'package:selector/widgets/add_buttons.dart';
 import 'package:selector/widgets/gradient_text.dart';
-import 'package:selector/widgets/utils.dart';
 
 class AddAction extends SelectorAction {
   final selector = GetIt.I.get<Selector>();
@@ -36,11 +34,11 @@ class AddAction extends SelectorAction {
 
   @override
   Widget content(BuildContext context) {
-    return AddButtons(
-      onFinish: onFinish,
-      onAdd: onAdd,
-    );
-    // return Image.asset("assets/gifs/insertion vinyle.gif");
+    // return AddButtons(
+    //   onFinish: onFinish,
+    //   onAdd: onAdd,
+    // );
+    return Image.asset("assets/gifs/insertion vinyle.gif");
   }
 
   @override
@@ -65,13 +63,15 @@ class AddAction extends SelectorAction {
       throw Exception("onFinish record is null, should not happen...");
     }
     processor.start(Scenario.close, record!);
-    showSteps(context);
+    // showSteps(context);
   }
 
   void onAdd(BuildContext context) async {
     completer?.complete();
     var navigator = Navigator.of(context);
-    navigator.pop();
+    // if (navigator.canPop()) {
+    //   navigator.pop();
+    // }
     if (!await bluetooth.checkConnection()) {
       navigator.push(
         MaterialPageRoute(
@@ -84,12 +84,9 @@ class AddAction extends SelectorAction {
     }
     navigator.push(
       MaterialPageRoute(
-        builder: (context) {
-          return const SearchScreen();
-        },
+        builder: (context) => const SearchScreen(),
       ),
     );
-    return;
     // processor.start(Scenario.addMore, record!);
     // showSteps(context);
   }

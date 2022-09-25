@@ -95,6 +95,24 @@ class RecordButtons extends StatelessWidget {
           ),
         ),
       );
+    } else if (type == "removePermanently") {
+      return Expanded(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: ElevatedButton(
+            onPressed: isOffline
+                ? null
+                : () => onTap(context, Scenario.removePermanently),
+            style: ButtonStyle(
+              backgroundColor:
+                  MaterialStateProperty.resolveWith(getDeleteColor),
+            ),
+            child: Text(
+              locale.removePermanently,
+            ),
+          ),
+        ),
+      );
     }
     return Container();
   }
@@ -116,9 +134,13 @@ class RecordButtons extends StatelessWidget {
           if (record.status == RecordStatus.inside) {
             buttons.add(getButton(context, "listen", isOffline));
           }
-          if (record.status == RecordStatus.missing) {
+          if (record.status == RecordStatus.none) {
             buttons.add(getButton(context, "add", isOffline));
-          } else {
+          }
+          if (record.status == RecordStatus.removed) {
+            buttons.add(getButton(context, "store", isOffline));
+            buttons.add(getButton(context, "removePermanently", isOffline));
+          } else if (record.status != RecordStatus.none) {
             buttons.add(getButton(context, "remove", isOffline));
           }
           return Row(

@@ -85,11 +85,12 @@ flutter:
     - assets/svgs/icone Ranger vinyle.svg
     - assets/svgs/icone Sortir vinyle.svg
     - assets/svgs/icone Supprimer vinyle.svg
+    - assets/svgs/icone multi vinyle.svg
     - assets/gifs/insertion vinyle et fermeture.gif
     - assets/gifs/ouverture intercalaire vide.gif
     - assets/gifs/ouverture et retrait vinyle.gif
     - assets/gifs/fermeture intercalaire vide.gif
-
+    
 environment_config:
   fields:
     discogsToken:

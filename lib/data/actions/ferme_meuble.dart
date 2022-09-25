@@ -23,9 +23,9 @@ class FermeMeuble extends SelectorAction {
   @override
   Widget content(BuildContext context) {
     if (status == RecordStatus.inside) {
-      return Image.asset("assets/gifs/insertion vinyle et fermeture.gif");
-    } else {
       return Image.asset("assets/gifs/fermeture intercalaire vide.gif");
+    } else {
+      return Image.asset("assets/gifs/insertion vinyle et fermeture.gif");
     }
   }
 
@@ -33,9 +33,9 @@ class FermeMeuble extends SelectorAction {
   Widget text(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
     if (status == RecordStatus.inside) {
-      return GradientText(locale.selectorClosing);
-    } else {
       return GradientText(locale.selectorClosingEmpty);
+    } else {
+      return GradientText(locale.selectorClosing);
     }
   }
 }

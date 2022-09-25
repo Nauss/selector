@@ -37,11 +37,18 @@ class Selector {
     recordsSubject.add(records);
   }
 
-  void remove(Record record) {
-    // Get the box
-    var box = Hive.box(Record.boxName);
-    box.delete(record.position);
-    records.remove(record);
+  void remove(Record record, bool permanently) {
+    if (permanently) {
+      // Get the box
+      var box = Hive.box(Record.boxName);
+      box.delete(record.position);
+      records.remove(record);
+    } else {
+      record.status = RecordStatus.removed;
+      // Reset the position since we want to put it back to the closest possible position
+      record.position = -1;
+      record.save();
+    }
     recordsSubject.add(records);
   }
 
@@ -111,6 +118,16 @@ class Selector {
     recordsSubject.add(filtered.toList());
 
     // Then order
+  }
+
+  Record? find(int id) {
+    final index = records.indexWhere(
+      (element) => element.info.id == id,
+    );
+    if (index >= 0) {
+      return records[index];
+    }
+    return null;
   }
 
   // Search functions

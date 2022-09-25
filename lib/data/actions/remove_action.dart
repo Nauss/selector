@@ -8,17 +8,18 @@ import 'package:selector/widgets/gradient_text.dart';
 
 class RemoveAction extends SelectorAction {
   final selector = GetIt.I.get<Selector>();
-  RemoveAction();
+  final bool permanently;
+  RemoveAction({this.permanently = false});
 
   @override
   Future<void> execute(Record record) {
-    selector.remove(record);
+    selector.remove(record, permanently);
     return Future.value();
   }
 
   @override
   Widget content(BuildContext context) {
-    return Image.asset("assets/gifs/prendre vinyle.gif");
+    return Image.asset("assets/gifs/ouverture et retrait vinyle.gif");
   }
 
   @override

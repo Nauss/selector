@@ -14,20 +14,22 @@ class RecordStatusAdapter extends TypeAdapter<RecordStatus> {
   RecordStatus read(BinaryReader reader) {
     switch (reader.readByte()) {
       case 0:
-        return RecordStatus.missing;
+        return RecordStatus.none;
       case 1:
         return RecordStatus.inside;
       case 2:
         return RecordStatus.outside;
+      case 3:
+        return RecordStatus.removed;
       default:
-        return RecordStatus.missing;
+        return RecordStatus.none;
     }
   }
 
   @override
   void write(BinaryWriter writer, RecordStatus obj) {
     switch (obj) {
-      case RecordStatus.missing:
+      case RecordStatus.none:
         writer.writeByte(0);
         break;
       case RecordStatus.inside:
@@ -35,6 +37,9 @@ class RecordStatusAdapter extends TypeAdapter<RecordStatus> {
         break;
       case RecordStatus.outside:
         writer.writeByte(2);
+        break;
+      case RecordStatus.removed:
+        writer.writeByte(3);
         break;
     }
   }
