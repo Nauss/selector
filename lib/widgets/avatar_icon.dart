@@ -13,10 +13,13 @@ class AvatarIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    return CircleAvatar(
-      radius: iconSize,
-      backgroundColor: themeData.dialogBackgroundColor.withAlpha(150),
-      child: svg,
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: CircleAvatar(
+        radius: iconSize,
+        backgroundColor: themeData.dialogBackgroundColor.withAlpha(150),
+        child: svg,
+      ),
     );
   }
 }

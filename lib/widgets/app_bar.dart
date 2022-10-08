@@ -65,6 +65,7 @@ class _SelectorAppBarState extends State<SelectorAppBar> {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
     final themeData = Theme.of(context);
+
     return StreamBuilder<Search>(
       stream: selector.selectorSearchStream,
       builder: (context, snapshot) {
@@ -102,31 +103,10 @@ class _SelectorAppBarState extends State<SelectorAppBar> {
           hint: locale.searchHint,
           hintStyle: themeData.inputDecorationTheme.hintStyle,
           actions: [
-            FloatingSearchBarAction.searchToClear(
-              showIfClosed: false,
-            ),
+            FloatingSearchBarAction.searchToClear(),
             const SizedBox(
               width: 4,
               height: 4,
-            ),
-            FloatingSearchBarAction(
-              child: IconButton(
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints(),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return const SettingsScreen();
-                      },
-                    ),
-                  );
-                },
-                icon: const Icon(
-                  Icons.menu,
-                ),
-              ),
             ),
           ],
           onQueryChanged: (query) {

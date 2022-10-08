@@ -4,6 +4,7 @@ import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:selector/data/selector.dart';
 import 'package:selector/screens/search_screen.dart';
 import 'package:selector/widgets/app_bar.dart';
+import 'package:selector/widgets/selector_menu.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -38,27 +39,35 @@ class MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    return SafeArea(
+    return const SafeArea(
       child: Scaffold(
-        body: const SelectorAppBar(),
-        floatingActionButton: FloatingActionButton(
-          mini: true,
-          backgroundColor: themeData.primaryColor,
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return const SearchScreen();
-                },
-              ),
-            );
-          },
-          child: const Icon(
-            Icons.add,
+          body: SelectorAppBar(),
+          drawer: Align(
+            alignment: Alignment.topLeft,
+            child: SelectorMenu(),
+          )
+          //  Drawer(
+          //   shape: CircleBorder(),
+          //   backgroundColor: Colors.transparent,
+          // ),
+          // floatingActionButton: FloatingActionButton(
+          //   mini: true,
+          //   backgroundColor: themeData.primaryColor,
+          //   onPressed: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //         builder: (context) {
+          //           return const SearchScreen();
+          //         },
+          //       ),
+          //     );
+          //   },
+          //   child: const Icon(
+          //     Icons.add,
+          //   ),
+          // ),
           ),
-        ),
-      ),
     );
   }
 }
