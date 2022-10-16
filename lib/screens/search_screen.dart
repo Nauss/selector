@@ -13,7 +13,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:selector/widgets/search_history.dart';
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({Key? key}) : super(key: key);
+  const SearchScreen({Key? key, this.multiple = false}) : super(key: key);
+  final bool multiple;
 
   @override
   SearchScreenState createState() => SearchScreenState();

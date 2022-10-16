@@ -5,7 +5,6 @@ import 'package:selector/data/record.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:selector/data/search.dart';
 import 'package:selector/data/selector.dart';
-import 'package:selector/screens/settings_sreen.dart';
 import 'package:selector/widgets/empty_selector.dart';
 import 'package:selector/widgets/record_grid.dart';
 import 'package:selector/widgets/search_history.dart';
@@ -24,7 +23,6 @@ class _SelectorAppBarState extends State<SelectorAppBar> {
       FloatingSearchBarController();
   final selector = GetIt.I.get<Selector>();
   List<String> filteredSearchHistory = [];
-  String selectedTerm = "";
 
   @override
   void initState() {
@@ -44,20 +42,20 @@ class _SelectorAppBarState extends State<SelectorAppBar> {
 
   void _handleSearch(Search? search, String term) {
     setState(() {
+      searchBarController.query = term;
       search?.addHistory(term);
-      selectedTerm = term;
-      filteredSearchHistory =
-          search?.getFilteredHistory(searchBarController.query) ?? [];
+      filteredSearchHistory = search?.getFilteredHistory(term) ?? [];
+      selector.filter(term);
+      searchBarController.close();
     });
-    selector.filter(term);
-    searchBarController.close();
   }
 
   void _handleDelete(Search? search, String term) {
     setState(() {
+      searchBarController.query = term;
       search?.deleteHistory(term);
-      filteredSearchHistory =
-          search?.getFilteredHistory(searchBarController.query) ?? [];
+      filteredSearchHistory = search?.getFilteredHistory(term) ?? [];
+      selector.filter(term);
     });
   }
 
@@ -76,7 +74,7 @@ class _SelectorAppBarState extends State<SelectorAppBar> {
             builder: (context, snapshot) {
               RecordList? records = snapshot.data;
               if (records == null || records.isEmpty) {
-                if (selectedTerm.isNotEmpty) {
+                if (searchBarController.query.isNotEmpty) {
                   return Center(
                       child: Text(
                     locale.filterEmptyResult,
@@ -86,34 +84,43 @@ class _SelectorAppBarState extends State<SelectorAppBar> {
                 return const EmptySelector();
               }
               return FloatingSearchBarScrollNotifier(
-                  child: RecordGrid(
-                records: records,
-                isFiltered: selectedTerm.isNotEmpty,
-              ));
+                child: RecordGrid(
+                  records: records,
+                ),
+              );
             },
           ),
+          automaticallyImplyBackButton: true,
+          automaticallyImplyDrawerHamburger: true,
           controller: searchBarController,
           physics: const BouncingScrollPhysics(),
           clearQueryOnClose: false,
           transition: CircularFloatingSearchBarTransition(),
           title: Text(
-            selectedTerm.isEmpty ? locale.searchTitle : selectedTerm,
+            searchBarController.query.isEmpty
+                ? locale.searchTitle
+                : searchBarController.query,
             style: themeData.inputDecorationTheme.hintStyle,
           ),
+          iconColor: themeData.primaryColor,
           hint: locale.searchHint,
           hintStyle: themeData.inputDecorationTheme.hintStyle,
           actions: [
-            FloatingSearchBarAction.searchToClear(),
+            FloatingSearchBarAction.searchToClear(
+              color: themeData.primaryTextTheme.labelSmall?.color,
+            ),
             const SizedBox(
               width: 4,
               height: 4,
             ),
           ],
-          onQueryChanged: (query) {
-            setState(() {
-              filteredSearchHistory = search?.getFilteredHistory(query) ?? [];
-            });
-          },
+          onQueryChanged: (query) => _handleSearch(search, query),
+          // onQueryChanged: (query) {
+          //   setState(() {
+          //     filteredSearchHistory = search?.getFilteredHistory(query) ?? [];
+          //     selector.filter(query);
+          //   });
+          // },
           onSubmitted: (query) => _handleSearch(search, query),
           builder: (context, transition) {
             return SearchHistory(

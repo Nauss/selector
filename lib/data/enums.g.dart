@@ -112,32 +112,27 @@ class SortTypeAdapter extends TypeAdapter<SortType> {
   SortType read(BinaryReader reader) {
     switch (reader.readByte()) {
       case 0:
-        return SortType.name;
+        return SortType.listening;
       case 1:
-        return SortType.artist;
+        return SortType.mySelector;
       case 2:
-        return SortType.favorites;
-      case 3:
-        return SortType.year;
+        return SortType.removed;
       default:
-        return SortType.name;
+        return SortType.listening;
     }
   }
 
   @override
   void write(BinaryWriter writer, SortType obj) {
     switch (obj) {
-      case SortType.name:
+      case SortType.listening:
         writer.writeByte(0);
         break;
-      case SortType.artist:
+      case SortType.mySelector:
         writer.writeByte(1);
         break;
-      case SortType.favorites:
+      case SortType.removed:
         writer.writeByte(2);
-        break;
-      case SortType.year:
-        writer.writeByte(3);
         break;
     }
   }

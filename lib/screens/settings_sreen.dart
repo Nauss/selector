@@ -22,77 +22,95 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     final locale = AppLocalizations.of(context)!;
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: SettingsList(
-          sections: [
-            SettingsSection(
-              subtitle: TextField(
-                controller: bluetoothMessageController,
-                textCapitalization: TextCapitalization.characters,
-              ),
-              title: locale.bluetoothSettings,
-              tiles: [
-                SettingsTile(
-                  title: 'Tail only 🙈',
-                  trailing: OutlinedButton(
-                      onPressed: () {
-                        bluetooth.sendMessage(bluetoothMessageController.text);
-                      },
-                      child: const Text('Envoyer')),
-                )
-              ],
-            ),
-            SettingsSection(
-              title: locale.dataBase,
-              tiles: [
-                SettingsTile(
-                  title: locale.clearDatabase,
-                  trailing: OutlinedButton(
-                    style: ButtonStyle(
-                      foregroundColor: MaterialStateProperty.all<Color>(
-                          themeData.errorColor),
-                    ),
-                    onPressed: () => showDialog<void>(
-                      context: context,
-                      builder: (BuildContext context) => AlertDialog(
-                        title: Text(locale.clearDatabase),
-                        content: Text(locale.clearDatabaseWarning),
-                        actions: [
-                          ElevatedButton(
-                            child: Text(locale.cancel),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                          ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  themeData.errorColor),
-                            ),
-                            onPressed: () {
-                              Hive.deleteBoxFromDisk(Record.boxName).then(
-                                (value) => Hive.openBox(Record.boxName).then(
-                                  (value) {
-                                    selector.loadRecords();
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              );
-                            },
-                            child: Text(locale.clear),
-                          ),
-                        ],
-                      ),
-                    ),
-                    child: Text(locale.clear),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(locale.advanced),
+      ),
+      body: SettingsList(
+        backgroundColor: themeData.backgroundColor,
+        sections: [
+          SettingsSection(
+            titlePadding: const EdgeInsets.only(top: 16, left: 16),
+            title: locale.advancedCommands,
+            tiles: [
+              SettingsTile(
+                title: locale.sendInit,
+                trailing: ElevatedButton(
+                  style: ButtonStyle(
+                    minimumSize: MaterialStatePropertyAll(
+                        Size(100, themeData.buttonTheme.height)),
                   ),
+                  onPressed: () {
+                    bluetooth.sendMessage('INIT');
+                  },
+                  child: Text(locale.send),
                 ),
-              ],
-            ),
-          ],
-        ),
+              ),
+              SettingsTile(
+                enabled: false,
+                title: locale.doEmptySelector,
+                trailing: ElevatedButton(
+                  style: ButtonStyle(
+                    minimumSize: MaterialStatePropertyAll(
+                        Size(100, themeData.buttonTheme.height)),
+                  ),
+                  onPressed: null,
+                  //  () {
+                  //   bluetooth.sendMessage('VIDER');
+                  // },
+                  child: Text(locale.doEmpty),
+                ),
+              ),
+            ],
+          ),
+          // SettingsSection(
+          //   title: locale.dataBase,
+          //   tiles: [
+          //     SettingsTile(
+          //       title: locale.clearDatabase,
+          //       trailing: OutlinedButton(
+          //         style: ButtonStyle(
+          //           foregroundColor:
+          //               MaterialStateProperty.all<Color>(themeData.errorColor),
+          //         ),
+          //         onPressed: () => showDialog<void>(
+          //           context: context,
+          //           builder: (BuildContext context) => AlertDialog(
+          //             title: Text(locale.clearDatabase),
+          //             content: Text(locale.clearDatabaseWarning),
+          //             actions: [
+          //               ElevatedButton(
+          //                 child: Text(locale.cancel),
+          //                 onPressed: () {
+          //                   Navigator.of(context).pop();
+          //                 },
+          //               ),
+          //               ElevatedButton(
+          //                 style: ButtonStyle(
+          //                   backgroundColor: MaterialStateProperty.all<Color>(
+          //                       themeData.errorColor),
+          //                 ),
+          //                 onPressed: () {
+          //                   Hive.deleteBoxFromDisk(Record.boxName).then(
+          //                     (value) => Hive.openBox(Record.boxName).then(
+          //                       (value) {
+          //                         selector.loadRecords();
+          //                         Navigator.of(context).pop();
+          //                       },
+          //                     ),
+          //                   );
+          //                 },
+          //                 child: Text(locale.clear),
+          //               ),
+          //             ],
+          //           ),
+          //         ),
+          //         child: Text(locale.clear),
+          //       ),
+          //     ),
+          //   ],
+          // ),
+        ],
       ),
     );
   }

@@ -30,13 +30,11 @@ enum Side {
 @HiveType(typeId: hiveSortTypeId)
 enum SortType {
   @HiveField(0)
-  name,
+  listening,
   @HiveField(1)
-  artist,
+  mySelector,
   @HiveField(2)
-  favorites,
-  @HiveField(3)
-  year,
+  removed,
 }
 
 enum BlueToothState {

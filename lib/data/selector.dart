@@ -144,6 +144,11 @@ class Selector {
     selectorSearchSubject.add(selectorSearch!);
   }
 
+  void toggleSortType(SortType type) {
+    selectorSearch!.toggleSortType(type);
+    selectorSearchSubject.add(selectorSearch!);
+  }
+
   void loadNetworkSearch() {
     // Get the box
     var box = Hive.box(Selector.boxName);

@@ -7,6 +7,7 @@ import 'package:selector/data/bluetooth.dart';
 import 'package:selector/data/constants.dart';
 import 'package:selector/data/record.dart';
 import 'package:selector/data/enums.dart';
+import 'package:selector/data/selector.dart';
 import 'package:selector/screens/connection_screen.dart';
 import 'package:selector/widgets/record_tile.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -14,14 +15,10 @@ import 'package:tuple/tuple.dart';
 
 class RecordGrid extends StatelessWidget {
   final bluetooth = GetIt.I.get<Bluetooth>();
+  final search = GetIt.I.get<Selector>().selectorSearch;
   final RecordList? records;
-  final bool isFiltered;
   final List<RecordStatus> statusFilter;
-  RecordGrid(
-      {Key? key,
-      required this.records,
-      this.isFiltered = false,
-      this.statusFilter = const []})
+  RecordGrid({Key? key, required this.records, this.statusFilter = const []})
       : super(key: key);
 
   Widget getHeader(BuildContext context, SvgPicture icon, String text) {
@@ -58,23 +55,28 @@ class RecordGrid extends StatelessWidget {
     RecordList removed = [];
     if (records != null) {
       for (var record in records) {
-        if (isFiltered) {
-          none.add(record);
-        } else {
-          switch (record.status) {
-            case RecordStatus.inside:
+        switch (record.status) {
+          case RecordStatus.inside:
+            if (search == null ||
+                search!.sortTypes.contains(SortType.mySelector)) {
               stored.add(record);
-              break;
-            case RecordStatus.outside:
+            }
+            break;
+          case RecordStatus.outside:
+            if (search == null ||
+                search!.sortTypes.contains(SortType.listening)) {
               listening.add(record);
-              break;
-            case RecordStatus.removed:
+            }
+            break;
+          case RecordStatus.removed:
+            if (search == null ||
+                search!.sortTypes.contains(SortType.removed)) {
               removed.add(record);
-              break;
-            case RecordStatus.none:
-              none.add(record);
-              break;
-          }
+            }
+            break;
+          case RecordStatus.none:
+            none.add(record);
+            break;
         }
       }
     }

@@ -52,6 +52,7 @@ class Tags {
 }
 
 const iconSize = 15.0;
+const primaryColor = Color(0xFF3399FF);
 
 // SVGs
 class SVGs {

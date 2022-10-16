@@ -10,14 +10,11 @@ class Search extends HiveObject {
   static const storedHistoryLength = 30;
 
   @HiveField(0)
-  late List<String> history;
+  List<String> history = [];
   @HiveField(1)
-  late SortType sortType;
+  List<SortType> sortTypes = [SortType.listening, SortType.mySelector];
 
-  Search() {
-    history = [];
-    sortType = SortType.artist;
-  }
+  Search();
 
   List<String> getFilteredHistory(String? filter) {
     List<String> list;
@@ -54,8 +51,12 @@ class Search extends HiveObject {
     save();
   }
 
-  set setSortType(SortType type) {
-    sortType = type;
+  void toggleSortType(SortType type) {
+    if (sortTypes.contains(type)) {
+      sortTypes.remove(type);
+    } else {
+      sortTypes.add(type);
+    }
     save();
   }
 }
