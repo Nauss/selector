@@ -47,3 +47,5 @@ app.*.map.json
 .env
 
 lib/environment_config.dart
+
+test/hive_testing_path/
