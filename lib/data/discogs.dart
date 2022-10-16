@@ -1,12 +1,20 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:enum_to_string/enum_to_string.dart';
+import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+import 'package:network_to_file_image/network_to_file_image.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:selector/data/enums.dart';
 import 'package:selector/data/record.dart';
 import 'package:selector/data/record_info.dart';
+import 'package:selector/data/selector.dart';
 import 'package:selector/data/track.dart';
 import 'package:selector/environment_config.dart';
+import 'package:path/path.dart' as p;
+
+import 'constants.dart';
 
 class Discogs {
   static const apiUrl = 'api.discogs.com';
@@ -41,10 +49,13 @@ class Discogs {
     http.get(uri, headers: headers).then((res) {
       var jsonData = json.decode(res.body);
       if (jsonData["results"] != null) {
+        final selector = GetIt.I.get<Selector>();
         jsonData["results"].forEach(
-          (result) => results.add(
-            Record(info: _fromSearch(result)),
-          ),
+          (result) {
+            results.add(
+              selector.find(result["id"]) ?? Record(info: _fromSearch(result)),
+            );
+          },
         );
       }
       resultsSubject.add(results);
@@ -52,8 +63,9 @@ class Discogs {
   }
 
   void loadDetails(Record record) {
+    // Always update the current stream with the given record
+    recordDetailSubject.add(record);
     if (record.info.fullyLoaded) {
-      recordDetailSubject.add(record);
       return;
     }
     final id = record.info.id;
@@ -72,6 +84,33 @@ class Discogs {
       record.info = _fromRelease(jsonData, record.info);
       recordDetailSubject.add(record);
     });
+  }
+
+  void loadImage(Record record) {
+    final info = record.info;
+    if (info.imageLoaded == true) {
+      return;
+    }
+    if (!Uri.parse(info.image).isAbsolute) {
+      info.imageProvider = const AssetImage(
+        'assets/missing.png',
+      );
+      info.imageLoaded = false;
+    }
+
+    var fileName = "${info.artist}-${info.title}";
+    String pathName = p.join(Globals.images!.path, fileName);
+    var file = File(pathName);
+    try {
+      info.imageProvider = NetworkToFileImage(url: info.image, file: file);
+      info.imageLoaded = true;
+    } catch (e) {
+      info.imageProvider = const AssetImage(
+        'assets/missing.png',
+      );
+      info.imageLoaded = false;
+    }
+    recordDetailSubject.add(record);
   }
 
   RecordInfo _fromSearch(dynamic json) {
@@ -107,6 +146,8 @@ class Discogs {
       label: _convertLabels(json["labels"]),
       tracks: _convertTracks(json["tracklist"]),
       fullyLoaded: true,
+      imageLoaded: fromSearch.imageLoaded,
+      imageProvider: fromSearch.imageProvider,
     );
     return recordInfo;
   }
@@ -179,6 +220,10 @@ class Discogs {
     TrackList result = [];
     if (tracklist != null && tracklist.length > 0) {
       for (var track in tracklist) {
+        if (track["type_"] != "track") {
+          // remove headings and maybe others
+          continue;
+        }
         result.add(Track(
           title: track["title"],
           duration: track["duration"],

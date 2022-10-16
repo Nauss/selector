@@ -18,7 +18,7 @@ class SearchAdapter extends TypeAdapter<Search> {
     };
     return Search()
       ..history = (fields[0] as List).cast<String>()
-      ..sortType = fields[1] as SortType;
+      ..sortTypes = (fields[1] as List).cast<SortType>();
   }
 
   @override
@@ -28,7 +28,7 @@ class SearchAdapter extends TypeAdapter<Search> {
       ..writeByte(0)
       ..write(obj.history)
       ..writeByte(1)
-      ..write(obj.sortType);
+      ..write(obj.sortTypes);
   }
 
   @override

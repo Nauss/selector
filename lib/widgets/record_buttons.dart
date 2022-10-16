@@ -7,6 +7,7 @@ import 'package:selector/data/record.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:selector/data/selector.dart';
 import 'package:selector/screens/connection_screen.dart';
+import 'package:selector/widgets/utils.dart';
 
 class RecordButtons extends StatelessWidget {
   final selector = GetIt.I.get<Selector>();
@@ -28,54 +29,7 @@ class RecordButtons extends StatelessWidget {
       return;
     }
     processor.start(scenario, record);
-    showModalBottomSheet(
-      context: context,
-      enableDrag: false,
-      isDismissible: false,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(25.0), topRight: Radius.circular(25.0)),
-      ),
-      builder: (BuildContext context) {
-        return WillPopScope(
-          onWillPop: () async => false,
-          child: StreamBuilder<Object>(
-            stream: processor.stepStream,
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return Container();
-              }
-              final step = snapshot.data as int;
-              if (step == -1) {
-                Future.delayed(
-                    const Duration(milliseconds: 10),
-                    () => Navigator.popUntil(
-                          context,
-                          (route) => route.isFirst,
-                        ));
-                return Container();
-              }
-              final currentAction = processor.currentAction;
-              if (currentAction == null) {
-                return Container();
-              }
-              return Center(
-                child: Column(
-                  children: [
-                    Expanded(
-                        child: Center(child: currentAction.image(context))),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: currentAction.text(context),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        );
-      },
-    );
+    showSteps(context);
   }
 
   Widget getButton(BuildContext context, String type, bool isOffline) {
@@ -126,15 +80,35 @@ class RecordButtons extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: ElevatedButton(
-            onPressed: (isOffline && record.status != RecordStatus.outside)
+            onPressed: isOffline
                 ? null
-                : () => onTap(context, Scenario.remove),
-            child: Text(
-              locale.remove,
-            ),
+                : record.status == RecordStatus.outside
+                    ? () => onTap(context, Scenario.removeAlreadyOut)
+                    : () => onTap(context, Scenario.remove),
             style: ButtonStyle(
               backgroundColor:
                   MaterialStateProperty.resolveWith(getDeleteColor),
+            ),
+            child: Text(
+              locale.remove,
+            ),
+          ),
+        ),
+      );
+    } else if (type == "removePermanently") {
+      return Expanded(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: ElevatedButton(
+            onPressed: isOffline
+                ? null
+                : () => onTap(context, Scenario.removePermanently),
+            style: ButtonStyle(
+              backgroundColor:
+                  MaterialStateProperty.resolveWith(getDeleteColor),
+            ),
+            child: Text(
+              locale.removePermanently,
             ),
           ),
         ),
@@ -160,9 +134,13 @@ class RecordButtons extends StatelessWidget {
           if (record.status == RecordStatus.inside) {
             buttons.add(getButton(context, "listen", isOffline));
           }
-          if (record.status == RecordStatus.missing) {
+          if (record.status == RecordStatus.none) {
             buttons.add(getButton(context, "add", isOffline));
-          } else {
+          }
+          if (record.status == RecordStatus.removed) {
+            buttons.add(getButton(context, "store", isOffline));
+            buttons.add(getButton(context, "removePermanently", isOffline));
+          } else if (record.status != RecordStatus.none) {
             buttons.add(getButton(context, "remove", isOffline));
           }
           return Row(

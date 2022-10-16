@@ -3,6 +3,7 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get_it/get_it.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:selector/data/discogs.dart';
+import 'package:selector/data/enums.dart';
 import 'package:selector/data/record.dart';
 import 'package:selector/data/search.dart';
 import 'package:selector/data/selector.dart';
@@ -12,13 +13,14 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:selector/widgets/search_history.dart';
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({Key? key}) : super(key: key);
+  const SearchScreen({Key? key, this.multiple = false}) : super(key: key);
+  final bool multiple;
 
   @override
-  _SearchScreenState createState() => _SearchScreenState();
+  SearchScreenState createState() => SearchScreenState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
+class SearchScreenState extends State<SearchScreen> {
   final FloatingSearchBarController searchBarController =
       FloatingSearchBarController();
   final selector = GetIt.I.get<Selector>();
@@ -100,7 +102,10 @@ class _SearchScreenState extends State<SearchScreen> {
                 body: StreamBuilder<RecordList>(
                   stream: discogs.resultsStream,
                   builder: (context, snapshot) {
-                    return RecordGrid(records: snapshot.data);
+                    return RecordGrid(
+                      records: snapshot.data,
+                      statusFilter: const [RecordStatus.none],
+                    );
                   },
                 ),
                 controller: searchBarController,

@@ -6,11 +6,13 @@ part 'enums.g.dart';
 @HiveType(typeId: hiveRecordStatusId)
 enum RecordStatus {
   @HiveField(0)
-  missing,
+  none,
   @HiveField(1)
   inside,
   @HiveField(2)
   outside,
+  @HiveField(3)
+  removed,
 }
 
 @HiveType(typeId: hiveSideId)
@@ -28,13 +30,11 @@ enum Side {
 @HiveType(typeId: hiveSortTypeId)
 enum SortType {
   @HiveField(0)
-  name,
+  listening,
   @HiveField(1)
-  artist,
+  mySelector,
   @HiveField(2)
-  favorites,
-  @HiveField(3)
-  year,
+  removed,
 }
 
 enum BlueToothState {
@@ -51,7 +51,18 @@ enum BlueToothState {
 
 enum Scenario {
   add,
+  addMore,
   store,
   listen,
   remove,
+  removeAlreadyOut,
+  removePermanently,
+  close
+}
+
+enum CategoryFilter {
+  none,
+  listening,
+  mySelector,
+  removed,
 }

@@ -11,7 +11,7 @@ import 'package:selector/data/track.dart';
 
 Future<void> initHive() async {
   var path = Directory.current.path;
-  Hive.init(path + '/test/hive_testing_path');
+  Hive.init('$path/test/hive_testing_path');
 
   // enums
   Hive.registerAdapter(RecordStatusAdapter());

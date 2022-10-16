@@ -17,8 +17,8 @@ class StoreAction extends SelectorAction {
   }
 
   @override
-  Widget image(BuildContext context) {
-    return Image.asset("assets/gifs/fermeture intercalaire avec vinyle.gif");
+  Widget content(BuildContext context) {
+    return Image.asset("assets/gifs/fermeture intercalaire vide.gif");
   }
 
   @override

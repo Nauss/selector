@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
-import 'package:selector/data/actions/close_empty_action.dart';
-import 'package:selector/data/actions/selector_action.dart';
 import 'package:selector/data/actions/add_action.dart';
-import 'package:selector/data/actions/close_action.dart';
+import 'package:selector/data/actions/ajout_vinyle.dart';
+import 'package:selector/data/actions/ferme_meuble.dart';
+import 'package:selector/data/actions/rentre_vinyle.dart';
+import 'package:selector/data/actions/selector_action.dart';
 import 'package:selector/data/actions/listen_action.dart';
-import 'package:selector/data/actions/open_action.dart';
 import 'package:selector/data/actions/remove_action.dart';
+import 'package:selector/data/actions/sortie_vinyle.dart';
 import 'package:selector/data/actions/store_action.dart';
-import 'package:selector/data/actions/user_take_action.dart';
 
 import 'enums.dart';
 
@@ -31,26 +31,28 @@ class Globals {
 }
 
 final Map<Scenario, List<SelectorAction>> scenarii = {
-  Scenario.add: [OpenAction(), CloseAction(), AddAction()],
-  Scenario.store: [OpenAction(), CloseAction(), StoreAction()],
-  Scenario.listen: [
-    OpenAction(),
-    UserTakeAction(),
-    CloseEmptyAction(),
-    ListenAction()
+  Scenario.listen: [SortieVinyle(), FermeMeuble(), ListenAction()],
+  Scenario.remove: [SortieVinyle(), FermeMeuble(), RemoveAction()],
+  Scenario.store: [
+    SortieVinyle(),
+    RentreVinyle(),
+    FermeMeuble(),
+    StoreAction()
   ],
-  Scenario.remove: [
-    OpenAction(),
-    UserTakeAction(),
-    CloseEmptyAction(),
-    RemoveAction()
-  ],
+  Scenario.add: [SortieVinyle(), AjoutVinyle()],
+  Scenario.addMore: [AjoutVinyle(), RentreVinyle(), AddAction()],
+  Scenario.removeAlreadyOut: [RemoveAction()],
+  Scenario.removePermanently: [RemoveAction(permanently: true)],
+  Scenario.close: [FermeMeuble()],
 };
 
 // Hero tags
 class Tags {
   static cover(String id) => "cover$id";
 }
+
+const iconSize = 15.0;
+const primaryColor = Color(0xFF3399FF);
 
 // SVGs
 class SVGs {
@@ -60,6 +62,7 @@ class SVGs {
   static String storePath = 'assets/svgs/icone Ranger vinyle.svg';
   static String listenPath = 'assets/svgs/icone Sortir vinyle.svg';
   static String removePath = 'assets/svgs/icone Supprimer vinyle.svg';
+  static String multiplePath = 'assets/svgs/icone multi vinyle.svg';
 
   static SvgPicture listening({
     Color? color,
@@ -120,13 +123,27 @@ class SVGs {
         width: width,
         height: height,
       );
+
+  static SvgPicture multiple({
+    Color? color,
+    double width = defaultSize,
+    double height = defaultSize,
+  }) =>
+      SvgPicture.asset(
+        multiplePath,
+        color: color,
+        width: width,
+        height: height,
+      );
 }
 
 // Arduino
 class Arduino {
   static const done = 'ETAPE_FIN';
-  static const take = 'PRENDRE_VINYL';
-  static open(int position) => 'S$position';
-  static close(int position) => 'R$position';
-  static closeEmpty(int position) => 'A$position';
+  static init() => 'INIT';
+  static info() => 'INFO';
+  static sortieVinyle(int position) => 'SV$position';
+  static rentreVinyl() => 'RV';
+  static ajoutVinyle(int position) => 'AV$position';
+  static fermeMeuble(int position) => 'FM$position';
 }

@@ -14,20 +14,22 @@ class RecordStatusAdapter extends TypeAdapter<RecordStatus> {
   RecordStatus read(BinaryReader reader) {
     switch (reader.readByte()) {
       case 0:
-        return RecordStatus.missing;
+        return RecordStatus.none;
       case 1:
         return RecordStatus.inside;
       case 2:
         return RecordStatus.outside;
+      case 3:
+        return RecordStatus.removed;
       default:
-        return RecordStatus.missing;
+        return RecordStatus.none;
     }
   }
 
   @override
   void write(BinaryWriter writer, RecordStatus obj) {
     switch (obj) {
-      case RecordStatus.missing:
+      case RecordStatus.none:
         writer.writeByte(0);
         break;
       case RecordStatus.inside:
@@ -35,6 +37,9 @@ class RecordStatusAdapter extends TypeAdapter<RecordStatus> {
         break;
       case RecordStatus.outside:
         writer.writeByte(2);
+        break;
+      case RecordStatus.removed:
+        writer.writeByte(3);
         break;
     }
   }
@@ -107,32 +112,27 @@ class SortTypeAdapter extends TypeAdapter<SortType> {
   SortType read(BinaryReader reader) {
     switch (reader.readByte()) {
       case 0:
-        return SortType.name;
+        return SortType.listening;
       case 1:
-        return SortType.artist;
+        return SortType.mySelector;
       case 2:
-        return SortType.favorites;
-      case 3:
-        return SortType.year;
+        return SortType.removed;
       default:
-        return SortType.name;
+        return SortType.listening;
     }
   }
 
   @override
   void write(BinaryWriter writer, SortType obj) {
     switch (obj) {
-      case SortType.name:
+      case SortType.listening:
         writer.writeByte(0);
         break;
-      case SortType.artist:
+      case SortType.mySelector:
         writer.writeByte(1);
         break;
-      case SortType.favorites:
+      case SortType.removed:
         writer.writeByte(2);
-        break;
-      case SortType.year:
-        writer.writeByte(3);
         break;
     }
   }

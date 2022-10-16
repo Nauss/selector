@@ -7,6 +7,7 @@ import 'package:selector/data/bluetooth.dart';
 import 'package:selector/data/constants.dart';
 import 'package:selector/data/record.dart';
 import 'package:selector/data/enums.dart';
+import 'package:selector/data/selector.dart';
 import 'package:selector/screens/connection_screen.dart';
 import 'package:selector/widgets/record_tile.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -14,9 +15,10 @@ import 'package:tuple/tuple.dart';
 
 class RecordGrid extends StatelessWidget {
   final bluetooth = GetIt.I.get<Bluetooth>();
+  final search = GetIt.I.get<Selector>().selectorSearch;
   final RecordList? records;
-  final bool isFiltered;
-  RecordGrid({Key? key, required this.records, this.isFiltered = false})
+  final List<RecordStatus> statusFilter;
+  RecordGrid({Key? key, required this.records, this.statusFilter = const []})
       : super(key: key);
 
   Widget getHeader(BuildContext context, SvgPicture icon, String text) {
@@ -46,31 +48,40 @@ class RecordGrid extends StatelessWidget {
     );
   }
 
-  Tuple3 sort(RecordList? records) {
+  Tuple4 sort(RecordList? records) {
     RecordList listening = [];
     RecordList stored = [];
-    RecordList missing = [];
+    RecordList none = [];
+    RecordList removed = [];
     if (records != null) {
       for (var record in records) {
-        if (isFiltered) {
-          missing.add(record);
-        } else {
-          switch (record.status) {
-            case RecordStatus.inside:
+        switch (record.status) {
+          case RecordStatus.inside:
+            if (search == null ||
+                search!.sortTypes.contains(SortType.mySelector)) {
               stored.add(record);
-              break;
-            case RecordStatus.outside:
+            }
+            break;
+          case RecordStatus.outside:
+            if (search == null ||
+                search!.sortTypes.contains(SortType.listening)) {
               listening.add(record);
-              break;
-            case RecordStatus.missing:
-              missing.add(record);
-              break;
-          }
+            }
+            break;
+          case RecordStatus.removed:
+            if (search == null ||
+                search!.sortTypes.contains(SortType.removed)) {
+              removed.add(record);
+            }
+            break;
+          case RecordStatus.none:
+            none.add(record);
+            break;
         }
       }
     }
 
-    return Tuple3(listening, stored, missing);
+    return Tuple4(listening, stored, removed, none);
   }
 
   double _getTopMargin(BuildContext context) {
@@ -86,7 +97,8 @@ class RecordGrid extends StatelessWidget {
     final sorted = sort(records);
     RecordList listening = sorted.item1;
     RecordList stored = sorted.item2;
-    RecordList missing = sorted.item3;
+    RecordList removed = sorted.item3;
+    RecordList none = sorted.item4;
 
     final extraMargin = listening.length + stored.length == 0 ? 8 : 0;
     final padding = _getTopMargin(context) + extraMargin + 4;
@@ -154,7 +166,9 @@ class RecordGrid extends StatelessWidget {
                 ),
               );
             }),
-        if (listening.isNotEmpty)
+        if (listening.isNotEmpty &&
+            (statusFilter.isEmpty ||
+                statusFilter.contains(RecordStatus.outside)))
           SliverStickyHeader(
             header: listening.isNotEmpty
                 ? getHeader(
@@ -170,7 +184,9 @@ class RecordGrid extends StatelessWidget {
               children: listening.map((e) => RecordTile(record: e)).toList(),
             ),
           ),
-        if (stored.isNotEmpty)
+        if (stored.isNotEmpty &&
+            (statusFilter.isEmpty ||
+                statusFilter.contains(RecordStatus.inside)))
           SliverStickyHeader(
             header: stored.isNotEmpty
                 ? getHeader(
@@ -185,10 +201,23 @@ class RecordGrid extends StatelessWidget {
               children: stored.map((e) => RecordTile(record: e)).toList(),
             ),
           ),
-        if (missing.isNotEmpty)
+        if (removed.isNotEmpty &&
+            (statusFilter.isEmpty ||
+                statusFilter.contains(RecordStatus.removed)))
+          SliverStickyHeader(
+            header: removed.isNotEmpty
+                ? getHeader(context, SVGs.remove(), locale.removed)
+                : null,
+            sliver: SliverGrid.count(
+              crossAxisCount: orientation == Orientation.portrait ? 2 : 3,
+              children: removed.map((e) => RecordTile(record: e)).toList(),
+            ),
+          ),
+        if (none.isNotEmpty &&
+            (statusFilter.isEmpty || statusFilter.contains(RecordStatus.none)))
           SliverGrid.count(
             crossAxisCount: orientation == Orientation.portrait ? 2 : 3,
-            children: missing.map((e) => RecordTile(record: e)).toList(),
+            children: none.map((e) => RecordTile(record: e)).toList(),
           ),
         SliverPadding(
           padding: EdgeInsets.only(

@@ -1,24 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:get_it/get_it.dart';
+import 'package:progress_indicators/progress_indicators.dart';
 import 'package:selector/data/constants.dart';
 import 'package:selector/data/discogs.dart';
 import 'package:selector/data/enums.dart';
 import 'package:selector/data/record.dart';
-import 'package:selector/data/utils.dart';
+import 'package:selector/widgets/avatar_icon.dart';
 import 'package:selector/widgets/record_buttons.dart';
 import 'package:selector/widgets/tracks.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class RecordScreen extends StatelessWidget {
-  final Discogs discogs = GetIt.I.get<Discogs>();
+class RecordScreen extends StatefulWidget {
   final Record record;
-  RecordScreen({Key? key, required this.record}) : super(key: key);
+  const RecordScreen({Key? key, required this.record}) : super(key: key);
+
+  @override
+  State<RecordScreen> createState() => _RecordScreenState();
+}
+
+class _RecordScreenState extends State<RecordScreen> {
+  final Discogs discogs = GetIt.I.get<Discogs>();
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final recordInfo = record.info;
-    discogs.loadDetails(record);
-
+    final locale = AppLocalizations.of(context)!;
     final themeData = Theme.of(context);
+    final isDouble = widget.record.isDouble;
     return SafeArea(
       child: WillPopScope(
         onWillPop: () async {
@@ -29,76 +41,119 @@ class RecordScreen extends StatelessWidget {
           body: StreamBuilder<Record?>(
               stream: discogs.recordDetailStream,
               builder: (context, snapshot) {
-                final updatedInfo = snapshot.data?.info ?? recordInfo;
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Flexible(
-                      flex: 2,
-                      child: Center(
-                        child: Stack(
-                          children: [
-                            Hero(
-                              tag: Tags.cover(record.uniqueId),
-                              child: Image(
-                                image: getImage(updatedInfo),
-                              ),
-                            ),
-                            if (record.status != RecordStatus.missing)
-                              Positioned(
-                                right: 4,
-                                bottom: 4,
-                                child: CircleAvatar(
-                                  radius: 19,
-                                  backgroundColor:
-                                      themeData.dialogBackgroundColor,
-                                  child: record.status == RecordStatus.outside
-                                      ? SVGs.listening(
-                                          color: themeData.primaryColor,
-                                        )
-                                      : SVGs.mySelector(
-                                          color: themeData.primaryColor,
-                                        ),
+                final recordInfo = snapshot.data?.info ?? widget.record.info;
+                debugPrint('detail tag: ${Tags.cover(widget.record.uniqueId)}');
+                // debugPrint(recordInfo.id.toString());
+                // getImage(recordInfo).then((value) => setState(() {
+                //       _imageProvider = value;
+                //     }));
+                return CustomScrollView(
+                  slivers: <Widget>[
+                    SliverStickyHeader(
+                      header: Container(
+                        decoration: BoxDecoration(
+                          color: themeData.scaffoldBackgroundColor,
+                        ),
+                        child: Center(
+                          child: Stack(
+                            children: [
+                              Hero(
+                                tag: Tags.cover(widget.record.uniqueId),
+                                child: Image(
+                                  image: recordInfo.imageProvider,
                                 ),
-                              )
-                          ],
+                              ),
+                              if (widget.record.status != RecordStatus.none)
+                                Positioned(
+                                  right: 4,
+                                  bottom: 4,
+                                  child: AvatarIcon(
+                                    svg: widget.record.status ==
+                                            RecordStatus.outside
+                                        ? SVGs.listening(
+                                            color: themeData.primaryColor,
+                                            height: iconSize,
+                                            width: iconSize,
+                                          )
+                                        : widget.record.status ==
+                                                RecordStatus.inside
+                                            ? SVGs.mySelector(
+                                                color: themeData.primaryColor,
+                                                height: iconSize,
+                                                width: iconSize,
+                                              )
+                                            : SVGs.remove(
+                                                color: themeData.primaryColor,
+                                                height: iconSize,
+                                                width: iconSize,
+                                              ),
+                                  ),
+                                )
+                            ],
+                          ),
+                        ),
+                      ),
+                      sliver: SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: Text(
+                                      recordInfo.title,
+                                      style: themeData.textTheme.headline4,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  if (isDouble)
+                                    AvatarIcon(
+                                      svg: SVGs.multiple(
+                                        color: themeData.primaryColor,
+                                        height: iconSize,
+                                        width: iconSize,
+                                      ),
+                                    ),
+                                ],
+                              ),
+                              Text(
+                                recordInfo.artist,
+                                style: themeData.textTheme.subtitle1,
+                              ),
+                              Text(
+                                "${recordInfo.year} - ${recordInfo.country}",
+                                style: themeData.textTheme.bodyText1,
+                              ),
+                              Text(
+                                recordInfo.format,
+                                style: themeData.textTheme.bodyText1,
+                              ),
+                              Text(
+                                recordInfo.label,
+                                style: themeData.textTheme.bodyText1,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            updatedInfo.title,
-                            style: themeData.textTheme.headline4,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          Text(
-                            updatedInfo.artist,
-                            style: themeData.textTheme.subtitle1,
-                          ),
-                          Text(
-                            "${updatedInfo.year} - ${updatedInfo.country}",
-                            style: themeData.textTheme.bodyText1,
-                          ),
-                          Text(
-                            updatedInfo.format,
-                            style: themeData.textTheme.bodyText1,
-                          ),
-                          Text(
-                            updatedInfo.label,
-                            style: themeData.textTheme.bodyText1,
-                          ),
-                        ],
+                    SliverStickyHeader(
+                      header: RecordButtons(record: widget.record),
+                      sliver: SliverToBoxAdapter(
+                        child: recordInfo.tracks.isNotEmpty
+                            ? Tracks(tracks: recordInfo.tracks)
+                            : Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Center(
+                                    child: JumpingText(locale.loadingTracks)),
+                              ),
                       ),
-                    ),
-                    RecordButtons(record: record),
-                    Flexible(
-                      flex: 1,
-                      child: Tracks(tracks: updatedInfo.tracks),
                     ),
                   ],
                 );

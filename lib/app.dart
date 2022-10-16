@@ -9,21 +9,21 @@ class SelectorApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Colors.lightBlue;
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: primaryColor,
+    final themeData = Theme.of(context);
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: themeData.primaryColor,
     ));
     return AdaptiveTheme(
       light: ThemeData(
         brightness: Brightness.light,
-        primaryColor: primaryColor,
+        primaryColor: themeData.primaryColor,
         inputDecorationTheme: const InputDecorationTheme(
           hintStyle: TextStyle(fontSize: 16),
         ),
       ),
       dark: ThemeData(
         brightness: Brightness.dark,
-        primaryColor: primaryColor,
+        primaryColor: themeData.primaryColor,
         inputDecorationTheme: const InputDecorationTheme(
           hintStyle: TextStyle(fontSize: 16),
         ),

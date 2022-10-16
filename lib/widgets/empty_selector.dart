@@ -1,7 +1,8 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'dart:math';
+
+import 'package:selector/widgets/pointing_arrow.dart';
 
 class EmptySelector extends StatefulWidget {
   const EmptySelector({Key? key}) : super(key: key);
@@ -16,19 +17,9 @@ class _EmptySelectorState extends State<EmptySelector>
   late AnimationController controller;
 
   @override
-  void initState() {
-    super.initState();
-    controller = AnimationController(
-      duration: const Duration(milliseconds: 1500),
-      vsync: this,
-    );
-    animation = Tween<double>(begin: 0, end: 1).animate(controller);
-    controller.repeat(reverse: true);
-  }
-
-  @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
+    final themeData = Theme.of(context);
     return Stack(
       children: [
         Center(
@@ -37,39 +28,28 @@ class _EmptySelectorState extends State<EmptySelector>
             children: [
               Text(
                 locale.emptySelector,
-                style: Theme.of(context).textTheme.headline6,
+                style: themeData.textTheme.headline6,
               ),
               const SizedBox(height: 16),
-              Text(
-                locale.addRecords,
-                style: Theme.of(context).textTheme.subtitle1,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    locale.addRecords,
+                    style: themeData.textTheme.subtitle1,
+                  ),
+                  const SizedBox(width: 8),
+                  Icon(Icons.menu, color: themeData.primaryColor),
+                ],
               ),
             ],
           ),
         ),
-        Positioned(
-          bottom: 50,
-          right: 50,
-          child: AnimatedBuilder(
-            animation: animation,
-            builder: (context, child) {
-              return FadeTransition(
-                opacity: animation,
-                child: Transform.translate(
-                  offset: Offset(animation.value * 10, animation.value * 10),
-                  child: child,
-                ),
-              );
-            },
-            child: Transform.rotate(
-              angle: -pi / 2.4,
-              child: const Icon(
-                Icons.play_arrow,
-                size: 100,
-              ),
-            ),
-          ),
-        ),
+        const Positioned(
+          top: 45,
+          left: 20,
+          child: PointingArrow(angle: -(pi / 2 + pi / 5.5), size: 100),
+        )
       ],
     );
   }

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
 import 'package:selector/data/hive_ids.dart';
 import 'package:selector/data/track.dart';
@@ -28,6 +29,8 @@ class RecordInfo extends HiveObject {
   TrackList tracks;
 
   bool fullyLoaded;
+  bool imageLoaded;
+  ImageProvider imageProvider;
 
   RecordInfo({
     required this.id,
@@ -40,5 +43,9 @@ class RecordInfo extends HiveObject {
     required this.label,
     required this.tracks,
     this.fullyLoaded = true,
+    this.imageLoaded = false,
+    this.imageProvider = const AssetImage(
+      'assets/missing.png',
+    ),
   });
 }
