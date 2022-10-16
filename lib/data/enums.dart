@@ -61,3 +61,10 @@ enum Scenario {
   removePermanently,
   close
 }
+
+enum CategoryFilter {
+  none,
+  listening,
+  mySelector,
+  removed,
+}

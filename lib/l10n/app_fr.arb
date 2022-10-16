@@ -44,6 +44,8 @@
   "reconnect": "Reconnecter",
   "recordAdded": "Vinyle ajouté",
   "addMore": "Ajouter un autre vinyle ?",
+  "addMultiple": "Ajouter plusieurs vinyles",
+  "removeAll": "Vider mon Selector",
   "finish": "Terminer",
   "filterEmptyResult": "Pas de resultat",
   "loadingTracks": "Chargement des pistes"

@@ -204,12 +204,7 @@ class RecordGrid extends StatelessWidget {
                 statusFilter.contains(RecordStatus.removed)))
           SliverStickyHeader(
             header: removed.isNotEmpty
-                ? getHeader(
-                    context,
-                    SVGs.remove(
-                      color: themeData.primaryColor,
-                    ),
-                    locale.removed)
+                ? getHeader(context, SVGs.remove(), locale.removed)
                 : null,
             sliver: SliverGrid.count(
               crossAxisCount: orientation == Orientation.portrait ? 2 : 3,

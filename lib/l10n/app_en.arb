@@ -52,6 +52,8 @@
   "reconnect": "Reconnect",
   "recordAdded": "Record added",
   "addMore": "Add another record ?",
+  "addMultiple": "Add multiple records",
+  "removeAll": "Remove all records",
   "finish": "Finish",
   "filterEmptyResult": "No result",
   "loadingTracks": "Loading tracks"
