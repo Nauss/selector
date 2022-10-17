@@ -45,6 +45,7 @@ class _FeatureMissingDialogState extends State<FeatureMissingDialog> {
         ],
       ),
       content: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(text),
           const Text(''),

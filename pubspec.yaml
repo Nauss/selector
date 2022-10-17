@@ -43,7 +43,7 @@ dependencies:
   tuple: ^2.0.0
   progress_indicators: ^1.0.0
   environment_config: ^3.0.0
-  permission_handler: ^9.2.0
+  permission_handler: ^10.2.0
   string_similarity: ^2.0.0
   mockito: ^5.1.0
   flutter_sticky_header: ^0.6.2
