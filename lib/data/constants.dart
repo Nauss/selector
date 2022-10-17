@@ -39,7 +39,7 @@ final Map<Scenario, List<SelectorAction>> scenarii = {
     FermeMeuble(),
     StoreAction()
   ],
-  Scenario.add: [SortieVinyle(), AjoutVinyle()],
+  Scenario.add: [SortieVinyle(), RentreVinyle(), FermeMeuble(), AddAction()],
   Scenario.addMore: [AjoutVinyle(), RentreVinyle(), AddAction()],
   Scenario.removeAlreadyOut: [RemoveAction()],
   Scenario.removePermanently: [RemoveAction(permanently: true)],
