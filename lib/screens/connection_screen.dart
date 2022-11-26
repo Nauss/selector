@@ -5,7 +5,6 @@ import 'package:get_it/get_it.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:selector/data/bluetooth.dart';
-import 'package:selector/data/constants.dart';
 import 'package:selector/data/enums.dart';
 import 'package:selector/widgets/feature_missing_dialog.dart';
 
@@ -59,7 +58,7 @@ class _ConnectionScreenState extends State<ConnectionScreen>
               ),
             ),
             Expanded(
-              child: SVGs.mySelector(width: 200, height: 200),
+              child: Image.asset("assets/gifs/gif ouverture appli.gif"),
             ),
             Padding(
               padding: const EdgeInsets.only(

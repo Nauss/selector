@@ -11,11 +11,7 @@ class EmptySelector extends StatefulWidget {
   State<EmptySelector> createState() => _EmptySelectorState();
 }
 
-class _EmptySelectorState extends State<EmptySelector>
-    with SingleTickerProviderStateMixin {
-  late Animation<double> animation;
-  late AnimationController controller;
-
+class _EmptySelectorState extends State<EmptySelector> {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
@@ -52,11 +48,5 @@ class _EmptySelectorState extends State<EmptySelector>
         )
       ],
     );
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
   }
 }

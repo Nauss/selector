@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:selector/data/actions/add_action.dart';
@@ -53,89 +52,6 @@ class Tags {
 
 const iconSize = 15.0;
 const primaryColor = Color(0xFF3399FF);
-
-// SVGs
-class SVGs {
-  static const double defaultSize = 24;
-  static String listeningPath = 'assets/svgs/icône en écoute.svg';
-  static String mySelectorPath = 'assets/svgs/icône mon selector.svg';
-  static String storePath = 'assets/svgs/icone Ranger vinyle.svg';
-  static String listenPath = 'assets/svgs/icone Sortir vinyle.svg';
-  static String removePath = 'assets/svgs/icone Supprimer vinyle.svg';
-  static String multiplePath = 'assets/svgs/icone multi vinyle.svg';
-
-  static SvgPicture listening({
-    Color? color,
-    double width = defaultSize,
-    double height = defaultSize,
-  }) =>
-      SvgPicture.asset(
-        listeningPath,
-        color: color,
-        width: width,
-        height: height,
-      );
-
-  static SvgPicture mySelector({
-    Color? color,
-    double width = defaultSize,
-    double height = defaultSize,
-  }) =>
-      SvgPicture.asset(
-        mySelectorPath,
-        color: color,
-        width: width,
-        height: height,
-      );
-
-  static SvgPicture store({
-    Color? color,
-    double width = defaultSize,
-    double height = defaultSize,
-  }) =>
-      SvgPicture.asset(
-        storePath,
-        color: color,
-        width: width,
-        height: height,
-      );
-
-  static SvgPicture listen({
-    Color? color,
-    double width = defaultSize,
-    double height = defaultSize,
-  }) =>
-      SvgPicture.asset(
-        listenPath,
-        color: color,
-        width: width,
-        height: height,
-      );
-
-  static SvgPicture remove({
-    Color? color,
-    double width = defaultSize,
-    double height = defaultSize,
-  }) =>
-      SvgPicture.asset(
-        removePath,
-        color: color,
-        width: width,
-        height: height,
-      );
-
-  static SvgPicture multiple({
-    Color? color,
-    double width = defaultSize,
-    double height = defaultSize,
-  }) =>
-      SvgPicture.asset(
-        multiplePath,
-        color: color,
-        width: width,
-        height: height,
-      );
-}
 
 // Arduino
 class Arduino {

@@ -68,22 +68,22 @@ class _RecordScreenState extends State<RecordScreen> {
                                   right: 4,
                                   bottom: 4,
                                   child: AvatarIcon(
-                                    svg: widget.record.status ==
+                                    image: widget.record.status ==
                                             RecordStatus.outside
-                                        ? SVGs.listening(
-                                            color: themeData.primaryColor,
+                                        ? Image.asset(
+                                            'assets/icons/icone en ecoute.png',
                                             height: iconSize,
                                             width: iconSize,
                                           )
                                         : widget.record.status ==
                                                 RecordStatus.inside
-                                            ? SVGs.mySelector(
-                                                color: themeData.primaryColor,
+                                            ? Image.asset(
+                                                'assets/icons/icone mon selector.png',
                                                 height: iconSize,
                                                 width: iconSize,
                                               )
-                                            : SVGs.remove(
-                                                color: themeData.primaryColor,
+                                            : Image.asset(
+                                                'assets/icons/icone sortie du selector.png',
                                                 height: iconSize,
                                                 width: iconSize,
                                               ),
@@ -114,8 +114,8 @@ class _RecordScreenState extends State<RecordScreen> {
                                   ),
                                   if (isDouble)
                                     AvatarIcon(
-                                      svg: SVGs.multiple(
-                                        color: themeData.primaryColor,
+                                      image: Image.asset(
+                                        'assets/icons/icone multi vinyle.png',
                                         height: iconSize,
                                         width: iconSize,
                                       ),

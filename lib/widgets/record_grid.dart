@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:selector/data/bluetooth.dart';
-import 'package:selector/data/constants.dart';
 import 'package:selector/data/record.dart';
 import 'package:selector/data/enums.dart';
 import 'package:selector/data/selector.dart';
@@ -21,7 +19,7 @@ class RecordGrid extends StatelessWidget {
   RecordGrid({Key? key, required this.records, this.statusFilter = const []})
       : super(key: key);
 
-  Widget getHeader(BuildContext context, SvgPicture icon, String text) {
+  Widget getHeader(BuildContext context, Image icon, String text) {
     final themeData = Theme.of(context);
     return Container(
       // height: 60.0,
@@ -173,8 +171,10 @@ class RecordGrid extends StatelessWidget {
             header: listening.isNotEmpty
                 ? getHeader(
                     context,
-                    SVGs.listening(
-                      color: themeData.primaryColor,
+                    Image.asset(
+                      'assets/icons/icone en ecoute.png',
+                      width: 30,
+                      height: 30,
                     ),
                     locale.listening,
                   )
@@ -191,8 +191,10 @@ class RecordGrid extends StatelessWidget {
             header: stored.isNotEmpty
                 ? getHeader(
                     context,
-                    SVGs.mySelector(
-                      color: themeData.primaryColor,
+                    Image.asset(
+                      'assets/icons/icone mon selector.png',
+                      width: 30,
+                      height: 30,
                     ),
                     locale.mySelector)
                 : null,
@@ -206,7 +208,14 @@ class RecordGrid extends StatelessWidget {
                 statusFilter.contains(RecordStatus.removed)))
           SliverStickyHeader(
             header: removed.isNotEmpty
-                ? getHeader(context, SVGs.remove(), locale.removed)
+                ? getHeader(
+                    context,
+                    Image.asset(
+                      'assets/icons/icone sortie du selector.png',
+                      width: 30,
+                      height: 30,
+                    ),
+                    locale.removed)
                 : null,
             sliver: SliverGrid.count(
               crossAxisCount: orientation == Orientation.portrait ? 2 : 3,

@@ -108,6 +108,8 @@ class MainScreenState extends State<MainScreen> {
                             const PointingArrow(angle: pi, size: 40),
                         ],
                       ),
+                      leading: Image.asset(
+                          'assets/icons/icone ajout nouveau vinyle.png'),
                       onTap: () {
                         Navigator.pop(context);
                         Navigator.push(
@@ -122,6 +124,8 @@ class MainScreenState extends State<MainScreen> {
                     ),
                     ListTile(
                       title: Text(locale.addMultiple),
+                      leading: Image.asset(
+                          'assets/icons/icone ajout plusieurs nouveaux vinyles.png'),
                       onTap: () {
                         Navigator.pop(context);
                         Navigator.push(

@@ -46,7 +46,6 @@ dependencies:
   string_similarity: ^2.0.0
   mockito: ^5.1.0
   flutter_sticky_header: ^0.6.2
-  flutter_svg: ^1.0.3
   app_settings: ^4.1.6
   path: ^1.8.1
   http: ^0.13.4
@@ -75,20 +74,15 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/connection.png
     - assets/missing.png
     - assets/barcode_scanner.png
-    - assets/icône en écoute.svg
-    - assets/svgs/icône mon selector.svg
-    - assets/svgs/icône en écoute.svg
-    - assets/svgs/icone Ranger vinyle.svg
-    - assets/svgs/icone Sortir vinyle.svg
-    - assets/svgs/icone Supprimer vinyle.svg
-    - assets/svgs/icone multi vinyle.svg
-    - assets/gifs/insertion vinyle et fermeture.gif
-    - assets/gifs/ouverture intercalaire vide.gif
-    - assets/gifs/ouverture et retrait vinyle.gif
-    - assets/gifs/fermeture intercalaire vide.gif
+    - assets/gifs/gif ouverture appli.gif
+    - assets/icons/icone mon selector.png
+    - assets/icons/icone en ecoute.png
+    - assets/icons/icone sortie du selector.png
+    - assets/icons/icone multi vinyle.png
+    - assets/icons/icone ajout nouveau vinyle.png
+    - assets/icons/icone ajout plusieurs nouveaux vinyles.png
       
   fonts:
     - family: Cooper Black
