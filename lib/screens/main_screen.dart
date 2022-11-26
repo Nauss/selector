@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:selector/data/enums.dart';
 import 'package:selector/data/search.dart';
@@ -75,11 +74,11 @@ class MainScreenState extends State<MainScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const BackButton(),
+                          children: const [
+                            BackButton(),
                             Text(
                               "Selector",
-                              style: GoogleFonts.openSans(
+                              style: TextStyle(
                                 fontSize: 40,
                                 fontWeight: FontWeight.bold,
                               ),

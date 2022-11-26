@@ -80,7 +80,7 @@ class _RecordTileState extends State<RecordTile> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '${recordInfo.artist} @${widget.record.position}',
+                          recordInfo.artist,
                           style: const TextStyle(fontWeight: FontWeight.bold),
                           maxLines: 2,
                         ),

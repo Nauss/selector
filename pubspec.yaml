@@ -28,7 +28,6 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.4
-  google_fonts: ^2.3.2
   adaptive_theme: ^2.3.1
   hive: ^2.1.0
   hive_flutter: ^1.1.0
@@ -90,6 +89,11 @@ flutter:
     - assets/gifs/ouverture intercalaire vide.gif
     - assets/gifs/ouverture et retrait vinyle.gif
     - assets/gifs/fermeture intercalaire vide.gif
+      
+  fonts:
+    - family: Cooper Black
+      fonts:
+        - asset: assets/fonts/COOPBL.ttf
     
 environment_config:
   fields:
