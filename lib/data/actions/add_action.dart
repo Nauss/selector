@@ -18,7 +18,10 @@ class AddAction extends SelectorAction {
 
   @override
   Widget content(BuildContext context) {
-    return Image.asset("assets/gifs/fermeture intercalaire vide.gif");
+    return Image.asset(
+      "assets/gifs/gif interaction.gif",
+      width: 200,
+    );
   }
 
   @override

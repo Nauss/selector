@@ -24,9 +24,15 @@ class SortieVinyle extends SelectorAction {
   @override
   Widget content(BuildContext context) {
     if (status == RecordStatus.inside) {
-      return Image.asset("assets/gifs/ouverture et retrait vinyle.gif");
+      return Image.asset(
+        "assets/gifs/gif interaction.gif",
+        width: 200,
+      );
     } else {
-      return Image.asset("assets/gifs/ouverture intercalaire vide.gif");
+      return Image.asset(
+        "assets/gifs/gif interaction.gif",
+        width: 200,
+      );
     }
   }
 

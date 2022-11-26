@@ -286,9 +286,9 @@ class Bluetooth {
       } catch (e) {
         debugPrint('Error sending message: $e');
       }
-      _bluetooth.subscribeToCharacteristic(characteristic).listen((value) {
-        debugPrint('Received message: ${utf8.decode(value)}');
-      });
+      // _bluetooth.subscribeToCharacteristic(characteristic).listen((value) {
+      //   debugPrint('Received message: ${utf8.decode(value)}');
+      // });
 
       // await _characteristicId!.read();
       // if (!_characteristicId!.isNotifying) {
