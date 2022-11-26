@@ -56,4 +56,10 @@ class _PointingArrowState extends State<PointingArrow>
       ),
     );
   }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 }

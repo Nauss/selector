@@ -48,10 +48,10 @@ dependencies:
   mockito: ^5.1.0
   flutter_sticky_header: ^0.6.2
   flutter_svg: ^1.0.3
-  flutter_blue: ^0.8.0
   app_settings: ^4.1.6
   path: ^1.8.1
   http: ^0.13.4
+  flutter_reactive_ble: ^5.0.2
 
 dev_dependencies:
   flutter_test:
