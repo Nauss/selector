@@ -2,11 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:selector/data/bluetooth.dart';
-import 'package:selector/data/constants.dart';
 import 'package:selector/data/enums.dart';
 import 'package:selector/widgets/feature_missing_dialog.dart';
 
@@ -46,21 +44,21 @@ class _ConnectionScreenState extends State<ConnectionScreen>
       body: SafeArea(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(
+            const Padding(
+              padding: EdgeInsets.only(
                 top: titleInset,
                 bottom: titleInset,
               ),
               child: Text(
                 "Selector",
-                style: GoogleFonts.openSans(
+                style: TextStyle(
                   fontSize: 50,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
             Expanded(
-              child: SVGs.mySelector(width: 200, height: 200),
+              child: Image.asset("assets/gifs/gif ouverture appli.gif"),
             ),
             Padding(
               padding: const EdgeInsets.only(

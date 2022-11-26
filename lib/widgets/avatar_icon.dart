@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import '../data/constants.dart';
 
 class AvatarIcon extends StatelessWidget {
-  final SvgPicture svg;
+  final Image image;
   const AvatarIcon({
     Key? key,
-    required this.svg,
+    required this.image,
   }) : super(key: key);
 
   @override
@@ -18,7 +17,7 @@ class AvatarIcon extends StatelessWidget {
       child: CircleAvatar(
         radius: iconSize,
         backgroundColor: themeData.dialogBackgroundColor.withAlpha(150),
-        child: svg,
+        child: image,
       ),
     );
   }

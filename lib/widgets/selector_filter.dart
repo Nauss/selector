@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:selector/data/constants.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:selector/data/enums.dart';
 import 'package:selector/data/search.dart';
@@ -19,13 +18,13 @@ class SelectorFilter extends StatelessWidget {
   Widget getSortTypeIcon() {
     switch (sortType) {
       case SortType.listening:
-        return SVGs.listening();
+        return Image.asset('assets/icons/icone en ecoute.png');
       case SortType.mySelector:
-        return SVGs.mySelector();
+        return Image.asset('assets/icons/icone mon selector.png');
       case SortType.removed:
-        return SVGs.remove();
+        return Image.asset('assets/icons/icone sortie du selector.png');
       default:
-        return SVGs.listening();
+        return Image.asset('assets/icons/icone en ecoute.png');
     }
   }
 

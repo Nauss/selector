@@ -23,9 +23,15 @@ class FermeMeuble extends SelectorAction {
   @override
   Widget content(BuildContext context) {
     if (status == RecordStatus.inside) {
-      return Image.asset("assets/gifs/fermeture intercalaire vide.gif");
+      return Image.asset(
+        "assets/gifs/gif en fonctionnement.gif",
+        width: 200,
+      );
     } else {
-      return Image.asset("assets/gifs/insertion vinyle et fermeture.gif");
+      return Image.asset(
+        "assets/gifs/gif interaction.gif",
+        width: 200,
+      );
     }
   }
 

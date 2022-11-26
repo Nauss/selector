@@ -27,3 +27,9 @@ flutter pub run flutter_launcher_icons:main
 ```bash
 flutter build apk --split-per-abi
 ```
+
+# Build bundle
+
+```bash
+flutter build appbundle
+```

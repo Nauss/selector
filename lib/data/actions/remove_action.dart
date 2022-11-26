@@ -19,7 +19,10 @@ class RemoveAction extends SelectorAction {
 
   @override
   Widget content(BuildContext context) {
-    return Image.asset("assets/gifs/ouverture et retrait vinyle.gif");
+    return Image.asset(
+      "assets/gifs/gif interaction.gif",
+      width: 200,
+    );
   }
 
   @override

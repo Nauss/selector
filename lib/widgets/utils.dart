@@ -4,20 +4,19 @@ import 'package:selector/data/processor.dart';
 
 Future<dynamic> showSteps(BuildContext context) {
   final processor = GetIt.I.get<Processor>();
-  return showModalBottomSheet(
+  return showDialog(
     context: context,
-    enableDrag: false,
-    isDismissible: false,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(25.0),
-        topRight: Radius.circular(25.0),
-      ),
-    ),
-    constraints: BoxConstraints(
-      maxHeight: MediaQuery.of(context).size.height * 0.33,
-    ),
-    barrierColor: const Color.fromARGB(100, 0, 0, 0),
+    barrierDismissible: false,
+    // shape: const RoundedRectangleBorder(
+    //   borderRadius: BorderRadius.only(
+    //     topLeft: Radius.circular(25.0),
+    //     topRight: Radius.circular(25.0),
+    //   ),
+    // ),
+    // constraints: BoxConstraints(
+    //   maxHeight: MediaQuery.of(context).size.height * 0.33,
+    // ),
+    // barrierColor: const Color.fromARGB(100, 0, 0, 0),
     builder: (BuildContext context) {
       return WillPopScope(
         onWillPop: () async => false,
@@ -41,20 +40,17 @@ Future<dynamic> showSteps(BuildContext context) {
             if (currentAction == null) {
               return Container();
             }
-            return Center(
-              child: Column(
-                children: [
-                  Expanded(
-                    child: Center(
-                      child: currentAction.content(context),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: currentAction.text(context),
-                  ),
-                ],
-              ),
+            return Column(
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.125,
+                ),
+                currentAction.content(context),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: currentAction.text(context),
+                // ),
+              ],
             );
           },
         ),

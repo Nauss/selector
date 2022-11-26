@@ -28,7 +28,6 @@ class _RecordTileState extends State<RecordTile> {
   Widget build(BuildContext context) {
     RecordInfo recordInfo = widget.record.info;
     discogs.loadImage(widget.record);
-    final themeData = Theme.of(context);
     final isDark = AdaptiveTheme.of(context).mode == AdaptiveThemeMode.dark;
     final isDouble = widget.record.isDouble;
     return Card(
@@ -80,7 +79,7 @@ class _RecordTileState extends State<RecordTile> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '${recordInfo.artist} @${widget.record.position}',
+                          recordInfo.artist,
                           style: const TextStyle(fontWeight: FontWeight.bold),
                           maxLines: 2,
                         ),
@@ -97,8 +96,8 @@ class _RecordTileState extends State<RecordTile> {
                     bottom: 0,
                     right: 0,
                     child: AvatarIcon(
-                      svg: SVGs.multiple(
-                        color: themeData.primaryColor,
+                      image: Image.asset(
+                        'assets/icons/icone multi vinyle.png',
                         height: iconSize,
                         width: iconSize,
                       ),

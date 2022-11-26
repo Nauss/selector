@@ -20,6 +20,7 @@ class SelectorApp extends StatelessWidget {
         inputDecorationTheme: const InputDecorationTheme(
           hintStyle: TextStyle(fontSize: 16),
         ),
+        fontFamily: 'Cooper Black',
       ),
       dark: ThemeData(
         brightness: Brightness.dark,
@@ -27,9 +28,11 @@ class SelectorApp extends StatelessWidget {
         inputDecorationTheme: const InputDecorationTheme(
           hintStyle: TextStyle(fontSize: 16),
         ),
+        fontFamily: 'Cooper Black',
       ),
       initial: AdaptiveThemeMode.dark,
       builder: (theme, darkTheme) => MaterialApp(
+        debugShowCheckedModeBanner: false,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         title: 'Selector',

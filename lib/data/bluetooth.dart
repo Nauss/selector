@@ -1,25 +1,25 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:selector/data/constants.dart';
 import 'package:selector/data/enums.dart';
 
-const customServiceUUID = '0000FFE0-0000-1000-8000-00805F9B34FB';
-const customCharacteristicUUID = '0000FFE1-0000-1000-8000-00805F9B34FB';
+final customServiceUUID = Uuid.parse('0000FFE0-0000-1000-8000-00805F9B34FB');
+final customCharacteristicUUID =
+    Uuid.parse('0000FFE1-0000-1000-8000-00805F9B34FB');
 
 class Bluetooth {
   BlueToothState _state = BlueToothState.disconnected;
   late BehaviorSubject<BlueToothState> connectionSubject;
 
-  final FlutterBlue _flutterBlue = FlutterBlue.instance;
-  StreamSubscription<BluetoothDeviceState>? _stateSubscription;
-  StreamSubscription<ScanResult>? _scanSubscription;
-  BluetoothDevice? _device;
-  BluetoothCharacteristic? _uart;
+  final _bluetooth = FlutterReactiveBle();
+  StreamSubscription<DiscoveredDevice>? _scanSubscription;
+  String? _deviceId;
 
   Bluetooth() {
     connectionSubject = BehaviorSubject<BlueToothState>.seeded(_state);
@@ -27,106 +27,145 @@ class Bluetooth {
 
   // Connection functions
   ValueStream<BlueToothState> get connectionStream => connectionSubject.stream;
+
   Future<void> connect() async {
     _state = BlueToothState.disconnected;
     connectionSubject.add(_state);
 
-    if (!(await checkPermissions())) {
-      return;
+    bool permissionsOk = true;
+    if (Platform.isAndroid) {
+      final scan = await Permission.bluetoothScan.request();
+      final connect = await Permission.bluetoothConnect.request();
+      final location = await Permission.location.request();
+      if (scan != PermissionStatus.granted ||
+          connect != PermissionStatus.granted ||
+          location != PermissionStatus.granted) {
+        permissionsOk = false;
+        debugPrint('permission failed: $scan, $connect, $location');
+      }
+    }
+
+    if (!permissionsOk) {
+      // @ todo show dialog
     }
 
     if (_scanSubscription != null) {
       _scanSubscription!.cancel();
     }
-    await _flutterBlue.stopScan();
 
-    // Check for existing connection
-    final connected = await _flutterBlue.connectedDevices;
-    if (connected.isNotEmpty) {
-      // Already connected, look for the correct device
-      final selectorIndex = connected.indexWhere(
-        (element) => element.name.startsWith('Selector'),
-      );
-      if (selectorIndex != -1) {
-        // Selector found, connect to it
-        BluetoothDevice selectorDevice = connected[selectorIndex];
-        _state = BlueToothState.connecting;
+    _bluetooth.connectedDeviceStream.listen((state) {
+      debugPrint('connectedDeviceStream $state');
+    });
+
+    _bluetooth.statusStream.listen((status) {
+      debugPrint('statusStream $status');
+      if (status == BleStatus.poweredOff) {
+        _state = BlueToothState.bluetoothIsOff;
         connectionSubject.add(_state);
-        await _deviceConnected(selectorDevice);
-        return;
       }
+    });
+
+    _bluetooth.characteristicValueStream.listen((value) {
+      debugPrint('characteristicValueStream $value');
+    });
+
+    if (_bluetooth.status == BleStatus.ready) {
+      debugPrint('READY');
+      // final status = await _bluetooth.connectedDeviceStream.first;
+      // _deviceConnected(status.deviceId);
     }
-    _scanSubscription = _flutterBlue.scan().listen(_scanResults);
+
+    _scanSubscription = _bluetooth.scanForDevices(
+      withServices: [customServiceUUID, customCharacteristicUUID],
+      scanMode: ScanMode.lowLatency,
+    ).listen(_scanResults, onError: (error) {
+      _state = BlueToothState.disconnected;
+      connectionSubject.add(_state);
+      debugPrint("error: $error");
+    });
   }
 
   Future<void> offline() async {
-    await _flutterBlue.stopScan();
     _state = BlueToothState.offline;
     connectionSubject.add(_state);
   }
 
   get isOffline => _state == BlueToothState.offline;
 
-  Future<void> _scanResults(ScanResult result) async {
+  void _scanResults(DiscoveredDevice device) {
+    debugPrint("_scanResults: $device, $_state");
     if (_state == BlueToothState.connecting) return;
-    if (result.device.name.startsWith('Selector')) {
+    if (device.name.startsWith('Selector')) {
       _state = BlueToothState.connecting;
-      var connected = await _connectToDevice(result.device, 5);
-      int attempt = 0;
-      while (!connected && attempt < 3) {
-        connected = await _connectToDevice(result.device, 5);
-        attempt += 1;
-      }
-      if (!connected) {
-        return;
-      }
+      _connectToDevice(device.id, 5);
+      // int attempt = 0;
+      // while (!connected && attempt < 3) {
+      //   connected = await _connectToDevice(device, 5);
+      //   attempt += 1;
+      // }
+      // if (!connected) {
+      //   return;
+      // }
 
-      await _deviceConnected(result.device);
-
-      // Stop scanning
-      await _flutterBlue.stopScan();
+      // await _deviceConnected(device);
     }
   }
 
-  Future<bool> _connectToDevice(BluetoothDevice device, int timeout) async {
-    Future<bool> returnValue = Future.value(true);
-    try {
-      await device.connect().timeout(Duration(seconds: timeout),
-          onTimeout: () async {
-        returnValue = Future.value(false);
-        await device.disconnect();
-      });
-    } catch (e) {
-      await device.disconnect();
-      returnValue = Future.value(false);
-    }
+  void _connectToDevice(String deviceId, int timeout) {
+    _bluetooth
+        .connectToDevice(
+      id: deviceId,
+      // servicesWithCharacteristicsToDiscover: {serviceId: [char1, char2]},
+      connectionTimeout: Duration(seconds: timeout),
+    )
+        .listen((connectionState) {
+      debugPrint("connectionState: $connectionState");
+      if (connectionState.connectionState == DeviceConnectionState.connected) {
+        _deviceConnected(deviceId);
+      }
+      // Handle connection state updates
+    }, onError: (error) {
+      // Handle a possible error
+      debugPrint("Conenction failed: $error");
+    });
 
-    return returnValue;
+    // try {
+    //   await device.connect().timeout(Duration(seconds: timeout),
+    //       onTimeout: () async {
+    //     returnValue = Future.value(false);
+    //     await device.disconnect();
+    //   });
+    // } catch (e) {
+    //   await device.disconnect();
+    //   returnValue = Future.value(false);
+    // }
   }
 
-  Future<void> _deviceConnected(BluetoothDevice device) async {
-    _device = device;
+  Future<void> _deviceConnected(String deviceId) async {
+    _deviceId = deviceId;
     await _getCharacteristic();
-    if (_stateSubscription == null) {
-      _stateSubscription = _device!.state.listen(_stateListener);
-    } else {
-      _stateSubscription!.resume();
-    }
+    // if (_stateSubscription == null) {
+    //   _stateSubscription = _bluetooth.state.listen(_stateListener);
+    // } else {
+    //   _stateSubscription!.resume();
+    // }
 
     _state = BlueToothState.connected;
     connectionSubject.add(_state);
 
-    Future.delayed(const Duration(milliseconds: 500), getStatus);
+    // Future.delayed(const Duration(milliseconds: 500), getStatus);
   }
 
   Future<void> _getCharacteristic() async {
-    List<BluetoothService> services = await _device!.discoverServices();
+    List<DiscoveredService> services =
+        await _bluetooth.discoverServices(_deviceId!);
     for (var service in services) {
-      if (service.uuid == Guid(customServiceUUID)) {
+      if (service.serviceId == (customServiceUUID)) {
         var characteristics = service.characteristics;
-        for (BluetoothCharacteristic c in characteristics) {
-          if (c.uuid == Guid(customCharacteristicUUID)) {
-            _uart = c;
+        for (var characteristic in characteristics) {
+          if (characteristic.characteristicId == customCharacteristicUUID) {
+            debugPrint(
+                "found: ${service.serviceId}${characteristic.characteristicId}");
             break;
           }
         }
@@ -134,13 +173,13 @@ class Bluetooth {
     }
   }
 
-  void _stateListener(BluetoothDeviceState event) {
-    if (event == BluetoothDeviceState.disconnected) {
-      reset();
-      _state = BlueToothState.offline;
-      connectionSubject.add(_state);
-    }
-  }
+  // void _stateListener(BluetoothDeviceState event) {
+  //   if (event == BluetoothDeviceState.disconnected) {
+  //     reset();
+  //     _state = BlueToothState.offline;
+  //     connectionSubject.add(_state);
+  //   }
+  // }
 
   Future<bool> checkConnection() async {
     final permissionsOk = await checkPermissions();
@@ -148,27 +187,33 @@ class Bluetooth {
   }
 
   Future<bool> checkPermissions() async {
-    // Check the phone's location
-    if (!await Permission.locationWhenInUse.serviceStatus.isEnabled) {
-      connectionSubject.add(BlueToothState.noLocation);
-      return false;
-    }
+    final status = _bluetooth.status;
     // Check the phone's bluetooth
-    var isAvailable = await _flutterBlue.isAvailable;
-    if (!isAvailable) {
+    // status == BleStatus.unknown ||
+    if (status == BleStatus.unsupported || status == BleStatus.unauthorized) {
       connectionSubject.add(BlueToothState.noBluetooth);
       return false;
     }
-    var isOn = await _flutterBlue.isOn;
-    if (!isOn) {
-      // Try once more after some time (to allow auto-enable)
-      await Future.delayed(const Duration(seconds: 2));
-      isOn = await _flutterBlue.isOn;
-      if (!isOn) {
-        connectionSubject.add(BlueToothState.bluetoothIsOff);
-        return false;
-      }
+    // Check the phone's location
+    if (status == BleStatus.locationServicesDisabled) {
+      connectionSubject.add(BlueToothState.noLocation);
+      return false;
     }
+    // Check bluetooth power
+    if (status == BleStatus.poweredOff) {
+      connectionSubject.add(BlueToothState.bluetoothIsOff);
+      return false;
+    }
+    // var isOn = await _bluetooth.isOn;
+    // if (!isOn) {
+    //   // Try once more after some time (to allow auto-enable)
+    //   await Future.delayed(const Duration(seconds: 2));
+    //   isOn = await _bluetooth.isOn;
+    //   if (!isOn) {
+    //     connectionSubject.add(BlueToothState.bluetoothIsOff);
+    //     return false;
+    //   }
+    // }
     return true;
   }
 
@@ -228,30 +273,59 @@ class Bluetooth {
   }
 
   Future<void> sendMessage(String message) async {
+    final characteristic = QualifiedCharacteristic(
+        serviceId: customServiceUUID,
+        characteristicId: customCharacteristicUUID,
+        deviceId: _deviceId!);
     if (message.isNotEmpty) {
       debugPrint('Sending message: $message');
-      await _uart!.write(utf8.encode(message));
-      await _uart!.read();
-      if (!_uart!.isNotifying) {
-        await _uart!.setNotifyValue(true);
-        await _uart!.read();
+
+      try {
+        await _bluetooth.writeCharacteristicWithResponse(characteristic,
+            value: utf8.encode(message));
+      } catch (e) {
+        debugPrint('Error sending message: $e');
       }
+      // _bluetooth.subscribeToCharacteristic(characteristic).listen((value) {
+      //   debugPrint('Received message: ${utf8.decode(value)}');
+      // });
+
+      // await _characteristicId!.read();
+      // if (!_characteristicId!.isNotifying) {
+      //   await _characteristicId!.setNotifyValue(true);
+      //   await _characteristicId!.read();
+      // }
     }
 
-    await _uart!.value.firstWhere((value) {
-      final received = utf8.decode(value, allowMalformed: true);
-      // debugPrint('Received $received');
+    await _bluetooth.characteristicValueStream.firstWhere((value) {
+      final received =
+          utf8.decode(value.result.dematerialize(), allowMalformed: true);
       // if (received.startsWith(Arduino.status)) {
       //   final status = received.replaceAll(Arduino.status, '');
       //   debugPrint('$received status: $status');
       // }
+      debugPrint('Received: $received');
       return received.startsWith(Arduino.done);
     });
+
+    // String responseString = "";
+    // // while (!responseString.startsWith(Arduino.done)) {
+    // final response = await _bluetooth.readCharacteristic(characteristic);
+    // responseString = utf8.decode(response, allowMalformed: true);
+    // debugPrint('Received $responseString');
+    // }
+
+    // await _characteristicId!.value.firstWhere((value) {
+    //   final received = utf8.decode(value, allowMalformed: true);
+    //   // if (received.startsWith(Arduino.status)) {
+    //   //   final status = received.replaceAll(Arduino.status, '');
+    //   //   debugPrint('$received status: $status');
+    //   // }
+    //   return received.startsWith(Arduino.done);
+    // });
   }
 
   Future<void> reset() async {
-    _stateSubscription?.pause();
-    _device = null;
-    _uart = null;
+    _deviceId = "";
   }
 }
