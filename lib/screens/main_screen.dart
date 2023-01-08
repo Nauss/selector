@@ -122,38 +122,38 @@ class MainScreenState extends State<MainScreen> {
                         );
                       },
                     ),
-                    ListTile(
-                      title: Text(locale.addMultiple),
-                      leading: Image.asset(
-                          'assets/icons/icone ajout plusieurs nouveaux vinyles.png'),
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return const SearchScreen(
-                                multiple: true,
-                              );
-                            },
-                          ),
-                        );
-                      },
-                    ),
-                    ListTile(
-                      title: Text(locale.advanced),
-                      onTap: () {
-                        Navigator.pop(context);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return const SettingsScreen();
-                            },
-                          ),
-                        );
-                      },
-                    ),
+                    // ListTile(
+                    //   title: Text(locale.addMultiple),
+                    //   leading: Image.asset(
+                    //       'assets/icons/icone ajout plusieurs nouveaux vinyles.png'),
+                    //   onTap: () {
+                    //     Navigator.pop(context);
+                    //     Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //         builder: (context) {
+                    //           return const SearchScreen(
+                    //             multiple: true,
+                    //           );
+                    //         },
+                    //       ),
+                    //     );
+                    //   },
+                    // ),
+                    // ListTile(
+                    //   title: Text(locale.advanced),
+                    //   onTap: () {
+                    //     Navigator.pop(context);
+                    //     Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //         builder: (context) {
+                    //           return const SettingsScreen();
+                    //         },
+                    //       ),
+                    //     );
+                    //   },
+                    // ),
                   ],
                 );
               }),
