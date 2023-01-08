@@ -7,7 +7,6 @@ import 'package:selector/data/enums.dart';
 import 'package:selector/data/search.dart';
 import 'package:selector/data/selector.dart';
 import 'package:selector/screens/search_screen.dart';
-import 'package:selector/screens/settings_sreen.dart';
 import 'package:selector/widgets/app_bar.dart';
 import 'package:selector/widgets/pointing_arrow.dart';
 import 'package:selector/widgets/selector_filter.dart';

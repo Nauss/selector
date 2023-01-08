@@ -16,22 +16,18 @@ class Record extends HiveObject {
   @HiveField(2)
   RecordInfo info;
 
+  bool isDouble = false;
+
   Record({
     required this.info,
     this.status = RecordStatus.none,
     this.position = -1,
-  });
-
-  Future<void> store() async {
-    // Get the box
-    var box = Hive.box(boxName);
-    await box.put(position, this);
+  }) {
+    // For now we check whether the record has tracks on C or D sides
+    // to know if its a double
+    isDouble = info.tracks
+        .any((track) => track.side != Side.A && track.side != Side.B);
   }
-
-  // For now we check whether the record has tracks on C or D sides
-  // to know if its a double
-  bool get isDouble =>
-      info.tracks.any((track) => track.side != Side.A && track.side != Side.B);
 
   String get uniqueId => '${info.id}-$position';
 }

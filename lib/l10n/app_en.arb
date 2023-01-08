@@ -62,5 +62,6 @@
   "advanced": "Advanced",
   "finish": "Finish",
   "filterEmptyResult": "No result",
-  "loadingTracks": "Loading tracks"
+  "loadingTracks": "Loading tracks",
+  "double": "Double"
 }
