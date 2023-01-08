@@ -2,6 +2,7 @@ import 'package:hive/hive.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:selector/data/constants.dart';
 import 'package:selector/data/enums.dart';
+import 'package:selector/data/parameters.dart';
 import 'package:selector/data/record.dart';
 import 'package:selector/data/search.dart';
 import 'package:string_similarity/string_similarity.dart';
@@ -15,6 +16,7 @@ class Selector {
   late BehaviorSubject<RecordList> recordsSubject;
   Search? selectorSearch, networkSearch;
   late BehaviorSubject<Search> selectorSearchSubject, networkSearchSubject;
+  Parameters parameters = Parameters();
 
   Selector() {
     recordsSubject = BehaviorSubject<RecordList>();

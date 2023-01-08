@@ -5,3 +5,5 @@ const hiveRecordId = 3;
 const hiveSideId = 4;
 const hiveSearchId = 5;
 const hiveSortTypeId = 6;
+const hiveParametersId = 7;
+const hiveGridViewTypeId = 8;

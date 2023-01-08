@@ -104,6 +104,7 @@ class SearchScreenState extends State<SearchScreen> {
                   builder: (context, snapshot) {
                     return RecordGrid(
                       records: snapshot.data,
+                      parameters: selector.parameters,
                       statusFilter: const [RecordStatus.none],
                     );
                   },

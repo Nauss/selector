@@ -66,3 +66,10 @@ enum CategoryFilter {
   mySelector,
   removed,
 }
+
+// Parameters
+@HiveType(typeId: hiveGridViewTypeId)
+enum GridViewType {
+  normal,
+  large,
+}

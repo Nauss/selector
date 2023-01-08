@@ -63,5 +63,6 @@
   "finish": "Finish",
   "filterEmptyResult": "No result",
   "loadingTracks": "Loading tracks",
-  "double": "Double"
+  "double": "Double",
+  "largeThumbnails": "Large thumbnails"
 }
