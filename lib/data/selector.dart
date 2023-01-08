@@ -28,8 +28,8 @@ class Selector {
     // Get the box
     var box = Hive.box(Record.boxName);
     records = <Record>[];
-    for (var i = 0; i < selectorCapacity; i++) {
-      var record = box.get(i) as Record?;
+    for (var key in box.keys) {
+      var record = box.get(key) as Record?;
       if (record != null) {
         records.add(record);
       }
@@ -70,7 +70,7 @@ class Selector {
     record.status = RecordStatus.inside;
     // Get the box
     var box = Hive.box(Record.boxName);
-    box.put(record.position, record);
+    box.put(record.info.id, record);
     records.add(record);
     recordsSubject.add(records);
   }
