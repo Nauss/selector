@@ -77,8 +77,7 @@ flutter:
     - assets/missing.png
     - assets/barcode_scanner.png
     - assets/gifs/gif ouverture appli.gif
-    - assets/gifs/gif en fonctionnement.gif
-    - assets/gifs/gif interaction.gif
+    - assets/gifs/ouverture intercalaire vide.gif
     - assets/icons/icone mon selector.png
     - assets/icons/icone en ecoute.png
     - assets/icons/icone sortie du selector.png

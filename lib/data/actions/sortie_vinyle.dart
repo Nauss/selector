@@ -25,12 +25,12 @@ class SortieVinyle extends SelectorAction {
   Widget content(BuildContext context) {
     if (status == RecordStatus.inside) {
       return Image.asset(
-        "assets/gifs/gif interaction.gif",
+        "assets/gifs/ouverture intercalaire vide.gif",
         width: 200,
       );
     } else {
       return Image.asset(
-        "assets/gifs/gif interaction.gif",
+        "assets/gifs/ouverture intercalaire vide.gif",
         width: 200,
       );
     }

@@ -28,7 +28,7 @@ class AjoutVinyle extends SelectorAction {
   @override
   Widget content(BuildContext context) {
     return Image.asset(
-      "assets/gifs/gif interaction.gif",
+      "assets/gifs/ouverture intercalaire vide.gif",
       width: 200,
     );
   }
