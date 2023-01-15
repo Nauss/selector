@@ -61,7 +61,9 @@ class RecordGrid extends StatelessWidget {
                 );
               }
               BlueToothState state = snapshot.data as BlueToothState;
-              if (state == BlueToothState.offline) {
+              if (state == BlueToothState.offline ||
+                  state == BlueToothState.bluetoothIsOff ||
+                  state == BlueToothState.disconnected) {
                 return SliverToBoxAdapter(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,

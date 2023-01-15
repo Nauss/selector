@@ -49,7 +49,7 @@ dependencies:
   app_settings: ^4.1.6
   path: ^1.8.1
   http: ^0.13.4
-  flutter_reactive_ble: ^5.0.2
+  flutter_reactive_ble: ^5.0.3
 
 dev_dependencies:
   flutter_test:
