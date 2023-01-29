@@ -90,6 +90,19 @@ class _RecordButtonsState extends State<RecordButtons> {
           ),
         ),
       );
+    } else if (type == "takeOut") {
+      return Expanded(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: ElevatedButton(
+            onPressed:
+                isOffline ? null : () => onTap(context, Scenario.takeOut),
+            child: Text(
+              locale.takeOut,
+            ),
+          ),
+        ),
+      );
     } else if (type == "remove") {
       return Expanded(
         child: Padding(
@@ -158,7 +171,9 @@ class _RecordButtonsState extends State<RecordButtons> {
           if (widget.record.status == RecordStatus.removed) {
             buttons.add(getButton(context, "store", isOffline));
             buttons.add(getButton(context, "removePermanently", isOffline));
-          } else if (widget.record.status != RecordStatus.none) {
+          } else if (widget.record.status == RecordStatus.inside) {
+            buttons.add(getButton(context, "takeOut", isOffline));
+          } else if (widget.record.status == RecordStatus.outside) {
             buttons.add(getButton(context, "remove", isOffline));
           }
           // Double picker switch

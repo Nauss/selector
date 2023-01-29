@@ -56,5 +56,6 @@
   "filterEmptyResult": "Pas de resultat",
   "loadingTracks": "Chargement des pistes",
   "double": "Double",
-  "largeThumbnails": "Grandes Vignettes"
+  "largeThumbnails": "Grandes Vignettes",
+  "takeOut": "Sortir"
 }

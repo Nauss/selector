@@ -54,6 +54,7 @@ enum Scenario {
   addMore,
   store,
   listen,
+  takeOut,
   remove,
   removeAlreadyOut,
   removePermanently,
