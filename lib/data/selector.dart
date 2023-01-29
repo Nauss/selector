@@ -2,6 +2,7 @@ import 'package:hive/hive.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:selector/data/constants.dart';
 import 'package:selector/data/enums.dart';
+import 'package:selector/data/parameters.dart';
 import 'package:selector/data/record.dart';
 import 'package:selector/data/search.dart';
 import 'package:string_similarity/string_similarity.dart';
@@ -15,6 +16,7 @@ class Selector {
   late BehaviorSubject<RecordList> recordsSubject;
   Search? selectorSearch, networkSearch;
   late BehaviorSubject<Search> selectorSearchSubject, networkSearchSubject;
+  Parameters parameters = Parameters();
 
   Selector() {
     recordsSubject = BehaviorSubject<RecordList>();
@@ -28,8 +30,8 @@ class Selector {
     // Get the box
     var box = Hive.box(Record.boxName);
     records = <Record>[];
-    for (var i = 0; i < selectorCapacity; i++) {
-      var record = box.get(i) as Record?;
+    for (var key in box.keys) {
+      var record = box.get(key) as Record?;
       if (record != null) {
         records.add(record);
       }
@@ -70,7 +72,7 @@ class Selector {
     record.status = RecordStatus.inside;
     // Get the box
     var box = Hive.box(Record.boxName);
-    box.put(record.position, record);
+    box.put(record.info.id, record);
     records.add(record);
     recordsSubject.add(records);
   }

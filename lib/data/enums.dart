@@ -54,6 +54,7 @@ enum Scenario {
   addMore,
   store,
   listen,
+  takeOut,
   remove,
   removeAlreadyOut,
   removePermanently,
@@ -65,4 +66,11 @@ enum CategoryFilter {
   listening,
   mySelector,
   removed,
+}
+
+// Parameters
+@HiveType(typeId: hiveGridViewTypeId)
+enum GridViewType {
+  normal,
+  large,
 }

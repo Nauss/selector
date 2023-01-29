@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:hive/hive.dart';
-import 'package:selector/data/debug.dart';
 import 'package:selector/data/enums.dart';
 import 'package:selector/data/record.dart';
 import 'package:selector/data/record_info.dart';
@@ -25,6 +24,4 @@ Future<void> initHive() async {
 
   await Hive.openBox(Selector.boxName);
   await Hive.openBox(Record.boxName);
-
-  await createFakeHive();
 }

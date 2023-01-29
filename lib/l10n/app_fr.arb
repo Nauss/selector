@@ -54,5 +54,8 @@
   "advanced": "Avancé",
   "finish": "Terminer",
   "filterEmptyResult": "Pas de resultat",
-  "loadingTracks": "Chargement des pistes"
+  "loadingTracks": "Chargement des pistes",
+  "double": "Double",
+  "largeThumbnails": "Grandes Vignettes",
+  "takeOut": "Sortir"
 }

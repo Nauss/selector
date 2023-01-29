@@ -30,7 +30,6 @@ class _RecordScreenState extends State<RecordScreen> {
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
     final themeData = Theme.of(context);
-    final isDouble = widget.record.isDouble;
     return SafeArea(
       child: WillPopScope(
         onWillPop: () async {
@@ -112,14 +111,6 @@ class _RecordScreenState extends State<RecordScreen> {
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
-                                  if (isDouble)
-                                    AvatarIcon(
-                                      image: Image.asset(
-                                        'assets/icons/icone multi vinyle.png',
-                                        height: iconSize,
-                                        width: iconSize,
-                                      ),
-                                    ),
                                 ],
                               ),
                               Text(

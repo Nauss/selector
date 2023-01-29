@@ -7,15 +7,30 @@ import 'package:selector/data/record.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:selector/data/selector.dart';
 import 'package:selector/screens/connection_screen.dart';
+import 'package:selector/widgets/double_switch.dart';
 import 'package:selector/widgets/utils.dart';
 
-class RecordButtons extends StatelessWidget {
+class RecordButtons extends StatefulWidget {
+  final Record record;
+
+  const RecordButtons({Key? key, required this.record}) : super(key: key);
+
+  @override
+  State<RecordButtons> createState() => _RecordButtonsState();
+}
+
+class _RecordButtonsState extends State<RecordButtons> {
   final selector = GetIt.I.get<Selector>();
   final processor = GetIt.I.get<Processor>();
   final bluetooth = GetIt.I.get<Bluetooth>();
-  final Record record;
 
-  RecordButtons({Key? key, required this.record}) : super(key: key);
+  bool isDouble = false;
+
+  @override
+  void initState() {
+    super.initState();
+    isDouble = widget.record.isDouble;
+  }
 
   void onTap(BuildContext context, Scenario scenario) async {
     if (!await bluetooth.checkConnection()) {
@@ -28,7 +43,7 @@ class RecordButtons extends StatelessWidget {
       );
       return;
     }
-    processor.start(scenario, record);
+    processor.start(scenario, widget.record);
     showSteps(context);
   }
 
@@ -75,6 +90,19 @@ class RecordButtons extends StatelessWidget {
           ),
         ),
       );
+    } else if (type == "takeOut") {
+      return Expanded(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: ElevatedButton(
+            onPressed:
+                isOffline ? null : () => onTap(context, Scenario.takeOut),
+            child: Text(
+              locale.takeOut,
+            ),
+          ),
+        ),
+      );
     } else if (type == "remove") {
       return Expanded(
         child: Padding(
@@ -82,7 +110,7 @@ class RecordButtons extends StatelessWidget {
           child: ElevatedButton(
             onPressed: isOffline
                 ? null
-                : record.status == RecordStatus.outside
+                : widget.record.status == RecordStatus.outside
                     ? () => onTap(context, Scenario.removeAlreadyOut)
                     : () => onTap(context, Scenario.remove),
             style: ButtonStyle(
@@ -128,24 +156,44 @@ class RecordButtons extends StatelessWidget {
           final isOffline =
               (snapshot.data as BlueToothState) == BlueToothState.offline;
           var buttons = <Widget>[];
-          if (record.status == RecordStatus.outside) {
+          var isEditable = false;
+          if (widget.record.status == RecordStatus.outside) {
             buttons.add(getButton(context, "store", isOffline));
+            isEditable = true;
           }
-          if (record.status == RecordStatus.inside) {
+          if (widget.record.status == RecordStatus.inside) {
             buttons.add(getButton(context, "listen", isOffline));
           }
-          if (record.status == RecordStatus.none) {
+          if (widget.record.status == RecordStatus.none) {
             buttons.add(getButton(context, "add", isOffline));
+            isEditable = true;
           }
-          if (record.status == RecordStatus.removed) {
+          if (widget.record.status == RecordStatus.removed) {
             buttons.add(getButton(context, "store", isOffline));
             buttons.add(getButton(context, "removePermanently", isOffline));
-          } else if (record.status != RecordStatus.none) {
+          } else if (widget.record.status == RecordStatus.inside) {
+            buttons.add(getButton(context, "takeOut", isOffline));
+          } else if (widget.record.status == RecordStatus.outside) {
             buttons.add(getButton(context, "remove", isOffline));
           }
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: buttons,
+          // Double picker switch
+          return Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: buttons,
+              ),
+              DoubleSwitch(
+                  value: widget.record.isDouble,
+                  onChanged: isEditable
+                      ? (value) {
+                          widget.record.isDouble = value;
+                          setState(() {
+                            isDouble = value;
+                          });
+                        }
+                      : null)
+            ],
           );
         });
   }

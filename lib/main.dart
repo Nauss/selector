@@ -49,9 +49,9 @@ void initGetIt() {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await initHive();
   await Globals.init();
   initGetIt();
-  await initHive();
 
   runApp(const SelectorApp());
 }

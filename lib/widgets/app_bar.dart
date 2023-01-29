@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
+import 'package:selector/data/parameters.dart';
 import 'package:selector/data/record.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:selector/data/search.dart';
@@ -10,8 +11,10 @@ import 'package:selector/widgets/record_grid.dart';
 import 'package:selector/widgets/search_history.dart';
 
 class SelectorAppBar extends StatefulWidget {
+  final Parameters parameters;
   const SelectorAppBar({
     Key? key,
+    required this.parameters,
   }) : super(key: key);
 
   @override
@@ -86,6 +89,7 @@ class _SelectorAppBarState extends State<SelectorAppBar> {
               return FloatingSearchBarScrollNotifier(
                 child: RecordGrid(
                   records: records,
+                  parameters: widget.parameters,
                 ),
               );
             },

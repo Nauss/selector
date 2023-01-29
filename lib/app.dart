@@ -29,6 +29,22 @@ class SelectorApp extends StatelessWidget {
           hintStyle: TextStyle(fontSize: 16),
         ),
         fontFamily: 'Cooper Black',
+        // switchTheme: SwitchThemeData(
+        //   thumbColor: MaterialStateProperty.resolveWith<Color>(
+        //     (Set<MaterialState> state) {
+        //       return state.contains(MaterialState.selected)
+        //           ? themeData.primaryColor
+        //           : Colors.grey;
+        //     },
+        //   ),
+        //   trackColor: MaterialStateProperty.resolveWith<Color>(
+        //     (Set<MaterialState> state) {
+        //       return state.contains(MaterialState.selected)
+        //           ? themeData.primaryColor.withOpacity(0.5)
+        //           : Colors.grey;
+        //     },
+        //   ),
+        // ),
       ),
       initial: AdaptiveThemeMode.dark,
       builder: (theme, darkTheme) => MaterialApp(

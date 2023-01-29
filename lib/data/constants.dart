@@ -30,7 +30,8 @@ class Globals {
 }
 
 final Map<Scenario, List<SelectorAction>> scenarii = {
-  Scenario.listen: [SortieVinyle(), FermeMeuble(), ListenAction()],
+  Scenario.listen: [SortieVinyle(), ListenAction(), RentreVinyle()],
+  Scenario.takeOut: [SortieVinyle(), FermeMeuble(), ListenAction()],
   Scenario.remove: [SortieVinyle(), FermeMeuble(), RemoveAction()],
   Scenario.store: [
     SortieVinyle(),

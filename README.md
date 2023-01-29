@@ -13,7 +13,8 @@ flutter pub run environment_config:generate --DICOGS_TOKEN=YOUR_DICOGS_TOKEN_HER
 # Generate the localizations
 
 ```bash
-flutter pub run build_runner build | flutter pub get
+flutter pub run build_runner build
+flutter pub get
 ```
 
 # Generate launcher icon

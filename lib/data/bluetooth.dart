@@ -115,23 +115,16 @@ class Bluetooth {
       debugPrint("connectionState: $connectionState");
       if (connectionState.connectionState == DeviceConnectionState.connected) {
         _deviceConnected(deviceId);
+      } else if (connectionState.connectionState ==
+          DeviceConnectionState.disconnected) {
+        _state = BlueToothState.disconnected;
+        connectionSubject.add(_state);
       }
       // Handle connection state updates
     }, onError: (error) {
       // Handle a possible error
       debugPrint("Conenction failed: $error");
     });
-
-    // try {
-    //   await device.connect().timeout(Duration(seconds: timeout),
-    //       onTimeout: () async {
-    //     returnValue = Future.value(false);
-    //     await device.disconnect();
-    //   });
-    // } catch (e) {
-    //   await device.disconnect();
-    //   returnValue = Future.value(false);
-    // }
   }
 
   Future<void> _deviceConnected(String deviceId) async {
