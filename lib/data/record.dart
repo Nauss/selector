@@ -15,19 +15,15 @@ class Record extends HiveObject {
   int position;
   @HiveField(2)
   RecordInfo info;
-
-  bool isDouble = false;
+  @HiveField(3)
+  bool isDouble;
 
   Record({
     required this.info,
+    required this.isDouble,
     this.status = RecordStatus.none,
     this.position = -1,
-  }) {
-    // For now we check whether the record has tracks on C or D sides
-    // to know if its a double
-    isDouble = info.tracks
-        .any((track) => track.side != Side.A && track.side != Side.B);
-  }
+  });
 
   String get uniqueId => '${info.id}-$position';
 }

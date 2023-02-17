@@ -71,6 +71,8 @@ enum CategoryFilter {
 // Parameters
 @HiveType(typeId: hiveGridViewTypeId)
 enum GridViewType {
+  @HiveField(0)
   normal,
+  @HiveField(1)
   large,
 }
