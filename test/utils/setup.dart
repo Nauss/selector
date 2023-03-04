@@ -8,6 +8,8 @@ import 'package:selector/data/search.dart';
 import 'package:selector/data/selector.dart';
 import 'package:selector/data/track.dart';
 
+import 'debug.dart';
+
 Future<void> initHive() async {
   var path = Directory.current.path;
   Hive.init('$path/test/hive_testing_path');
@@ -24,4 +26,6 @@ Future<void> initHive() async {
 
   await Hive.openBox(Selector.boxName);
   await Hive.openBox(Record.boxName);
+
+  await createFakeHive();
 }

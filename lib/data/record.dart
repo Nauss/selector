@@ -15,14 +15,14 @@ class Record extends HiveObject {
   int position;
   @HiveField(2)
   RecordInfo info;
-  @HiveField(3)
+  // @HiveField(3)
   bool isDouble;
 
   Record({
     required this.info,
-    required this.isDouble,
     this.status = RecordStatus.none,
     this.position = -1,
+    this.isDouble = false,
   });
 
   String get uniqueId => '${info.id}-$position';

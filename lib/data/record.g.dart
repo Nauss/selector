@@ -18,7 +18,6 @@ class RecordAdapter extends TypeAdapter<Record> {
     };
     return Record(
       info: fields[2] as RecordInfo,
-      isDouble: fields[3] as bool,
       status: fields[0] as RecordStatus,
       position: fields[1] as int,
     );
@@ -27,15 +26,13 @@ class RecordAdapter extends TypeAdapter<Record> {
   @override
   void write(BinaryWriter writer, Record obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(3)
       ..writeByte(0)
       ..write(obj.status)
       ..writeByte(1)
       ..write(obj.position)
       ..writeByte(2)
-      ..write(obj.info)
-      ..writeByte(3)
-      ..write(obj.isDouble);
+      ..write(obj.info);
   }
 
   @override
