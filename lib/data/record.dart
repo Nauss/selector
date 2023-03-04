@@ -15,17 +15,19 @@ class Record extends HiveObject {
   int position;
   @HiveField(2)
   RecordInfo info;
-  // @HiveField(3)
-  bool isDouble;
+  @HiveField(3)
+  bool? double;
 
   Record({
     required this.info,
     this.status = RecordStatus.none,
     this.position = -1,
-    this.isDouble = false,
+    this.double = false,
   });
 
   String get uniqueId => '${info.id}-$position';
+  bool get isDouble => double ?? false;
+  set isDouble(value) => double = value;
 }
 
 typedef RecordList = List<Record>;

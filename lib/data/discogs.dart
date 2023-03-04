@@ -59,7 +59,7 @@ class Discogs {
               selector.find(result["id"]) ??
                   Record(
                       info: info,
-                      isDouble: info.tracks.any((track) =>
+                      double: info.tracks.any((track) =>
                           track.side != Side.A && track.side != Side.B)),
             );
           },
