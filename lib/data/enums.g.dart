@@ -147,3 +147,42 @@ class SortTypeAdapter extends TypeAdapter<SortType> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+class GridViewTypeAdapter extends TypeAdapter<GridViewType> {
+  @override
+  final int typeId = 8;
+
+  @override
+  GridViewType read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return GridViewType.normal;
+      case 1:
+        return GridViewType.large;
+      default:
+        return GridViewType.normal;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, GridViewType obj) {
+    switch (obj) {
+      case GridViewType.normal:
+        writer.writeByte(0);
+        break;
+      case GridViewType.large:
+        writer.writeByte(1);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is GridViewTypeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}

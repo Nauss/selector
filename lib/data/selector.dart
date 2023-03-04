@@ -68,11 +68,11 @@ class Selector {
     recordsSubject.add(records);
   }
 
-  void add(Record record) {
+  Future<void> add(Record record) async {
     record.status = RecordStatus.inside;
     // Get the box
     var box = Hive.box(Record.boxName);
-    box.put(record.info.id, record);
+    await box.put(record.info.id, record);
     records.add(record);
     recordsSubject.add(records);
   }

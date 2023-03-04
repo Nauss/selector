@@ -52,8 +52,15 @@ class Discogs {
         final selector = GetIt.I.get<Selector>();
         jsonData["results"].forEach(
           (result) {
+            // For now we check whether the record has tracks on C or D sides
+            // to know if its a double
+            var info = _fromSearch(result);
             results.add(
-              selector.find(result["id"]) ?? Record(info: _fromSearch(result)),
+              selector.find(result["id"]) ??
+                  Record(
+                      info: info,
+                      double: info.tracks.any((track) =>
+                          track.side != Side.A && track.side != Side.B)),
             );
           },
         );

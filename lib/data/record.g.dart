@@ -20,19 +20,22 @@ class RecordAdapter extends TypeAdapter<Record> {
       info: fields[2] as RecordInfo,
       status: fields[0] as RecordStatus,
       position: fields[1] as int,
+      double: fields[3] as bool?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Record obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.status)
       ..writeByte(1)
       ..write(obj.position)
       ..writeByte(2)
-      ..write(obj.info);
+      ..write(obj.info)
+      ..writeByte(3)
+      ..write(obj.double);
   }
 
   @override
