@@ -51,7 +51,7 @@ class _RecordButtonsState extends State<RecordButtons> {
     final locale = AppLocalizations.of(context)!;
     final ThemeData themeData = Theme.of(context);
     Color getDeleteColor(Set<MaterialState> states) {
-      return themeData.errorColor;
+      return themeData.colorScheme.error;
     }
 
     if (type == "store") {

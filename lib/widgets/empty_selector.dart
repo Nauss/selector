@@ -24,7 +24,7 @@ class _EmptySelectorState extends State<EmptySelector> {
             children: [
               Text(
                 locale.emptySelector,
-                style: themeData.textTheme.headline6,
+                style: themeData.textTheme.titleLarge,
               ),
               const SizedBox(height: 16),
               Row(
@@ -32,7 +32,7 @@ class _EmptySelectorState extends State<EmptySelector> {
                 children: [
                   Text(
                     locale.addRecords,
-                    style: themeData.textTheme.subtitle1,
+                    style: themeData.textTheme.titleMedium,
                   ),
                   const SizedBox(width: 8),
                   Icon(Icons.menu, color: themeData.primaryColor),
