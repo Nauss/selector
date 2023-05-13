@@ -65,5 +65,7 @@
   "loadingTracks": "Loading tracks",
   "double": "Double",
   "largeThumbnails": "Large thumbnails",
-  "takeOut": "Take out"
+  "takeOut": "Take out",
+  "outside": "Outside Selector",
+  "addOutside": "Add outside Selector"
 }

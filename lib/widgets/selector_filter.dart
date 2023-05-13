@@ -36,7 +36,7 @@ class SelectorFilter extends StatelessWidget {
       case SortType.mySelector:
         return Text(locale.mySelector);
       case SortType.removed:
-        return Text(locale.removed);
+        return Text(locale.outside);
       default:
         return Text(locale.listening);
     }

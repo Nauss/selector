@@ -74,6 +74,7 @@ flutter:
     - assets/icons/icone multi vinyle.png
     - assets/icons/icone ajout nouveau vinyle.png
     - assets/icons/icone ajout plusieurs nouveaux vinyles.png
+    - assets/icons/icone ajout nouveau vinyle hors selector.png
       
   fonts:
     - family: Cooper Black

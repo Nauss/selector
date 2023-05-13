@@ -71,7 +71,13 @@ class _RecordButtonsState extends State<RecordButtons> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: ElevatedButton(
-            onPressed: isOffline ? null : () => onTap(context, Scenario.add),
+            onPressed: isOffline
+                ? null
+                : () => onTap(
+                    context,
+                    selector.addNextRemoved
+                        ? Scenario.addRemoved
+                        : Scenario.add),
             child: Text(
               locale.add,
             ),
@@ -137,6 +143,7 @@ class _RecordButtonsState extends State<RecordButtons> {
             ),
             child: Text(
               locale.removePermanently,
+              textAlign: TextAlign.center,
             ),
           ),
         ),
