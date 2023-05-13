@@ -30,16 +30,23 @@ class Globals {
 }
 
 final Map<Scenario, List<SelectorAction>> scenarii = {
-  Scenario.listen: [SortieVinyle(), RentreVinyle(), FermeMeuble()],
+  Scenario.listen: [
+    SortieVinyle(),
+    RemoveAction(),
+    RentreVinyle(),
+    StoreAction(),
+    FermeMeuble()
+  ],
   Scenario.takeOut: [SortieVinyle(), FermeMeuble(), ListenAction()],
   Scenario.remove: [SortieVinyle(), FermeMeuble(), RemoveAction()],
   Scenario.store: [
     SortieVinyle(),
     RentreVinyle(),
-    FermeMeuble(),
-    StoreAction()
+    StoreAction(),
+    FermeMeuble()
   ],
   Scenario.add: [SortieVinyle(), RentreVinyle(), FermeMeuble(), AddAction()],
+  Scenario.addRemoved: [AddAction()],
   Scenario.addMore: [AjoutVinyle(), RentreVinyle(), AddAction()],
   Scenario.removeAlreadyOut: [RemoveAction()],
   Scenario.removePermanently: [RemoveAction(permanently: true)],
@@ -63,4 +70,5 @@ class Arduino {
   static rentreVinyl() => 'RV';
   static ajoutVinyle(int position) => 'AV$position';
   static fermeMeuble(int position) => 'FM$position';
+  static off() => 'OFF';
 }

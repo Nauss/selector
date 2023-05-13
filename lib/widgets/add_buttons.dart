@@ -25,7 +25,7 @@ class AddButtons extends StatelessWidget {
       children: [
         Text(
           locale.addMore,
-          style: Theme.of(context).textTheme.headline6,
+          style: Theme.of(context).textTheme.titleLarge,
         ),
         const SizedBox(height: 8),
         Row(

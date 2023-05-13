@@ -18,7 +18,7 @@ class EmptySearch extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 8.0),
               child: Text(
                 query ?? locale.selectRecordStore,
-                style: themeData.textTheme.headline4,
+                style: themeData.textTheme.headlineMedium,
                 textAlign: TextAlign.center,
               ),
             ),

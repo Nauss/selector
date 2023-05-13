@@ -51,6 +51,7 @@ enum BlueToothState {
 
 enum Scenario {
   add,
+  addRemoved,
   addMore,
   store,
   listen,
@@ -58,7 +59,7 @@ enum Scenario {
   remove,
   removeAlreadyOut,
   removePermanently,
-  close
+  close,
 }
 
 enum CategoryFilter {

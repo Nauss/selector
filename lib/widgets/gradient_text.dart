@@ -46,9 +46,9 @@ class _GradientTextState extends State<GradientText>
             animation.value + 0.2
           ],
           colors: [
-            themeData.textTheme.bodyText1?.color ?? Colors.amber,
+            themeData.textTheme.bodyLarge?.color ?? Colors.amber,
             themeData.primaryColor,
-            themeData.textTheme.bodyText1?.color ?? Colors.amber,
+            themeData.textTheme.bodyLarge?.color ?? Colors.amber,
           ],
         ).createShader(bounds);
       },

@@ -25,7 +25,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         title: Text(locale.advanced),
       ),
       body: SettingsList(
-        backgroundColor: themeData.backgroundColor,
+        backgroundColor: themeData.colorScheme.background,
         sections: [
           SettingsSection(
             titlePadding: const EdgeInsets.only(top: 16, left: 16),

@@ -3,17 +3,7 @@ description: The application used to command the Selector device.
 
 publish_to: "none"
 
-# The following defines the version and build number for your application.
-# A version number is three numbers separated by dots, like 1.2.43
-# followed by an optional build number separated by a +.
-# Both the version and the builder number may be overridden in flutter
-# build by specifying --build-name and --build-number, respectively.
-# In Android, build-name is used as versionName while build-number used as versionCode.
-# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
-# In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
-# Read more about iOS versioning at
-# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+13
+version: 1.0.1+14
 
 environment:
   sdk: ">=2.13.0 <3.0.0"
@@ -84,6 +74,7 @@ flutter:
     - assets/icons/icone multi vinyle.png
     - assets/icons/icone ajout nouveau vinyle.png
     - assets/icons/icone ajout plusieurs nouveaux vinyles.png
+    - assets/icons/icone ajout nouveau vinyle hors selector.png
       
   fonts:
     - family: Cooper Black

@@ -51,7 +51,7 @@ class _RecordButtonsState extends State<RecordButtons> {
     final locale = AppLocalizations.of(context)!;
     final ThemeData themeData = Theme.of(context);
     Color getDeleteColor(Set<MaterialState> states) {
-      return themeData.errorColor;
+      return themeData.colorScheme.error;
     }
 
     if (type == "store") {
@@ -71,7 +71,13 @@ class _RecordButtonsState extends State<RecordButtons> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: ElevatedButton(
-            onPressed: isOffline ? null : () => onTap(context, Scenario.add),
+            onPressed: isOffline
+                ? null
+                : () => onTap(
+                    context,
+                    selector.addNextRemoved
+                        ? Scenario.addRemoved
+                        : Scenario.add),
             child: Text(
               locale.add,
             ),
@@ -137,6 +143,7 @@ class _RecordButtonsState extends State<RecordButtons> {
             ),
             child: Text(
               locale.removePermanently,
+              textAlign: TextAlign.center,
             ),
           ),
         ),

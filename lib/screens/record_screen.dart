@@ -106,7 +106,7 @@ class _RecordScreenState extends State<RecordScreen> {
                                     flex: 1,
                                     child: Text(
                                       recordInfo.title,
-                                      style: themeData.textTheme.headline4,
+                                      style: themeData.textTheme.headlineMedium,
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                     ),
@@ -115,19 +115,19 @@ class _RecordScreenState extends State<RecordScreen> {
                               ),
                               Text(
                                 recordInfo.artist,
-                                style: themeData.textTheme.subtitle1,
+                                style: themeData.textTheme.titleMedium,
                               ),
                               Text(
                                 "${recordInfo.year} - ${recordInfo.country}",
-                                style: themeData.textTheme.bodyText1,
+                                style: themeData.textTheme.bodyLarge,
                               ),
                               Text(
                                 recordInfo.format,
-                                style: themeData.textTheme.bodyText1,
+                                style: themeData.textTheme.bodyLarge,
                               ),
                               Text(
                                 recordInfo.label,
-                                style: themeData.textTheme.bodyText1,
+                                style: themeData.textTheme.bodyLarge,
                               ),
                             ],
                           ),

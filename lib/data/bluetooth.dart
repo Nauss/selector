@@ -247,6 +247,16 @@ class Bluetooth {
     return true;
   }
 
+  Future<bool> off() async {
+    if (!await checkConnection()) {
+      return false;
+    }
+    final message = Arduino.off();
+
+    await sendMessage(message);
+    return true;
+  }
+
   Future<bool> getStatus() async {
     debugPrint('getStatus');
     if (!await checkConnection()) {

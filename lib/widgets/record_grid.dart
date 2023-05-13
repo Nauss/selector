@@ -3,6 +3,7 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:get_it/get_it.dart';
 import 'package:material_floating_search_bar/material_floating_search_bar.dart';
 import 'package:selector/data/bluetooth.dart';
+import 'package:selector/data/constants.dart';
 import 'package:selector/data/parameters.dart';
 import 'package:selector/data/record.dart';
 import 'package:selector/data/enums.dart';
@@ -121,6 +122,7 @@ class RecordGrid extends StatelessWidget {
                       height: 30,
                     ),
                     locale.listening,
+                    "",
                   )
                 : null,
             sliver: SliverGrid.count(
@@ -133,14 +135,19 @@ class RecordGrid extends StatelessWidget {
                 statusFilter.contains(RecordStatus.inside)))
           SliverStickyHeader(
             header: stored.isNotEmpty
-                ? getHeader(
-                    context,
-                    Image.asset(
-                      'assets/icons/icone mon selector.png',
-                      width: 30,
-                      height: 30,
+                ? Padding(
+                    padding: EdgeInsets.only(top: listening.isEmpty ? 0 : 12),
+                    child: getHeader(
+                      context,
+                      Image.asset(
+                        'assets/icons/icone mon selector.png',
+                        width: 30,
+                        height: 30,
+                      ),
+                      locale.mySelector,
+                      "${stored.length}/$selectorCapacity",
                     ),
-                    locale.mySelector)
+                  )
                 : null,
             sliver: SliverGrid.count(
               crossAxisCount: gridSize,
@@ -152,14 +159,20 @@ class RecordGrid extends StatelessWidget {
                 statusFilter.contains(RecordStatus.removed)))
           SliverStickyHeader(
             header: removed.isNotEmpty
-                ? getHeader(
-                    context,
-                    Image.asset(
-                      'assets/icons/icone sortie du selector.png',
-                      width: 30,
-                      height: 30,
+                ? Padding(
+                    padding: EdgeInsets.only(
+                        top: listening.isEmpty && stored.isEmpty ? 0 : 12),
+                    child: getHeader(
+                      context,
+                      Image.asset(
+                        'assets/icons/icone sortie du selector.png',
+                        width: 30,
+                        height: 30,
+                      ),
+                      locale.outside,
+                      "",
                     ),
-                    locale.removed)
+                  )
                 : null,
             sliver: SliverGrid.count(
               crossAxisCount: gridSize,
@@ -181,16 +194,14 @@ class RecordGrid extends StatelessWidget {
     );
   }
 
-  Widget getHeader(BuildContext context, Image icon, String text) {
+  Widget getHeader(
+      BuildContext context, Widget icon, String text, String count) {
     final themeData = Theme.of(context);
     return Container(
       // height: 60.0,
       color: themeData.scaffoldBackgroundColor,
       padding: const EdgeInsets.all(4.0),
-      // alignment: Alignment.centerLeft,
       child: Row(
-        // mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const SizedBox(
             width: 8,
@@ -202,6 +213,14 @@ class RecordGrid extends StatelessWidget {
           Text(
             text,
             style: const TextStyle(fontSize: 17),
+          ),
+          const Spacer(),
+          Padding(
+            padding: const EdgeInsets.only(top: 6.0),
+            child: Text(
+              count,
+              style: const TextStyle(fontSize: 12),
+            ),
           )
         ],
       ),

@@ -17,6 +17,7 @@ class Selector {
   Search? selectorSearch, networkSearch;
   late BehaviorSubject<Search> selectorSearchSubject, networkSearchSubject;
   Parameters parameters = Parameters();
+  bool _addNextRemoved = false;
 
   Selector() {
     recordsSubject = BehaviorSubject<RecordList>();
@@ -43,7 +44,7 @@ class Selector {
     if (permanently) {
       // Get the box
       var box = Hive.box(Record.boxName);
-      box.delete(record.position);
+      box.delete(record.info.id);
       records.remove(record);
     } else {
       record.status = RecordStatus.removed;
@@ -69,13 +70,21 @@ class Selector {
   }
 
   Future<void> add(Record record) async {
-    record.status = RecordStatus.inside;
+    if (_addNextRemoved) {
+      _addNextRemoved = false;
+      record.status = RecordStatus.removed;
+    } else {
+      record.status = RecordStatus.inside;
+    }
     // Get the box
     var box = Hive.box(Record.boxName);
     await box.put(record.info.id, record);
     records.add(record);
     recordsSubject.add(records);
   }
+
+  bool get addNextRemoved => _addNextRemoved = true;
+  void setAddNextRemoved() => _addNextRemoved = true;
 
   void filter(String query) {
     if (selectorSearch == null || records.length < 2 || query.isEmpty) {
@@ -197,4 +206,11 @@ class Selector {
       }
     }
   }
+
+  int get selectorCount =>
+      records.where((record) => record.status == RecordStatus.inside).length;
+  int get listeningCount =>
+      records.where((record) => record.status == RecordStatus.outside).length;
+  int get removedCount =>
+      records.where((record) => record.status == RecordStatus.removed).length;
 }

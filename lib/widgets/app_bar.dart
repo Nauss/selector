@@ -81,7 +81,7 @@ class _SelectorAppBarState extends State<SelectorAppBar> {
                   return Center(
                       child: Text(
                     locale.filterEmptyResult,
-                    style: Theme.of(context).textTheme.headline6,
+                    style: Theme.of(context).textTheme.titleLarge,
                   ));
                 }
                 return const EmptySelector();

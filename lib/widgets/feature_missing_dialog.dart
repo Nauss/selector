@@ -40,7 +40,7 @@ class _FeatureMissingDialogState extends State<FeatureMissingDialog> {
           Expanded(child: Container()),
           Icon(
             icon,
-            color: themeData.errorColor,
+            color: themeData.colorScheme.error,
           ),
         ],
       ),
