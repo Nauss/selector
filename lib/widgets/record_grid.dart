@@ -145,7 +145,7 @@ class RecordGrid extends StatelessWidget {
                         height: 30,
                       ),
                       locale.mySelector,
-                      "${stored.length}/$selectorCapacity",
+                      "${countTakenSpots(stored)}/$selectorCapacity",
                     ),
                   )
                 : null,
@@ -267,4 +267,15 @@ class RecordGrid extends StatelessWidget {
     final fsb = FloatingSearchBar.of(context);
     return fsb != null ? fsb.style.height + fsb.style.margins.vertical : 0;
   }
+}
+
+int countTakenSpots(List<Record> records) {
+  int count = 0;
+  for (var record in records) {
+    count++;
+    if (record.isDouble) {
+      count++;
+    }
+  }
+  return count;
 }
