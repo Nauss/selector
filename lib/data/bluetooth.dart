@@ -41,7 +41,6 @@ class Bluetooth {
           connect != PermissionStatus.granted ||
           location != PermissionStatus.granted) {
         permissionsOk = false;
-        debugPrint('permission failed: $scan, $connect, $location');
       }
     }
 
@@ -54,14 +53,12 @@ class Bluetooth {
     }
 
     _bluetooth.connectedDeviceStream.listen((state) {
-      debugPrint('connectedDeviceStream $state');
       if (state.connectionState == DeviceConnectionState.connected) {
         _connectToDevice(state.deviceId, 5);
       }
     });
 
     _bluetooth.statusStream.listen((status) {
-      debugPrint('statusStream $status');
       if (status == BleStatus.poweredOff) {
         _state = BlueToothState.bluetoothIsOff;
         connectionSubject.add(_state);
@@ -73,7 +70,6 @@ class Bluetooth {
     // });
 
     if (_bluetooth.status == BleStatus.ready) {
-      debugPrint('READY');
       // final status = await _bluetooth.connectedDeviceStream.first;
       // _deviceConnected(status.deviceId);
     }
@@ -84,7 +80,6 @@ class Bluetooth {
     ).listen(_scanResults, onError: (error) {
       _state = BlueToothState.disconnected;
       connectionSubject.add(_state);
-      debugPrint("error: $error");
     });
   }
 
@@ -96,7 +91,6 @@ class Bluetooth {
   get isOffline => _state == BlueToothState.offline;
 
   void _scanResults(DiscoveredDevice device) {
-    debugPrint("_scanResults: $device, $_state");
     // if (_state == BlueToothState.connecting) return;
     if (device.name.startsWith('Selector')) {
       _state = BlueToothState.connecting;
@@ -112,7 +106,6 @@ class Bluetooth {
       connectionTimeout: Duration(seconds: timeout),
     )
         .listen((connectionState) {
-      debugPrint("connectionState: $connectionState");
       if (connectionState.connectionState == DeviceConnectionState.connected) {
         _deviceConnected(deviceId);
       } else if (connectionState.connectionState ==
@@ -150,8 +143,6 @@ class Bluetooth {
         var characteristics = service.characteristics;
         for (var characteristic in characteristics) {
           if (characteristic.characteristicId == customCharacteristicUUID) {
-            debugPrint(
-                "found: ${service.serviceId}${characteristic.characteristicId}");
             break;
           }
         }
@@ -223,6 +214,7 @@ class Bluetooth {
     final message = Arduino.fermeMeuble(position);
 
     await sendMessage(message);
+    sendMessage(Arduino.init(), waitForResponse: false);
     return true;
   }
 
@@ -258,9 +250,7 @@ class Bluetooth {
   }
 
   Future<bool> getStatus() async {
-    debugPrint('getStatus');
     if (!await checkConnection()) {
-      debugPrint('No connection');
       return false;
     }
 
@@ -268,14 +258,13 @@ class Bluetooth {
     return true;
   }
 
-  Future<void> sendMessage(String message) async {
+  Future<void> sendMessage(String message,
+      {bool waitForResponse = true}) async {
     final characteristic = QualifiedCharacteristic(
         serviceId: customServiceUUID,
         characteristicId: customCharacteristicUUID,
         deviceId: _deviceId!);
     if (message.isNotEmpty) {
-      debugPrint('Sending message: $message');
-
       try {
         await _bluetooth.writeCharacteristicWithResponse(characteristic,
             value: utf8.encode(message));
@@ -296,18 +285,18 @@ class Bluetooth {
     // final response = await _bluetooth.readCharacteristic(characteristic);
     // final received = utf8.decode(response, allowMalformed: true);
     // debugPrint('response: $received');
-    await _bluetooth
-        .subscribeToCharacteristic(characteristic)
-        .firstWhere((data) {
-      debugPrint('subscribeToCharacteristic Received: $data');
-      final received = utf8.decode(data, allowMalformed: true);
-      // if (received.startsWith(Arduino.status)) {
-      //   final status = received.replaceAll(Arduino.status, '');
-      //   debugPrint('$received status: $status');
-      // }
-      debugPrint('Received: $received');
-      return received.startsWith(Arduino.done);
-    });
+    if (waitForResponse) {
+      await _bluetooth
+          .subscribeToCharacteristic(characteristic)
+          .firstWhere((data) {
+        final received = utf8.decode(data, allowMalformed: true);
+        // if (received.startsWith(Arduino.status)) {
+        //   final status = received.replaceAll(Arduino.status, '');
+        //   debugPrint('$received status: $status');
+        // }
+        return received.startsWith(Arduino.done);
+      });
+    }
     // await _bluetooth.characteristicValueStream.firstWhere((value) {
     //   final received =
     //       utf8.decode(value.result.dematerialize(), allowMalformed: true);
@@ -334,7 +323,6 @@ class Bluetooth {
     //   // }
     //   return received.startsWith(Arduino.done);
     // });
-    debugPrint('sendMessage done');
   }
 
   Future<void> reset() async {
