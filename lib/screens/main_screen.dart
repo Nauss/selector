@@ -133,7 +133,7 @@ class MainScreenState extends State<MainScreen> {
                             context,
                             MaterialPageRoute(
                               builder: (context) {
-                                selector.setAddNextRemoved();
+                                selector.addNextRemoved = true;
                                 return const SearchScreen();
                               },
                             ),

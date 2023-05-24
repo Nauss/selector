@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:selector/data/constants.dart';
@@ -17,7 +18,7 @@ class Selector {
   Search? selectorSearch, networkSearch;
   late BehaviorSubject<Search> selectorSearchSubject, networkSearchSubject;
   Parameters parameters = Parameters();
-  bool _addNextRemoved = false;
+  bool addNextRemoved = false;
 
   Selector() {
     recordsSubject = BehaviorSubject<RecordList>();
@@ -70,8 +71,8 @@ class Selector {
   }
 
   Future<void> add(Record record) async {
-    if (_addNextRemoved) {
-      _addNextRemoved = false;
+    if (addNextRemoved) {
+      addNextRemoved = false;
       record.status = RecordStatus.removed;
     } else {
       record.status = RecordStatus.inside;
@@ -82,9 +83,6 @@ class Selector {
     records.add(record);
     recordsSubject.add(records);
   }
-
-  bool get addNextRemoved => _addNextRemoved = true;
-  void setAddNextRemoved() => _addNextRemoved = true;
 
   void filter(String query) {
     if (selectorSearch == null || records.length < 2 || query.isEmpty) {
