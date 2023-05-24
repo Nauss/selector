@@ -55,13 +55,11 @@ class Discogs {
             // For now we check whether the record has tracks on C or D sides
             // to know if its a double
             var info = _fromSearch(result);
-            results.add(
-              selector.find(result["id"]) ??
-                  Record(
-                      info: info,
-                      double: info.tracks.any((track) =>
-                          track.side != Side.A && track.side != Side.B)),
-            );
+            results.add(selector.find(result["id"]) ??
+                Record(
+                  info: info,
+                  double: isDouble(info.tracks),
+                ));
           },
         );
       }
@@ -89,6 +87,9 @@ class Discogs {
         throw "getRecord with id '$id' failed";
       }
       record.info = _fromRelease(jsonData, record.info);
+      if (!record.isDouble && isDouble(record.info.tracks)) {
+        record.isDouble = true;
+      }
       recordDetailSubject.add(record);
     });
   }
@@ -243,3 +244,6 @@ class Discogs {
     return result;
   }
 }
+
+bool isDouble(List<Track> tracks) =>
+    tracks.any((track) => track.side != Side.A && track.side != Side.B);
