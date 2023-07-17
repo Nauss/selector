@@ -10,11 +10,12 @@ import 'package:selector/widgets/gradient_text.dart';
 class ListenAction extends SelectorAction {
   final selector = GetIt.I.get<Selector>();
   final bluetooth = GetIt.I.get<Bluetooth>();
-  ListenAction();
+  final bool keepPosition;
+  ListenAction({this.keepPosition = false});
 
   @override
   Future<bool> execute(Record record) async {
-    selector.listen(record);
+    selector.listen(record, keepPosition: keepPosition);
     return true;
   }
 
