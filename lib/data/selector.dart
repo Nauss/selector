@@ -56,10 +56,12 @@ class Selector {
     recordsSubject.add(records);
   }
 
-  void listen(Record record) {
+  void listen(Record record, {bool keepPosition = false}) {
     record.status = RecordStatus.outside;
-    // Reset the position since we want to put it back to the closest possible position
-    record.position = -1;
+    if (!keepPosition) {
+      // Reset the position since we want to put it back to the closest possible position
+      record.position = -1;
+    }
     record.save();
     recordsSubject.add(records);
   }

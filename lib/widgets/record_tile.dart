@@ -103,6 +103,14 @@ class _RecordTileState extends State<RecordTile> {
                       ),
                     ),
                   ),
+                // Debug text to show the position
+                // Text(
+                //   widget.record.position.toString(),
+                //   style: const TextStyle(
+                //       fontWeight: FontWeight.bold,
+                //       fontSize: 30,
+                //       color: Colors.orangeAccent),
+                // ),
               ],
             ),
           ),

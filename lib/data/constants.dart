@@ -32,7 +32,7 @@ class Globals {
 final Map<Scenario, List<SelectorAction>> scenarii = {
   Scenario.listen: [
     SortieVinyle(),
-    RemoveAction(),
+    ListenAction(keepPosition: true),
     RentreVinyle(),
     StoreAction(),
     FermeMeuble()
