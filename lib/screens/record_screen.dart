@@ -41,7 +41,7 @@ class _RecordScreenState extends State<RecordScreen> {
               stream: discogs.recordDetailStream,
               builder: (context, snapshot) {
                 final recordInfo = snapshot.data?.info ?? widget.record.info;
-                debugPrint('detail tag: ${Tags.cover(widget.record.uniqueId)}');
+                // debugPrint('detail tag: ${Tags.cover(widget.record.uniqueId)}');
                 // debugPrint(recordInfo.id.toString());
                 // getImage(recordInfo).then((value) => setState(() {
                 //       _imageProvider = value;
@@ -128,6 +128,18 @@ class _RecordScreenState extends State<RecordScreen> {
                               Text(
                                 recordInfo.label,
                                 style: themeData.textTheme.bodyLarge,
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "${locale.position}: ",
+                                    style: themeData.textTheme.bodyLarge,
+                                  ),
+                                  Text(
+                                    widget.record.position.toString(),
+                                    style: themeData.textTheme.bodyLarge,
+                                  ),
+                                ],
                               ),
                             ],
                           ),

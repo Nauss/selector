@@ -26,6 +26,7 @@ class _RecordTileState extends State<RecordTile> {
 
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
     RecordInfo recordInfo = widget.record.info;
     discogs.loadImage(widget.record);
     final isDark = AdaptiveTheme.of(context).mode == AdaptiveThemeMode.dark;
@@ -104,13 +105,16 @@ class _RecordTileState extends State<RecordTile> {
                     ),
                   ),
                 // Debug text to show the position
-                // Text(
-                //   widget.record.position.toString(),
-                //   style: const TextStyle(
-                //       fontWeight: FontWeight.bold,
-                //       fontSize: 30,
-                //       color: Colors.orangeAccent),
-                // ),
+                Positioned(
+                  right: 0,
+                  bottom: 0,
+                  child: Text(
+                    widget.record.position != -1
+                        ? widget.record.position.toString()
+                        : "",
+                    style: themeData.textTheme.bodySmall,
+                  ),
+                ),
               ],
             ),
           ),
