@@ -49,6 +49,7 @@ class SearchScreenState extends State<SearchScreen> {
     final themeData = Theme.of(context);
     final locale = AppLocalizations.of(context)!;
     String scanResult = "";
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
     try {
       scanResult = await FlutterBarcodeScanner.scanBarcode(
         themeData.primaryColor.toHex(),
@@ -57,7 +58,7 @@ class SearchScreenState extends State<SearchScreen> {
         ScanMode.BARCODE,
       );
     } on Exception {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      scaffoldMessenger.showSnackBar(SnackBar(
         content: Text(locale.barcodeScanFailed),
       ));
     }
