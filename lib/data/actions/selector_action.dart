@@ -6,5 +6,5 @@ abstract class SelectorAction {
   Widget content(BuildContext context);
   Widget text(BuildContext context);
 
-  Future<void> execute(Record record);
+  Future<bool> execute(Record record);
 }

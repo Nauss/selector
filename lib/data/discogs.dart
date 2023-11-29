@@ -35,7 +35,10 @@ class Discogs {
 
   void searchRecords(String query) {
     results = [];
-    if (query.isEmpty) resultsSubject.add(results);
+    if (query.isEmpty) {
+      resultsSubject.add(results);
+      return;
+    }
     final uri = Uri.https(
       apiUrl,
       "/database/search",

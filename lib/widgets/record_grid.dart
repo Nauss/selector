@@ -2,19 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:get_it/get_it.dart';
 import 'package:material_floating_search_bar_2/material_floating_search_bar_2.dart';
-import 'package:selector/data/bluetooth.dart';
 import 'package:selector/data/constants.dart';
 import 'package:selector/data/parameters.dart';
 import 'package:selector/data/record.dart';
 import 'package:selector/data/enums.dart';
 import 'package:selector/data/selector.dart';
-import 'package:selector/screens/connection_screen.dart';
-import 'package:selector/widgets/record_tile.dart';
+import 'package:selector/widgets/reconnection.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:selector/widgets/record_tile.dart';
 import 'package:tuple/tuple.dart';
 
 class RecordGrid extends StatelessWidget {
-  final bluetooth = GetIt.I.get<Bluetooth>();
   final selector = GetIt.I.get<Selector>();
   final RecordList? records;
   final Parameters parameters;
@@ -29,7 +27,6 @@ class RecordGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locale = AppLocalizations.of(context)!;
-    final themeData = Theme.of(context);
 
     final sorted = sort(records);
     RecordList listening = sorted.item1;
@@ -51,64 +48,12 @@ class RecordGrid extends StatelessWidget {
             top: padding,
           ),
         ),
-        StreamBuilder(
-            stream: bluetooth.connectionStream,
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return SliverToBoxAdapter(
-                  child: Container(
-                    height: 0,
-                  ),
-                );
-              }
-              BlueToothState state = snapshot.data as BlueToothState;
-              if (state == BlueToothState.offline ||
-                  state == BlueToothState.bluetoothIsOff ||
-                  state == BlueToothState.disconnected) {
-                return SliverToBoxAdapter(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          // Back to the connection screen
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return const ConnectionScreen();
-                              },
-                            ),
-                          );
-                        },
-                        style: ButtonStyle(
-                          foregroundColor: MaterialStateProperty.all<Color>(
-                            Colors.orange,
-                          ),
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                            themeData.focusColor,
-                          ),
-                          visualDensity: VisualDensity.compact,
-                        ),
-                        icon: const Icon(
-                          Icons.bluetooth_disabled,
-                          size: 20,
-                        ),
-                        label: Text(
-                          locale.reconnect,
-                          style: const TextStyle(color: Colors.orange),
-                        ),
-                      )
-                    ],
-                  ),
-                );
-              }
-              return SliverToBoxAdapter(
-                child: Container(
-                  height: 0,
-                ),
-              );
-            }),
+        SliverStickyHeader(
+          header: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Reconnection(),
+          ),
+        ),
         if (listening.isNotEmpty &&
             (statusFilter.isEmpty ||
                 statusFilter.contains(RecordStatus.outside)))

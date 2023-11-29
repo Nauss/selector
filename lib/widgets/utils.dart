@@ -29,11 +29,12 @@ Future<dynamic> showSteps(BuildContext context) {
             final step = snapshot.data as int;
             if (step == -1) {
               Future.delayed(
-                  const Duration(milliseconds: 10),
-                  () => Navigator.popUntil(
-                        context,
-                        (route) => route.isFirst,
-                      ));
+                const Duration(milliseconds: 10),
+                () => Navigator.popUntil(
+                  context,
+                  (route) => route.isFirst,
+                ),
+              );
               return Container();
             }
             final currentAction = processor.currentAction;

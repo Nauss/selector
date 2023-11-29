@@ -32,8 +32,6 @@ class MainScreenState extends State<MainScreen> {
 
   @override
   void initState() {
-    selector.loadSelectorSearch();
-    selector.loadRecords();
     parameters = selector.parameters;
 
     filteredSearchHistory =
@@ -78,10 +76,10 @@ class MainScreenState extends State<MainScreen> {
                               scale: 2,
                             ),
                           ),
-                          child: Column(
+                          child: const Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
+                            children: [
                               BackButton(),
                               Text(
                                 "Selector",

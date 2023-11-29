@@ -27,7 +27,6 @@ class SearchScreenState extends State<SearchScreen> {
   final selector = GetIt.I.get<Selector>();
   final discogs = GetIt.I.get<Discogs>();
   List<String> filteredSearchHistory = [];
-  String selectedTerm = "";
 
   @override
   void initState() {
@@ -64,8 +63,7 @@ class SearchScreenState extends State<SearchScreen> {
     }
     if (scanResult != '-1') {
       setState(() {
-        selectedTerm = scanResult;
-        discogs.searchRecords(selectedTerm);
+        discogs.searchRecords(scanResult);
       });
     }
   }
@@ -73,12 +71,8 @@ class SearchScreenState extends State<SearchScreen> {
   void _handleSearch(Search? search, String term) {
     discogs.searchRecords(term);
     search?.addHistory(term);
+    searchBarController.query = term;
     searchBarController.close();
-    setState(() {
-      selectedTerm = term;
-      filteredSearchHistory =
-          search?.getFilteredHistory(searchBarController.query) ?? [];
-    });
   }
 
   void _handleDelete(Search? search, String term) {
@@ -113,10 +107,10 @@ class SearchScreenState extends State<SearchScreen> {
                 controller: searchBarController,
                 physics: const BouncingScrollPhysics(),
                 transition: CircularFloatingSearchBarTransition(),
-                title: Text(
-                  selectedTerm.isEmpty ? locale.searchDiscogs : selectedTerm,
-                  style: themeData.inputDecorationTheme.hintStyle,
-                ),
+                // title: Text(
+                //   selectedTerm.isEmpty ? locale.searchDiscogs : selectedTerm,
+                //   style: themeData.inputDecorationTheme.hintStyle,
+                // ),
                 hint: locale.searchHint,
                 hintStyle: themeData.inputDecorationTheme.hintStyle,
                 actions: [

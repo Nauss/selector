@@ -6,7 +6,6 @@ import 'package:selector/data/processor.dart';
 import 'package:selector/data/record.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:selector/data/selector.dart';
-import 'package:selector/screens/connection_screen.dart';
 import 'package:selector/widgets/double_switch.dart';
 import 'package:selector/widgets/utils.dart';
 
@@ -32,22 +31,12 @@ class _RecordButtonsState extends State<RecordButtons> {
     isDouble = widget.record.isDouble;
   }
 
-  void onTap(BuildContext context, Scenario scenario) async {
-    if (!await bluetooth.checkConnection()) {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) {
-            return const ConnectionScreen();
-          },
-        ),
-      );
-      return;
-    }
+  void onTap(BuildContext context, Scenario scenario) {
     processor.start(scenario, widget.record);
     showSteps(context);
   }
 
-  Widget getButton(BuildContext context, String type, bool isOffline) {
+  Widget getButton(BuildContext context, String type) {
     final locale = AppLocalizations.of(context)!;
     final ThemeData themeData = Theme.of(context);
     Color getDeleteColor(Set<MaterialState> states) {
@@ -59,7 +48,7 @@ class _RecordButtonsState extends State<RecordButtons> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: ElevatedButton(
-            onPressed: isOffline ? null : () => onTap(context, Scenario.store),
+            onPressed: () => onTap(context, Scenario.store),
             child: Text(
               locale.store,
             ),
@@ -71,13 +60,8 @@ class _RecordButtonsState extends State<RecordButtons> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: ElevatedButton(
-            onPressed: isOffline
-                ? null
-                : () => onTap(
-                    context,
-                    selector.addNextRemoved
-                        ? Scenario.addRemoved
-                        : Scenario.add),
+            onPressed: () => onTap(context,
+                selector.addNextRemoved ? Scenario.addRemoved : Scenario.add),
             child: Text(
               locale.add,
             ),
@@ -89,7 +73,7 @@ class _RecordButtonsState extends State<RecordButtons> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: ElevatedButton(
-            onPressed: isOffline ? null : () => onTap(context, Scenario.listen),
+            onPressed: () => onTap(context, Scenario.listen),
             child: Text(
               locale.listen,
             ),
@@ -101,8 +85,7 @@ class _RecordButtonsState extends State<RecordButtons> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: ElevatedButton(
-            onPressed:
-                isOffline ? null : () => onTap(context, Scenario.takeOut),
+            onPressed: () => onTap(context, Scenario.takeOut),
             child: Text(
               locale.takeOut,
             ),
@@ -114,11 +97,9 @@ class _RecordButtonsState extends State<RecordButtons> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: ElevatedButton(
-            onPressed: isOffline
-                ? null
-                : widget.record.status == RecordStatus.outside
-                    ? () => onTap(context, Scenario.removeAlreadyOut)
-                    : () => onTap(context, Scenario.remove),
+            onPressed: widget.record.status == RecordStatus.outside
+                ? () => onTap(context, Scenario.removeAlreadyOut)
+                : () => onTap(context, Scenario.remove),
             style: ButtonStyle(
               backgroundColor:
                   MaterialStateProperty.resolveWith(getDeleteColor),
@@ -134,9 +115,7 @@ class _RecordButtonsState extends State<RecordButtons> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: ElevatedButton(
-            onPressed: isOffline
-                ? null
-                : () => onTap(context, Scenario.removePermanently),
+            onPressed: () => onTap(context, Scenario.removePermanently),
             style: ButtonStyle(
               backgroundColor:
                   MaterialStateProperty.resolveWith(getDeleteColor),
@@ -154,54 +133,45 @@ class _RecordButtonsState extends State<RecordButtons> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-        stream: bluetooth.connectionStream,
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Container();
-          }
-          final isOffline =
-              (snapshot.data as BlueToothState) == BlueToothState.offline;
-          var buttons = <Widget>[];
-          var isEditable = false;
-          if (widget.record.status == RecordStatus.outside) {
-            buttons.add(getButton(context, "store", isOffline));
-            isEditable = true;
-          }
-          if (widget.record.status == RecordStatus.inside) {
-            buttons.add(getButton(context, "listen", isOffline));
-          }
-          if (widget.record.status == RecordStatus.none) {
-            buttons.add(getButton(context, "add", isOffline));
-            isEditable = true;
-          }
-          if (widget.record.status == RecordStatus.removed) {
-            buttons.add(getButton(context, "store", isOffline));
-            buttons.add(getButton(context, "removePermanently", isOffline));
-          } else if (widget.record.status == RecordStatus.inside) {
-            buttons.add(getButton(context, "takeOut", isOffline));
-          } else if (widget.record.status == RecordStatus.outside) {
-            buttons.add(getButton(context, "remove", isOffline));
-          }
-          // Double picker switch
-          return Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: buttons,
-              ),
-              DoubleSwitch(
-                  value: widget.record.isDouble,
-                  onChanged: isEditable
-                      ? (value) {
-                          widget.record.isDouble = value;
-                          setState(() {
-                            isDouble = value;
-                          });
-                        }
-                      : null)
-            ],
-          );
-        });
+    var buttons = <Widget>[];
+    var isEditable = false;
+    if (widget.record.status == RecordStatus.outside) {
+      buttons.add(getButton(context, "store"));
+      isEditable = true;
+    }
+    if (widget.record.status == RecordStatus.inside) {
+      buttons.add(getButton(context, "listen"));
+    }
+    if (widget.record.status == RecordStatus.none) {
+      buttons.add(getButton(context, "add"));
+      isEditable = true;
+    }
+    if (widget.record.status == RecordStatus.removed) {
+      buttons.add(getButton(context, "store"));
+      buttons.add(getButton(context, "removePermanently"));
+    } else if (widget.record.status == RecordStatus.inside) {
+      buttons.add(getButton(context, "takeOut"));
+    } else if (widget.record.status == RecordStatus.outside) {
+      buttons.add(getButton(context, "remove"));
+    }
+    // Double picker switch
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: buttons,
+        ),
+        DoubleSwitch(
+            value: widget.record.isDouble,
+            onChanged: isEditable
+                ? (value) {
+                    widget.record.isDouble = value;
+                    setState(() {
+                      isDouble = value;
+                    });
+                  }
+                : null)
+      ],
+    );
   }
 }

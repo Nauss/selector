@@ -11,7 +11,7 @@ class RentreVinyle extends SelectorAction {
   RentreVinyle();
 
   @override
-  Future<void> execute(Record record) {
+  Future<bool> execute(Record record) {
     return bluetooth.rentreVinyle();
   }
 

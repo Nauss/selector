@@ -29,9 +29,6 @@ class _SelectorAppBarState extends State<SelectorAppBar> {
 
   @override
   void initState() {
-    selector.loadSelectorSearch();
-    selector.loadRecords();
-
     filteredSearchHistory =
         selector.selectorSearch?.getFilteredHistory(null) ?? [];
     super.initState();

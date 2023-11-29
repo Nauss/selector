@@ -23,6 +23,9 @@ class _RecordScreenState extends State<RecordScreen> {
   final Discogs discogs = GetIt.I.get<Discogs>();
   @override
   void initState() {
+    discogs.loadImage(widget.record);
+    discogs.loadDetails(widget.record);
+
     super.initState();
   }
 
@@ -41,11 +44,6 @@ class _RecordScreenState extends State<RecordScreen> {
               stream: discogs.recordDetailStream,
               builder: (context, snapshot) {
                 final recordInfo = snapshot.data?.info ?? widget.record.info;
-                // debugPrint('detail tag: ${Tags.cover(widget.record.uniqueId)}');
-                // debugPrint(recordInfo.id.toString());
-                // getImage(recordInfo).then((value) => setState(() {
-                //       _imageProvider = value;
-                //     }));
                 return CustomScrollView(
                   slivers: <Widget>[
                     SliverStickyHeader(
