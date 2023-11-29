@@ -42,8 +42,8 @@ Future<void> initHive() async {
 void initGetIt() {
   GetIt.I.registerSingleton<Selector>(Selector());
   GetIt.I.registerSingleton<Discogs>(Discogs());
-  GetIt.I.registerSingleton<Bluetooth>(Bluetooth());
   GetIt.I.registerSingleton<Processor>(Processor());
+  GetIt.I.registerSingleton<Bluetooth>(Bluetooth());
 }
 
 void main() async {

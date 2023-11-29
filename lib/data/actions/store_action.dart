@@ -11,9 +11,9 @@ class StoreAction extends SelectorAction {
   StoreAction();
 
   @override
-  Future<void> execute(Record record) {
+  Future<bool> execute(Record record) {
     selector.store(record);
-    return Future.value();
+    return Future.value(true);
   }
 
   @override

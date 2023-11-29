@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get_it/get_it.dart';
-import 'package:material_floating_search_bar/material_floating_search_bar.dart';
+import 'package:material_floating_search_bar_2/material_floating_search_bar_2.dart';
 import 'package:selector/data/discogs.dart';
 import 'package:selector/data/enums.dart';
 import 'package:selector/data/record.dart';
@@ -27,7 +27,6 @@ class SearchScreenState extends State<SearchScreen> {
   final selector = GetIt.I.get<Selector>();
   final discogs = GetIt.I.get<Discogs>();
   List<String> filteredSearchHistory = [];
-  String selectedTerm = "";
 
   @override
   void initState() {
@@ -50,6 +49,7 @@ class SearchScreenState extends State<SearchScreen> {
     final themeData = Theme.of(context);
     final locale = AppLocalizations.of(context)!;
     String scanResult = "";
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
     try {
       scanResult = await FlutterBarcodeScanner.scanBarcode(
         themeData.primaryColor.toHex(),
@@ -58,14 +58,13 @@ class SearchScreenState extends State<SearchScreen> {
         ScanMode.BARCODE,
       );
     } on Exception {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      scaffoldMessenger.showSnackBar(SnackBar(
         content: Text(locale.barcodeScanFailed),
       ));
     }
     if (scanResult != '-1') {
       setState(() {
-        selectedTerm = scanResult;
-        discogs.searchRecords(selectedTerm);
+        discogs.searchRecords(scanResult);
       });
     }
   }
@@ -73,12 +72,8 @@ class SearchScreenState extends State<SearchScreen> {
   void _handleSearch(Search? search, String term) {
     discogs.searchRecords(term);
     search?.addHistory(term);
+    searchBarController.query = term;
     searchBarController.close();
-    setState(() {
-      selectedTerm = term;
-      filteredSearchHistory =
-          search?.getFilteredHistory(searchBarController.query) ?? [];
-    });
   }
 
   void _handleDelete(Search? search, String term) {
@@ -113,10 +108,10 @@ class SearchScreenState extends State<SearchScreen> {
                 controller: searchBarController,
                 physics: const BouncingScrollPhysics(),
                 transition: CircularFloatingSearchBarTransition(),
-                title: Text(
-                  selectedTerm.isEmpty ? locale.searchDiscogs : selectedTerm,
-                  style: themeData.inputDecorationTheme.hintStyle,
-                ),
+                // title: Text(
+                //   selectedTerm.isEmpty ? locale.searchDiscogs : selectedTerm,
+                //   style: themeData.inputDecorationTheme.hintStyle,
+                // ),
                 hint: locale.searchHint,
                 hintStyle: themeData.inputDecorationTheme.hintStyle,
                 actions: [

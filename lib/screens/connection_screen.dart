@@ -6,6 +6,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:progress_indicators/progress_indicators.dart';
 import 'package:selector/data/bluetooth.dart';
 import 'package:selector/data/enums.dart';
+import 'package:selector/data/selector.dart';
 import 'package:selector/widgets/feature_missing_dialog.dart';
 
 import 'main_screen.dart';
@@ -23,11 +24,15 @@ class ConnectionScreen extends StatefulWidget {
 class _ConnectionScreenState extends State<ConnectionScreen>
     with WidgetsBindingObserver {
   final bluetooth = GetIt.I.get<Bluetooth>();
+  final selector = GetIt.I.get<Selector>();
   bool _isInBackground = false;
   StreamSubscription<BlueToothState>? _stream;
 
   @override
   void initState() {
+    selector.loadSelectorSearch();
+    selector.loadRecords();
+
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     bluetooth.connect();

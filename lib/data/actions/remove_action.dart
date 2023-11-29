@@ -12,9 +12,9 @@ class RemoveAction extends SelectorAction {
   RemoveAction({this.permanently = false});
 
   @override
-  Future<void> execute(Record record) {
+  Future<bool> execute(Record record) {
     selector.remove(record, permanently);
-    return Future.value();
+    return Future.value(true);
   }
 
   @override

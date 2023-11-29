@@ -42,9 +42,6 @@ class _RecordTileState extends State<RecordTile> {
                 context,
                 MaterialPageRoute(
                   builder: (context) {
-                    debugPrint(
-                        'tile tag: ${Tags.cover(widget.record.uniqueId)}');
-                    discogs.loadDetails(widget.record);
                     return RecordScreen(record: widget.record);
                   },
                 ),
