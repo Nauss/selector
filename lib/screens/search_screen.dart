@@ -89,63 +89,67 @@ class SearchScreenState extends State<SearchScreen> {
     final themeData = Theme.of(context);
     final locale = AppLocalizations.of(context)!;
     return SafeArea(
-      child: Scaffold(
-        body: StreamBuilder<Search>(
-            stream: selector.networkSearchStream,
-            builder: (context, snapshot) {
-              var search = snapshot.data;
-              return FloatingSearchBar(
-                body: StreamBuilder<RecordList>(
-                  stream: discogs.resultsStream,
-                  builder: (context, snapshot) {
-                    return RecordGrid(
-                      records: snapshot.data,
-                      parameters: selector.parameters,
-                      statusFilter: const [RecordStatus.none],
-                    );
-                  },
-                ),
-                controller: searchBarController,
-                physics: const BouncingScrollPhysics(),
-                transition: CircularFloatingSearchBarTransition(),
-                // title: Text(
-                //   selectedTerm.isEmpty ? locale.searchDiscogs : selectedTerm,
-                //   style: themeData.inputDecorationTheme.hintStyle,
-                // ),
-                hint: locale.searchHint,
-                hintStyle: themeData.inputDecorationTheme.hintStyle,
-                actions: [
-                  FloatingSearchBarAction.searchToClear(),
-                  IconButton(
-                    icon: const ImageIcon(
-                      AssetImage(
-                        'assets/barcode_scanner.png',
-                      ),
-                    ),
-                    onPressed: () {
-                      handleScanPressed(
-                        context,
+      child: PopScope(
+        canPop: true,
+        child: Scaffold(
+          body: StreamBuilder<Search>(
+              stream: selector.networkSearchStream,
+              builder: (context, snapshot) {
+                var search = snapshot.data;
+                return FloatingSearchBar(
+                  body: StreamBuilder<RecordList>(
+                    stream: discogs.resultsStream,
+                    builder: (context, snapshot) {
+                      return RecordGrid(
+                        records: snapshot.data,
+                        parameters: selector.parameters,
+                        statusFilter: const [RecordStatus.none],
                       );
                     },
                   ),
-                ],
-                onQueryChanged: (query) {
-                  setState(() {
-                    filteredSearchHistory =
-                        search?.getFilteredHistory(query) ?? [];
-                  });
-                },
-                onSubmitted: (query) => _handleSearch(search, query),
-                builder: (context, transition) {
-                  return SearchHistory(
-                    history: filteredSearchHistory,
-                    onDelete: (term) => _handleDelete(search, term),
-                    onSearch: (term) => _handleSearch(search, term),
-                    query: searchBarController.query,
-                  );
-                },
-              );
-            }),
+                  controller: searchBarController,
+                  physics: const BouncingScrollPhysics(),
+                  transition: CircularFloatingSearchBarTransition(),
+                  // title: Text(
+                  //   selectedTerm.isEmpty ? locale.searchDiscogs : selectedTerm,
+                  //   style: themeData.inputDecorationTheme.hintStyle,
+                  // ),
+                  hint: locale.searchHint,
+                  hintStyle: themeData.inputDecorationTheme.hintStyle,
+                  iconColor: Colors.white,
+                  actions: [
+                    FloatingSearchBarAction.searchToClear(),
+                    IconButton(
+                      icon: const ImageIcon(
+                        AssetImage(
+                          'assets/barcode_scanner.png',
+                        ),
+                      ),
+                      onPressed: () {
+                        handleScanPressed(
+                          context,
+                        );
+                      },
+                    ),
+                  ],
+                  onQueryChanged: (query) {
+                    setState(() {
+                      filteredSearchHistory =
+                          search?.getFilteredHistory(query) ?? [];
+                    });
+                  },
+                  onSubmitted: (query) => _handleSearch(search, query),
+                  builder: (context, transition) {
+                    return SearchHistory(
+                      history: filteredSearchHistory,
+                      onDelete: (term) => _handleDelete(search, term),
+                      onSearch: (term) => _handleSearch(search, term),
+                      query: searchBarController.query,
+                    );
+                  },
+                );
+              }),
+        ),
       ),
     );
   }

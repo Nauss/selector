@@ -49,6 +49,10 @@ class _RecordButtonsState extends State<RecordButtons> {
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: ElevatedButton(
             onPressed: () => onTap(context, Scenario.store),
+            style: ElevatedButton.styleFrom(
+              foregroundColor: themeData.colorScheme.onPrimary,
+              backgroundColor: themeData.colorScheme.primary,
+            ),
             child: Text(
               locale.store,
             ),
@@ -62,6 +66,10 @@ class _RecordButtonsState extends State<RecordButtons> {
           child: ElevatedButton(
             onPressed: () => onTap(context,
                 selector.addNextRemoved ? Scenario.addRemoved : Scenario.add),
+            style: ElevatedButton.styleFrom(
+              foregroundColor: themeData.colorScheme.onPrimary,
+              backgroundColor: Colors.green[700],
+            ),
             child: Text(
               locale.add,
             ),
@@ -74,6 +82,10 @@ class _RecordButtonsState extends State<RecordButtons> {
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: ElevatedButton(
             onPressed: () => onTap(context, Scenario.listen),
+            style: ElevatedButton.styleFrom(
+              foregroundColor: themeData.colorScheme.onPrimary,
+              backgroundColor: themeData.colorScheme.primary,
+            ),
             child: Text(
               locale.listen,
             ),
@@ -86,6 +98,10 @@ class _RecordButtonsState extends State<RecordButtons> {
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: ElevatedButton(
             onPressed: () => onTap(context, Scenario.takeOut),
+            style: ElevatedButton.styleFrom(
+              foregroundColor: themeData.colorScheme.onPrimary,
+              backgroundColor: themeData.colorScheme.primary,
+            ),
             child: Text(
               locale.takeOut,
             ),
