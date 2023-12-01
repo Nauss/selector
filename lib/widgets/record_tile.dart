@@ -1,4 +1,3 @@
-import 'package:adaptive_theme/adaptive_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:selector/data/constants.dart';
@@ -19,8 +18,10 @@ class RecordTile extends StatefulWidget {
 
 class _RecordTileState extends State<RecordTile> {
   final Discogs discogs = GetIt.I.get<Discogs>();
+
   @override
   void initState() {
+    discogs.loadImage(widget.record);
     super.initState();
   }
 
@@ -28,8 +29,6 @@ class _RecordTileState extends State<RecordTile> {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     RecordInfo recordInfo = widget.record.info;
-    discogs.loadImage(widget.record);
-    final isDark = AdaptiveTheme.of(context).mode == AdaptiveThemeMode.dark;
     final isDouble = widget.record.isDouble;
     return Card(
       child: Hero(
@@ -59,14 +58,14 @@ class _RecordTileState extends State<RecordTile> {
                   ),
                 ),
                 Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.center,
                       end: Alignment.bottomCenter,
-                      stops: const [0.2, 1],
+                      stops: [0.2, 1],
                       colors: [
                         Colors.transparent,
-                        isDark ? Colors.black : Colors.white,
+                        Colors.black,
                       ],
                     ),
                   ),

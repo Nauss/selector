@@ -41,7 +41,7 @@ android {
     defaultConfig {
         applicationId "com.samkutail.selector"
         minSdkVersion 21
-        targetSdkVersion 31
+        targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
