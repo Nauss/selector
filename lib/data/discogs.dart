@@ -111,8 +111,8 @@ class Discogs {
 
     var fileName = "${info.artist}-${info.title}";
     String pathName = p.join(Globals.images!.path, fileName);
-    var file = File(pathName);
     try {
+      var file = File(pathName);
       info.imageProvider = NetworkToFileImage(url: info.image, file: file);
       info.imageLoaded = true;
     } catch (e) {

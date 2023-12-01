@@ -130,13 +130,12 @@ class Bluetooth {
   }
 
   Future<void> _getCharacteristic() async {
-    List<DiscoveredService> services =
-        await _bluetooth.discoverServices(_deviceId!);
+    List<Service> services = await _bluetooth.getDiscoveredServices(_deviceId!);
     for (var service in services) {
-      if (service.serviceId == (customServiceUUID)) {
+      if (service.id == (customServiceUUID)) {
         var characteristics = service.characteristics;
         for (var characteristic in characteristics) {
-          if (characteristic.characteristicId == customCharacteristicUUID) {
+          if (characteristic.id == customCharacteristicUUID) {
             break;
           }
         }

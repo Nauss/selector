@@ -34,10 +34,13 @@ class _RecordScreenState extends State<RecordScreen> {
     final locale = AppLocalizations.of(context)!;
     final themeData = Theme.of(context);
     return SafeArea(
-      child: WillPopScope(
-        onWillPop: () async {
+      child: PopScope(
+        canPop: true,
+        onPopInvoked: (bool didPop) {
+          if (didPop) {
+            return;
+          }
           discogs.recordDetailSubject.add(null);
-          return true;
         },
         child: Scaffold(
           body: StreamBuilder<Record?>(

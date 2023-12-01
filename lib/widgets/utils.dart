@@ -18,8 +18,8 @@ Future<dynamic> showSteps(BuildContext context) {
     // ),
     // barrierColor: const Color.fromARGB(100, 0, 0, 0),
     builder: (BuildContext context) {
-      return WillPopScope(
-        onWillPop: () async => false,
+      return PopScope(
+        canPop: false,
         child: StreamBuilder<Object>(
           stream: processor.stepStream,
           builder: (context, snapshot) {
